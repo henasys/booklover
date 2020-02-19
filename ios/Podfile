@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'BookLover' do
-  # Pods for BookLover
+target 'BookLover3' do
+  # Pods for BookLover3
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,7 +34,7 @@ target 'BookLover' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'BookLoverTests' do
+  target 'BookLover3Tests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -42,10 +42,10 @@ target 'BookLover' do
   use_native_modules!
 end
 
-target 'BookLover-tvOS' do
-  # Pods for BookLover-tvOS
+target 'BookLover3-tvOS' do
+  # Pods for BookLover3-tvOS
 
-  target 'BookLover-tvOSTests' do
+  target 'BookLover3-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
