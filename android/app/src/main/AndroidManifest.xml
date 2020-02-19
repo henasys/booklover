@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.booklover">
+  package="com.henasys.app.booklover">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
