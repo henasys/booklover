@@ -1,4 +1,4 @@
-package com.henasys.app.booklover;
+package com.booklover;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "BookLover2";
+    return "BookLover";
   }
 }

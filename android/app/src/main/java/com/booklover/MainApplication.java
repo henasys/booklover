@@ -1,4 +1,4 @@
-package com.henasys.app.booklover;
+package com.booklover;
 
 import android.app.Application;
 import android.content.Context;
