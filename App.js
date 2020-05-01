@@ -1,29 +1,39 @@
-/* eslint-disable react-native/no-inline-styles */
-// In App.js in a new project
+import React, {useState, useEffect} from 'react';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 
-import * as React from 'react';
-import {View, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+const App = () => {
+  const [url, setUrl] = useState(null);
+  const handleUrl = event => {
+    console.log('handleUrl', event);
+    setUrl(event.url);
+  };
 
-function HomeScreen() {
+  useEffect(() => {
+    Linking.getInitialURL()
+      .then(initialUrl => {
+        console.log('getInitialURL', initialUrl);
+        setUrl(initialUrl);
+      })
+      .catch(e => {
+        console.log('getInitialURL error', e);
+      });
+    Linking.addEventListener('url', handleUrl);
+    console.log('Linking.addEventListener');
+
+    return () => {
+      Linking.removeEventListener('url', handleUrl);
+      console.log('Linking.removeEventListener');
+    };
+  }, []);
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <Text>{`The deep link is: ${url}`}</Text>
     </View>
   );
-}
-
-const Stack = createStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+};
 
 export default App;
+
+const styles = StyleSheet.create({
+  container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+});
