@@ -27,8 +27,8 @@ class App extends PureComponent {
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
-          onGoogleVisionBarcodesDetected={({barcodes}) => {
-            console.log(barcodes);
+          onBarCodeRead={event => {
+            console.log('onBarCodeRead', event);
           }}
         />
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
