@@ -3,6 +3,7 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import {BarcodeMask} from '@nartc/react-native-barcode-mask';
 
 class App extends PureComponent {
   render() {
@@ -24,8 +25,9 @@ class App extends PureComponent {
           }}
           onBarCodeRead={event => {
             console.log('onBarCodeRead', event);
-          }}
-        />
+          }}>
+          <BarcodeMask />
+        </RNCamera>
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
           <TouchableOpacity
             onPress={this.takePicture.bind(this)}
