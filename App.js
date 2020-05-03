@@ -1,73 +1,26 @@
-/* eslint-disable react-native/no-inline-styles */
-'use strict';
-import React, {PureComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {RNCamera} from 'react-native-camera';
-import {BarcodeMask} from '@nartc/react-native-barcode-mask';
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {NavigationContainer} from '@react-navigation/native';
 
-class App extends PureComponent {
-  render() {
-    return (
-      <View style={styles.container}>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          captureAudio={false}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          onBarCodeRead={event => {
-            console.log('onBarCodeRead', event);
-          }}>
-          <BarcodeMask />
-        </RNCamera>
-        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
-          <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style={styles.capture}>
-            <Text style={{fontSize: 14}}> SNAP </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+import Navigator from './src/modules/Navigator';
+import MyStack from './src/screens/MyStack';
 
-  takePicture = async () => {
-    if (this.camera) {
-      const options = {quality: 0.5, base64: true};
-      const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
-    }
-  };
+function App() {
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer
+        ref={Navigator.navigationRef}
+        onStateChange={state => {
+          // console.log('New state is', state);
+          const currentRouteName = Navigator.getActiveRouteName(state);
+          Navigator.routeNameRef.current = currentRouteName;
+          // console.log('currentRouteName', currentRouteName);
+        }}>
+        <MyStack />
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
-  },
-});
