@@ -22,7 +22,7 @@ class Aladin {
       ttbkey: this.apiKey,
       isbn: isbn,
       output: 'JS',
-      version: '20131101', // 20131101, 20070901
+      version: '20070901', // 20131101, 20070901
     };
     const url = this.getUrlForIsbn(params);
     return this.fetch(url);
