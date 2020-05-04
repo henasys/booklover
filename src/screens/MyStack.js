@@ -10,25 +10,31 @@ const Stack = createStackNavigator();
 
 export default function MyStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={'Main'}>
       <Stack.Screen
         name="BarcodeScanner"
         component={BarcodeScanner}
         options={({navigation, route}) => ({
           title: '바코드 스캐너',
+        })}
+      />
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={({navigation, route}) => ({
+          title: '메인',
           headerRight: () => (
             <View style={styles.menuContainer}>
               <Icon
                 iconStyle={styles.menuItem}
-                onPress={() => navigation.navigate('Main')}
-                name="playlist-edit"
+                onPress={() => navigation.navigate('BarcodeScanner')}
+                name="barcode-scan"
                 type="material-community"
               />
             </View>
           ),
         })}
       />
-      <Stack.Screen name="Main" component={Main} options={{title: '메인'}} />
     </Stack.Navigator>
   );
 }
