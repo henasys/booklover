@@ -15,6 +15,7 @@ function Main() {
           const searcher = new Aladin();
           searcher
             .searchIsbn(isbn)
+            .then(response => response.json())
             .then(response => {
               console.log('searchIsbn response', response);
             })

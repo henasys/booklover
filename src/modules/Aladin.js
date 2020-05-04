@@ -2,7 +2,7 @@ import {REACT_APP_ALADIN_API_KEY} from 'react-native-dotenv';
 
 class Aladin {
   constructor() {
-    console.log('REACT_APP_ALADIN_API_KEY', REACT_APP_ALADIN_API_KEY);
+    this.apiKey = REACT_APP_ALADIN_API_KEY;
   }
 
   getUrlForIsbn(p) {
@@ -19,10 +19,10 @@ class Aladin {
 
   searchIsbn(isbn) {
     const params = {
-      ttbkey: REACT_APP_ALADIN_API_KEY,
+      ttbkey: this.apiKey,
       isbn: isbn,
-      output: 'xml',
-      version: '20070901',
+      output: 'JS',
+      version: '20131101', // 20131101, 20070901
     };
     const url = this.getUrlForIsbn(params);
     return this.fetch(url);
