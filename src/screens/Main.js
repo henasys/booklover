@@ -11,13 +11,14 @@ function Main() {
       <Button
         title="search ISBN"
         onPress={() => {
-          const isbn = 'K882531540';
+          // const isbn = 'K882531540';
+          const isbn = '9788936438128';
           const searcher = new Aladin();
           searcher
             .searchIsbn(isbn)
             .then(response => response.json())
             .then(response => {
-              console.log('searchIsbn response', response);
+              console.log('searchIsbn response', JSON.stringify(response));
             })
             .catch(e => {
               console.log('searchIsbn error', e);
