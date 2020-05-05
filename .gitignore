@@ -60,3 +60,13 @@ buck-out/
 
 # react-native-dotenv
 .env
+
+# realm test
+default.realm
+default.realm.inMemory
+default.realm.inMemory.lock
+default.realm.lock
+default.realm.inMemory.management/access_control.control.mx
+default.realm.inMemory.management/access_control.write.mx
+default.realm.management/access_control.control.mx
+default.realm.management/access_control.write.mx
