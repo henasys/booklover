@@ -101,12 +101,12 @@ const clearAllDatabase = () => {
 };
 
 const saveCategory = (realm, name, level, parentId = null) => {
+  const list = realm
+    .objects('Category')
+    .filtered('name = $0 and level = $1', name, level);
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
-        const list = realm
-          .objects('Category')
-          .filtered('name = $0 and level = $1', name, level);
         if (!list.isEmpty()) {
           resolve(list[0]);
           return;
