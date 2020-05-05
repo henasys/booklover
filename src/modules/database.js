@@ -100,7 +100,7 @@ const clearAllDatabase = () => {
   });
 };
 
-const saveCategory = (realm, name, level, parentId = null) => {
+const saveCategory = (realm, {name, level, parentId = null}) => {
   const list = realm
     .objects('Category')
     .filtered('name = $0 and level = $1', name, level);
@@ -150,7 +150,7 @@ const saveCategoryName = async (realm, categoryName) => {
   let parentId = null;
   for (let index = 0; index < categories.length; index++) {
     const name = categories[index];
-    const category = await saveCategory(realm, name, index, parentId);
+    const category = await saveCategory(realm, {name, level: index, parentId});
     parentId = category.id;
   }
 };
