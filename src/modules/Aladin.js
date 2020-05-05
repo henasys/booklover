@@ -1,5 +1,7 @@
 import {REACT_APP_ALADIN_API_KEY} from 'react-native-dotenv';
 
+const parseString = require('react-native-xml2js').parseString;
+
 class Aladin {
   constructor() {
     this.apiKey = REACT_APP_ALADIN_API_KEY;
@@ -21,7 +23,7 @@ class Aladin {
     const params = {
       ttbkey: this.apiKey,
       isbn: isbn,
-      output: 'JS',
+      output: 'XML',
       version: '20070901', // 20131101, 20070901
     };
     const url = this.getUrlForIsbn(params);
@@ -29,7 +31,21 @@ class Aladin {
   }
 
   fetch(url) {
-    return fetch(url);
+    return fetch(url)
+      .then(response => response.text())
+      .then(response => {
+        // console.log('response.text', response);
+        return new Promise((resolve, reject) => {
+          const options = {explicitArray: false, explicitRoot: false};
+          parseString(response, options, function(err, result) {
+            if (err) {
+              reject(new Error(err));
+              return;
+            }
+            resolve(result);
+          });
+        });
+      });
   }
 }
 

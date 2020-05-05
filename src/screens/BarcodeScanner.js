@@ -14,6 +14,7 @@ const defaultBarCodeTypes = [
 ];
 
 const renderItem = item => {
+  console.log('item', item);
   return (
     <View style={styles.itemContainer}>
       <Image style={styles.cover} source={{uri: item.cover}} />
@@ -64,10 +65,13 @@ function BarcodeScanner(props) {
     const searcher = new Aladin();
     searcher
       .searchIsbn(isbn)
-      .then(response => response.json())
       .then(response => {
         console.log('searchIsbn response', response);
-        setList(response.item);
+        if (Array.isArray(response.item)) {
+          setList(response.item);
+        } else {
+          setList([response.item]);
+        }
       })
       .catch(e => {
         console.log('searchIsbn error', e);
