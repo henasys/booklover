@@ -25,13 +25,34 @@ afterEach(async () => {
   await clearDatabase();
 });
 
-test('Database init', async () => {
-  console.log('_realm.path', _realm.path);
-  console.log('Database.getRealm().path', Database.getRealm().path);
+// test('Database init', async () => {
+//   console.log('_realm.path', _realm.path);
+//   console.log('Database.getRealm().path', Database.getRealm().path);
+// });
+
+test('saveCategoryName', async () => {
+  const categoryName = '국내도서>사회과학>사회학>사회학 일반';
+  await Database.saveCategoryName(_realm, categoryName);
+  const categoryList = Database.getCategoryList(_realm);
+  console.log('categoryList', categoryList);
+  categoryList.forEach(cat => {
+    console.log(cat.id, cat.parentId, cat.name, cat.level);
+  });
 });
 
-// test('saveCategory', async () => {
-//   await saveCategory();
-//   const categoryList = db.getAccount();
-//   console.log('categoryList', categoryList);
-// });
+test('saveMultiCategoryName', async () => {
+  const cat1 = '국내도서>경제경영>기업 경영>경영 일반';
+  const cat2 = '국내도서>경제경영>기업 경영>서비스/고객관리';
+  await Database.saveCategoryName(_realm, cat1);
+  let categoryList = Database.getCategoryList(_realm);
+  console.log('categoryList', categoryList);
+  categoryList.forEach(cat => {
+    console.log(cat.id, cat.parentId, cat.name, cat.level);
+  });
+  await Database.saveCategoryName(_realm, cat2);
+  categoryList = Database.getCategoryList(_realm);
+  console.log('categoryList', categoryList);
+  categoryList.forEach(cat => {
+    console.log(cat.id, cat.parentId, cat.name, cat.level);
+  });
+});

@@ -4,6 +4,7 @@ import {v1 as uuidv1} from 'uuid';
 
 import {schemas} from '../modules/schemas';
 import {Category, Book} from '../modules/schemas';
+import {splitCategoryName} from '../modules/util';
 
 let _realm = null;
 
@@ -103,6 +104,13 @@ const saveCategory = (realm, name, level, parentId = null) => {
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
+        const list = realm
+          .objects('Category')
+          .filtered('name = $0 and level = $1', name, level);
+        if (!list.isEmpty()) {
+          resolve(list[0]);
+          return;
+        }
         const category = realm.create('Category', {
           id: uuidv1(),
           name: name,
@@ -137,6 +145,16 @@ const deleteCategoryAll = realm => {
   });
 };
 
+const saveCategoryName = async (realm, categoryName) => {
+  const categories = splitCategoryName(categoryName);
+  let parentId = null;
+  for (let index = 0; index < categories.length; index++) {
+    const name = categories[index];
+    const category = await saveCategory(realm, name, index, parentId);
+    parentId = category.id;
+  }
+};
+
 export default {
   Category,
   Book,
@@ -149,4 +167,5 @@ export default {
   saveCategory,
   getCategoryList,
   deleteCategoryAll,
+  saveCategoryName,
 };
