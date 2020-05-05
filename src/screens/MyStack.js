@@ -5,6 +5,7 @@ import {Icon} from 'react-native-elements';
 
 import Main from '../screens/Main';
 import BarcodeScanner from '../screens/BarcodeScanner';
+import Database from '../modules/database';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,14 @@ export default function MyStack() {
           title: '메인',
           headerRight: () => (
             <View style={styles.menuContainer}>
+              <Icon
+                iconStyle={styles.menuItem}
+                onPress={() => {
+                  Database.clearAllDatabase();
+                }}
+                name="delete"
+                type="material-community"
+              />
               <Icon
                 iconStyle={styles.menuItem}
                 onPress={() => navigation.navigate('BarcodeScanner')}
