@@ -32,7 +32,8 @@ afterEach(async () => {
 
 test('saveCategoryName', async () => {
   const categoryName = '국내도서>사회과학>사회학>사회학 일반';
-  await Database.saveCategoryName(_realm, categoryName);
+  const result = await Database.saveCategoryName(_realm, categoryName);
+  console.log('result', result.id, result.name, result.level);
   const categoryList = Database.getCategoryList(_realm);
   console.log('categoryList', categoryList);
   categoryList.forEach(cat => {
