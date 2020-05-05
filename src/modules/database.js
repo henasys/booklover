@@ -100,7 +100,7 @@ const clearAllDatabase = () => {
   });
 };
 
-const saveCategory = (realm, {name, level, parentId = null}) => {
+const saveCategoryOrGet = (realm, {name, level, parentId = null}) => {
   const list = realm
     .objects('Category')
     .filtered('name = $0 and level = $1', name, level);
@@ -148,11 +148,79 @@ const deleteCategoryAll = realm => {
 const saveCategoryName = async (realm, categoryName) => {
   const categories = splitCategoryName(categoryName);
   let parentId = null;
+  let category = null;
   for (let index = 0; index < categories.length; index++) {
     const name = categories[index];
-    const category = await saveCategory(realm, {name, level: index, parentId});
+    category = await saveCategoryOrGet(realm, {name, level: index, parentId});
     parentId = category.id;
   }
+  return category;
+};
+
+const saveBook = (
+  realm,
+  {
+    title,
+    author,
+    isbn,
+    isbn13,
+    publisher,
+    link,
+    cover,
+    pubDate,
+    description,
+    toc,
+    priceSales,
+    priceStandard,
+    categoryName,
+    category,
+    created = null,
+  },
+) => {
+  const priceSalesValue =
+    typeof priceSales === 'string' ? parseInt(priceSales, 10) : priceSales;
+  const priceStandardValue =
+    typeof priceStandard === 'string'
+      ? parseInt(priceStandard, 10)
+      : priceStandard;
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const book = realm.create('Book', {
+          id: uuidv1(),
+          title: title,
+          author: author,
+          isbn: isbn,
+          isbn13: isbn13,
+          publisher: publisher,
+          link: link,
+          cover: cover,
+          pubDate: pubDate,
+          description: description,
+          toc: toc,
+          priceSales: priceSalesValue,
+          priceStandard: priceStandardValue,
+          categoryName: categoryName,
+          created: created ? created : new Date().getTime(),
+        });
+        book.category = category;
+        resolve(book);
+      });
+    } catch (e) {
+      console.warn('realm.write at saveBook', e);
+      reject(new Error(e));
+    }
+  });
+};
+
+const getBookByIsbn = (realm, isbn, isbn13) => {
+  const rs = realm
+    .objects('Book')
+    .filtered('isbn = $0 or isbn13 = $1', isbn, isbn13);
+  if (rs.isEmpty()) {
+    return null;
+  }
+  return rs[0];
 };
 
 export default {
@@ -164,8 +232,10 @@ export default {
   open,
   close,
   clearAllDatabase,
-  saveCategory,
+  saveCategoryOrGet,
   getCategoryList,
   deleteCategoryAll,
   saveCategoryName,
+  saveBook,
+  getBookByIsbn,
 };

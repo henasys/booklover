@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RNCamera} from 'react-native-camera';
@@ -7,13 +8,40 @@ import {FlatList} from 'react-native-gesture-handler';
 import {Image, Icon} from 'react-native-elements';
 
 import Aladin from '../modules/Aladin';
+import Database from '../modules/database';
 
 const defaultBarCodeTypes = [
   RNCamera.Constants.BarCodeType.ean13,
   RNCamera.Constants.BarCodeType.ean8,
 ];
 
-const renderItem = item => {
+const addBook = async (realm, item, callback) => {
+  const category = await Database.saveCategoryName(realm, item.categoryName);
+  console.log(category.id, category.parentId, category.name, category.level);
+  const book = await Database.saveBook(realm, {...item, ...{category}});
+  console.log('new book', book.id, book.title);
+  item._book = book;
+  callback(item);
+};
+
+const getIcon = (realm, item, callback) => {
+  if (!item._book) {
+    return (
+      <Icon
+        reverse
+        name="add"
+        type="material"
+        onPress={() => {
+          addBook(realm, item, callback);
+        }}
+      />
+    );
+  } else {
+    return <Icon disabled reverse name="check" type="material" />;
+  }
+};
+
+const renderItem = (realm, item, callback) => {
   console.log('item', item);
   if (!item) {
     return null;
@@ -32,14 +60,7 @@ const renderItem = item => {
           {item.isbn} {item.isbn13}
         </Text>
       </View>
-      <Icon
-        reverse
-        name="add"
-        type="material"
-        onPress={() => {
-          console.log('add clicked');
-        }}
-      />
+      {getIcon(realm, item, callback)}
     </View>
   );
 };
@@ -56,9 +77,20 @@ const renderError = error => {
 };
 
 function BarcodeScanner(props) {
+  const [realm, setRealm] = useState(null);
   const [barcode, setBarcode] = useState(null);
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    Database.open(_realm => {
+      setRealm(_realm);
+      console.log('Database.open');
+    });
+    return () => {
+      Database.close(realm);
+      console.log('Database.close');
+    };
+  }, []);
   const onBarcodeRead = event => {
     console.log('onBarcodeRead', event);
     const isbn = event.data;
@@ -70,10 +102,22 @@ function BarcodeScanner(props) {
       .searchIsbn(isbn)
       .then(response => {
         console.log('searchIsbn response', response);
-        if (Array.isArray(response.item)) {
-          setList(response.item);
+        if (response.errorCode) {
+          const msg = `${response.errorCode} ${response.errorMessage}`;
+          console.log(msg);
+          setError(msg);
+          return;
+        }
+        const item = response.item;
+        const book = Database.getBookByIsbn(realm, item.isbn, item.isbn13);
+        item._book = book;
+        if (book) {
+          setError('이미 추가된 도서입니다.');
+        }
+        if (Array.isArray(item)) {
+          setList(item);
         } else {
-          setList([response.item]);
+          setList([item]);
         }
       })
       .catch(e => {
@@ -85,6 +129,9 @@ function BarcodeScanner(props) {
           setBarcode(null);
         }, 2000);
       });
+  };
+  const callbackForItemChanged = item => {
+    setList([item]);
   };
   const barCodeTypes = barcode ? [] : defaultBarCodeTypes;
   return (
@@ -112,7 +159,9 @@ function BarcodeScanner(props) {
       <View style={styles.listContainer}>
         <FlatList
           data={list}
-          renderItem={({item}) => renderItem(item)}
+          renderItem={({item}) =>
+            renderItem(realm, item, callbackForItemChanged)
+          }
           keyExtractor={(item, index) => String(index)}
         />
       </View>
@@ -143,7 +192,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     marginLeft: 10,
-    marginVertical: 10,
+    marginBottom: 10,
+    // marginVertical: 10,
+    // borderWidth: 1,
   },
   cover: {
     width: 80,
@@ -170,6 +221,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 10,
+    // borderWidth: 1,
   },
   error: {
     color: 'crimson',
