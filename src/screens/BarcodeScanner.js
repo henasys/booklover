@@ -15,24 +15,71 @@ const defaultBarCodeTypes = [
   RNCamera.Constants.BarCodeType.ean8,
 ];
 
-const addBook = async (realm, item, callback) => {
+const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
+  const isbn = event.data;
+  setBarcode(isbn);
+  setError(null);
+  setList([]);
+  const book = Database.getBookByIsbn(realm, isbn, isbn);
+  if (book) {
+    setError('이미 추가된 도서입니다.');
+    book._alreadyAdded = true;
+    setList([book]);
+    setBarcodeTimer(setBarcode);
+    return;
+  }
+  const searcher = new Aladin();
+  searcher
+    .searchIsbn(isbn)
+    .then(response => {
+      console.log('searchIsbn response', response);
+      if (response.errorCode) {
+        const msg = `${response.errorCode} ${response.errorMessage}`;
+        console.log(msg);
+        setError(msg);
+        return;
+      }
+      const item = response.item;
+      item._alreadyAdded =
+        Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
+      if (item._alreadyAdded) {
+        setError('이미 추가된 도서입니다.');
+      }
+      setList([item]);
+    })
+    .catch(e => {
+      console.log('searchIsbn error', e);
+      setError(`검색 오류입니다. ${e}`);
+    })
+    .finally(() => {
+      setBarcodeTimer(setBarcode);
+    });
+};
+
+const setBarcodeTimer = setBarcode => {
+  setTimeout(() => {
+    setBarcode(null);
+  }, 2000);
+};
+
+const addBook = async (realm, item, setList) => {
   const category = await Database.saveCategoryName(realm, item.categoryName);
   console.log(category.id, category.parentId, category.name, category.level);
   const book = await Database.saveBook(realm, {...item, ...{category}});
   console.log('new book', book.id, book.title);
-  item._book = book;
-  callback(item);
+  item._alreadyAdded = book !== null;
+  setList([item]);
 };
 
-const getIcon = (realm, item, callback) => {
-  if (!item._book) {
+const getIcon = (realm, item, setList) => {
+  if (!item._alreadyAdded) {
     return (
       <Icon
         reverse
         name="add"
         type="material"
         onPress={() => {
-          addBook(realm, item, callback);
+          addBook(realm, item, setList);
         }}
       />
     );
@@ -41,8 +88,8 @@ const getIcon = (realm, item, callback) => {
   }
 };
 
-const renderItem = (realm, item, callback) => {
-  console.log('item', item);
+const renderItem = (realm, item, setList) => {
+  // console.log('item', item);
   if (!item) {
     return null;
   }
@@ -60,7 +107,7 @@ const renderItem = (realm, item, callback) => {
           {item.isbn} {item.isbn13}
         </Text>
       </View>
-      {getIcon(realm, item, callback)}
+      {getIcon(realm, item, setList)}
     </View>
   );
 };
@@ -84,54 +131,15 @@ function BarcodeScanner(props) {
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
-      console.log('Database.open');
+      // console.log('Database.open');
     });
     return () => {
       Database.close(realm);
-      console.log('Database.close');
+      // console.log('Database.close');
     };
   }, []);
   const onBarcodeRead = event => {
-    console.log('onBarcodeRead', event);
-    const isbn = event.data;
-    setBarcode(isbn);
-    setError(null);
-    setList([]);
-    const searcher = new Aladin();
-    searcher
-      .searchIsbn(isbn)
-      .then(response => {
-        console.log('searchIsbn response', response);
-        if (response.errorCode) {
-          const msg = `${response.errorCode} ${response.errorMessage}`;
-          console.log(msg);
-          setError(msg);
-          return;
-        }
-        const item = response.item;
-        const book = Database.getBookByIsbn(realm, item.isbn, item.isbn13);
-        item._book = book;
-        if (book) {
-          setError('이미 추가된 도서입니다.');
-        }
-        if (Array.isArray(item)) {
-          setList(item);
-        } else {
-          setList([item]);
-        }
-      })
-      .catch(e => {
-        console.log('searchIsbn error', e);
-        setError(`검색 오류입니다. ${e}`);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setBarcode(null);
-        }, 2000);
-      });
-  };
-  const callbackForItemChanged = item => {
-    setList([item]);
+    handleOnBarcodeRead(event, setBarcode, setError, setList, realm);
   };
   const barCodeTypes = barcode ? [] : defaultBarCodeTypes;
   return (
@@ -159,9 +167,7 @@ function BarcodeScanner(props) {
       <View style={styles.listContainer}>
         <FlatList
           data={list}
-          renderItem={({item}) =>
-            renderItem(realm, item, callbackForItemChanged)
-          }
+          renderItem={({item}) => renderItem(realm, item, setList)}
           keyExtractor={(item, index) => String(index)}
         />
       </View>
