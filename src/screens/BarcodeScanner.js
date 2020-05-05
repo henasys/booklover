@@ -15,6 +15,9 @@ const defaultBarCodeTypes = [
 
 const renderItem = item => {
   console.log('item', item);
+  if (!item) {
+    return null;
+  }
   return (
     <View style={styles.itemContainer}>
       <Image style={styles.cover} source={{uri: item.cover}} />
