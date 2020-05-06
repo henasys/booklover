@@ -79,7 +79,9 @@ function Main({navigation}) {
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
-      setList(Database.getBookList(_realm));
+      const bookList = Database.getBookList(_realm);
+      bookList.addListener(listListener);
+      setList(bookList);
     });
     return () => {
       Database.close(realm);
@@ -122,6 +124,36 @@ function Main({navigation}) {
     const books = Database.getBookListBySearch(realm, text);
     setList(books);
   };
+  const listListener = (oldList, changes) => {
+    console.log('main listListener changes', changes);
+    console.log('main listListener oldList', oldList);
+    if (changes.deletions.length > 0) {
+      console.log('changes.deletions exists');
+      const newList = [];
+      for (let index = 0; index < oldList.length; index++) {
+        const element = oldList[index];
+        if (!changes.deletions.includes(index)) {
+          newList.push(element);
+        }
+      }
+      setList(newList);
+    }
+    if (changes.modifications.length > 0) {
+      console.log('changes.modifications exists');
+      setList(oldList);
+    }
+    if (changes.insertions.length > 0) {
+      console.log('changes.insertions exists');
+      const newList = [...oldList];
+      // for (let index = 0; index < oldList.length; index++) {
+      //   const element = oldList[index];
+      //   if (changes.insertions.includes(index)) {
+      //     newList.push(element);
+      //   }
+      // }
+      setList(newList);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.flexOne}>
@@ -137,7 +169,7 @@ function Main({navigation}) {
           <FlatList
             data={list}
             renderItem={({item}) => renderItem(item, navigation)}
-            keyExtractor={(item, index) => String(index)}
+            keyExtractor={(item, index) => item.id}
           />
         </View>
         {renderActionButton(navigation)}
