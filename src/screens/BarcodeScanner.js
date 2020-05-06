@@ -65,7 +65,8 @@ const setBarcodeTimer = setBarcode => {
 const addBook = async (realm, item, setList) => {
   const category = await Database.saveCategoryName(realm, item.categoryName);
   console.log(category.id, category.parentId, category.name, category.level);
-  const book = await Database.saveBook(realm, {...item, ...{category}});
+  const toc = item.bookinfo && item.bookinfo.toc;
+  const book = await Database.saveBook(realm, {...item, ...{category, toc}});
   console.log('new book', book.id, book.title);
   item._alreadyAdded = book !== null;
   setList([item]);
