@@ -72,6 +72,18 @@ const addBook = async (realm, item, setList) => {
   setList([item]);
 };
 
+const deleteBook = (realm, item, setList) => {
+  const book = {...item};
+  Database.deleteBookById(realm, item.id)
+    .then(() => {
+      console.log('Database.deleteBookById done', book.id, book.title);
+      setList([]);
+    })
+    .catch(e => {
+      console.log('Database.deleteBookById error', book.id, e);
+    });
+};
+
 const getIcon = (realm, item, setList) => {
   if (!item._alreadyAdded) {
     return (
@@ -85,7 +97,16 @@ const getIcon = (realm, item, setList) => {
       />
     );
   } else {
-    return <Icon disabled reverse name="check" type="material" />;
+    return (
+      <Icon
+        reverse
+        name="delete"
+        type="material"
+        onPress={() => {
+          deleteBook(realm, item, setList);
+        }}
+      />
+    );
   }
 };
 
