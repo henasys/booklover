@@ -237,6 +237,21 @@ const getBookListBySearch = (realm, text) => {
   return list;
 };
 
+const deleteBookById = (realm, id) => {
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const book = realm.objects('Book').filtered('id = $0', id);
+        realm.delete(book);
+        resolve();
+      });
+    } catch (e) {
+      console.warn('realm.write', e);
+      reject(new Error(e));
+    }
+  });
+};
+
 export default {
   Category,
   Book,
@@ -254,4 +269,5 @@ export default {
   getBookByIsbn,
   getBookList,
   getBookListBySearch,
+  deleteBookById,
 };

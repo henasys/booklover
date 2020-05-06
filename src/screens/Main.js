@@ -8,6 +8,7 @@ import {Icon, SearchBar} from 'react-native-elements';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
+import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 
 const renderActionButton = navigation => {
@@ -46,13 +47,15 @@ function Main({navigation}) {
   const [list, setList] = React.useState([]);
   const [search, setSearch] = React.useState(null);
   React.useEffect(() => {
+    let bookList;
     Database.open(_realm => {
       setRealm(_realm);
-      const bookList = Database.getBookList(_realm);
+      bookList = Database.getBookList(_realm);
       bookList.addListener(listListener);
       setList(bookList);
     });
     return () => {
+      bookList && bookList.removeAllListeners();
       Database.close(realm);
     };
   }, []);
@@ -93,29 +96,38 @@ function Main({navigation}) {
     const books = Database.getBookListBySearch(realm, text);
     setList(books);
   };
-  const listListener = (oldList, changes) => {
+  const listListener = (newList, changes) => {
     console.log('main listListener changes', changes);
-    console.log('main listListener oldList', oldList);
+    console.log('main listListener newList', newList);
     if (changes.deletions.length > 0) {
       console.log('changes.deletions exists');
-      const newList = [];
-      for (let index = 0; index < oldList.length; index++) {
-        const element = oldList[index];
-        if (!changes.deletions.includes(index)) {
-          newList.push(element);
-        }
-      }
       setList(newList);
     }
     if (changes.modifications.length > 0) {
       console.log('changes.modifications exists');
-      setList(oldList);
+      setList(newList);
     }
     if (changes.insertions.length > 0) {
       console.log('changes.insertions exists');
-      const newList = [...oldList];
       setList(newList);
     }
+  };
+  const onDeleteRow = rowKey => {
+    console.log('_onDeleteRow', rowKey);
+    if (!rowKey) {
+      return;
+    }
+    const newList = [...list];
+    const prevIndex = list.findIndex(item => item.id === rowKey);
+    newList.splice(prevIndex, 1);
+    setList(newList);
+    Database.deleteBookById(realm, rowKey)
+      .then(() => {
+        console.log('Database.deleteBookById done', rowKey);
+      })
+      .catch(e => {
+        console.log('Database.deleteBookById error', rowKey, e);
+      });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -131,7 +143,16 @@ function Main({navigation}) {
         <View style={styles.listContainer}>
           <FlatList
             data={list}
-            renderItem={({item}) => <BookItem item={item} />}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderItem={({item, index}) => (
+              <SwipeableRow
+                rowKey={item.id}
+                rowIndex={index}
+                rowItem={item}
+                onDeleteRow={onDeleteRow}>
+                <BookItem item={item} />
+              </SwipeableRow>
+            )}
             keyExtractor={item => item.id}
           />
         </View>
@@ -163,6 +184,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     // paddingHorizontal: 10,
+  },
+  separator: {
+    backgroundColor: 'rgb(200, 199, 204)',
+    height: StyleSheet.hairlineWidth,
   },
   searchBarContainer: {
     backgroundColor: 'lightslategrey',
