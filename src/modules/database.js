@@ -227,6 +227,13 @@ const getBookList = realm => {
   return realm.objects('Book');
 };
 
+const getBookListBySearch = (realm, text) => {
+  const list = realm
+    .objects('Book')
+    .filtered('title CONTAINS[c] $0 or author CONTAINS[c] $0', text);
+  return list;
+};
+
 export default {
   Category,
   Book,
@@ -243,4 +250,5 @@ export default {
   saveBook,
   getBookByIsbn,
   getBookList,
+  getBookListBySearch,
 };
