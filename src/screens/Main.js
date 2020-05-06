@@ -6,7 +6,7 @@ import {Icon} from 'react-native-elements';
 
 import Aladin from '../modules/Aladin';
 
-function Main() {
+function Main(props) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Main Screen</Text>
@@ -20,7 +20,9 @@ function Main() {
         <ActionButton.Item
           buttonColor="#1abc9c"
           title="바코드 검색"
-          onPress={() => {}}>
+          onPress={() => {
+            props.navigation.navigate('BarcodeScanner');
+          }}>
           <Icon
             name="barcode-scan"
             type="material-community"

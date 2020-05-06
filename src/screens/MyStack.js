@@ -34,12 +34,6 @@ export default function MyStack() {
                 name="delete"
                 type="material-community"
               />
-              <Icon
-                iconStyle={styles.menuItem}
-                onPress={() => navigation.navigate('BarcodeScanner')}
-                name="barcode-scan"
-                type="material-community"
-              />
             </View>
           ),
         })}
