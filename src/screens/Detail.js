@@ -46,13 +46,17 @@ function Detail({navigation, route}) {
           </View>
         </View>
         <View style={styles.spacer} />
-        <Text>내용 소개</Text>
+        <Text style={styles.sectionTitle}>내용 소개</Text>
         <View style={styles.spacer} />
-        <HTMLView value={sanitizeHtml(book.description)} />
+        <View style={styles.htmlContainer}>
+          <HTMLView value={sanitizeHtml(book.description)} />
+        </View>
         <View style={styles.spacer} />
-        <Text>목차</Text>
+        <Text style={styles.sectionTitle}>목차</Text>
         <View style={styles.spacer} />
-        <HTMLView value={book.toc} />
+        <View style={styles.htmlContainer}>
+          <HTMLView value={book.toc} />
+        </View>
         <View style={styles.spacer} />
       </ScrollView>
     </SafeAreaView>
@@ -95,6 +99,12 @@ const styles = StyleSheet.create({
   },
   isbn: {
     color: 'darkslategrey',
+  },
+  sectionTitle: {
+    fontSize: 18,
+  },
+  htmlContainer: {
+    marginHorizontal: 20,
   },
 });
 
