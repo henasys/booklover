@@ -3,7 +3,7 @@ import * as React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 
-import Navigator from './src/modules/Navigator';
+import Navigator from './src/modules/navigator';
 import MyStack from './src/screens/MyStack';
 
 function App() {
