@@ -1,45 +1,14 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {View, Text, StyleSheet, KeyboardAvoidingView} from 'react-native';
-import {TouchableOpacity} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
-import {Image, Icon, SearchBar} from 'react-native-elements';
+import {Icon, SearchBar} from 'react-native-elements';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
-
-const renderItem = (item, navigation) => {
-  if (!item) {
-    return null;
-  }
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('Detail', {book: item});
-      }}>
-      <View style={styles.itemContainer}>
-        <Image style={styles.cover} source={{uri: item.cover}} />
-        <View style={styles.bookInfo}>
-          <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
-            {item.title}
-          </Text>
-          <Text style={styles.author} numberOfLines={2} ellipsizeMode={'tail'}>
-            {item.author}
-          </Text>
-          <Text
-            style={styles.category}
-            numberOfLines={2}
-            ellipsizeMode={'tail'}>
-            {item.category.name}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+import BookItem from '../views/BookItem';
 
 const renderActionButton = navigation => {
   return (
@@ -162,8 +131,8 @@ function Main({navigation}) {
         <View style={styles.listContainer}>
           <FlatList
             data={list}
-            renderItem={({item}) => renderItem(item, navigation)}
-            keyExtractor={(item, index) => item.id}
+            renderItem={({item}) => <BookItem item={item} />}
+            keyExtractor={item => item.id}
           />
         </View>
         {renderActionButton(navigation)}
@@ -194,35 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     // paddingHorizontal: 10,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginLeft: 10,
-    marginBottom: 10,
-    // marginVertical: 10,
-    // borderWidth: 1,
-  },
-  cover: {
-    width: 80,
-    height: 80,
-  },
-  bookInfo: {
-    flexDirection: 'column',
-    width: '70%',
-    // marginHorizontal: 10,
-    marginLeft: 10,
-    marginVertical: 10,
-  },
-  title: {
-    fontSize: 15,
-  },
-  author: {
-    color: 'grey',
-  },
-  category: {
-    color: 'navy',
   },
   searchBarContainer: {
     backgroundColor: 'lightslategrey',
