@@ -1,32 +1,43 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {View, Text, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
 import {Image, Icon, SearchBar} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
 
 import Database from '../modules/database';
 
-const renderItem = (realm, item, setList) => {
+const renderItem = (item, navigation) => {
   if (!item) {
     return null;
   }
   return (
-    <View style={styles.itemContainer}>
-      <Image style={styles.cover} source={{uri: item.cover}} />
-      <View style={styles.bookInfo}>
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
-          {item.title}
-        </Text>
-        <Text style={styles.author} numberOfLines={2} ellipsizeMode={'tail'}>
-          {item.author}
-        </Text>
-        <Text style={styles.category} numberOfLines={2} ellipsizeMode={'tail'}>
-          {item.category.name}
-        </Text>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('Detail', {book: item});
+      }}>
+      <View style={styles.itemContainer}>
+        <Image style={styles.cover} source={{uri: item.cover}} />
+        <View style={styles.bookInfo}>
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
+            {item.title}
+          </Text>
+          <Text style={styles.author} numberOfLines={2} ellipsizeMode={'tail'}>
+            {item.author}
+          </Text>
+          <Text
+            style={styles.category}
+            numberOfLines={2}
+            ellipsizeMode={'tail'}>
+            {item.category.name}
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -117,7 +128,7 @@ function Main({navigation}) {
         <View style={styles.listContainer}>
           <FlatList
             data={list}
-            renderItem={({item}) => renderItem(realm, item, setList)}
+            renderItem={({item}) => renderItem(item, navigation)}
             keyExtractor={(item, index) => String(index)}
           />
         </View>
