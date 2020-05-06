@@ -223,6 +223,10 @@ const getBookByIsbn = (realm, isbn, isbn13) => {
   return rs[0];
 };
 
+const getBookList = realm => {
+  return realm.objects('Book');
+};
+
 export default {
   Category,
   Book,
@@ -238,4 +242,5 @@ export default {
   saveCategoryName,
   saveBook,
   getBookByIsbn,
+  getBookList,
 };

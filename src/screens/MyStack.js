@@ -22,7 +22,7 @@ export default function MyStack() {
         name="Main"
         component={Main}
         options={({navigation, route}) => ({
-          title: '메인',
+          title: '책사랑꾼',
         })}
       />
     </Stack.Navigator>
