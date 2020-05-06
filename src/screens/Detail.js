@@ -1,9 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
+
+const sanitizeHtml = require('sanitize-html');
 
 function Detail({navigation, route}) {
   const {book} = route.params;
@@ -47,7 +48,7 @@ function Detail({navigation, route}) {
         <View style={styles.spacer} />
         <Text>내용 소개</Text>
         <View style={styles.spacer} />
-        <HTMLView value={book.description} />
+        <HTMLView value={sanitizeHtml(book.description)} />
         <View style={styles.spacer} />
         <Text>목차</Text>
         <View style={styles.spacer} />
