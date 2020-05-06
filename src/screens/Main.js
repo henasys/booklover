@@ -145,12 +145,6 @@ function Main({navigation}) {
     if (changes.insertions.length > 0) {
       console.log('changes.insertions exists');
       const newList = [...oldList];
-      // for (let index = 0; index < oldList.length; index++) {
-      //   const element = oldList[index];
-      //   if (changes.insertions.includes(index)) {
-      //     newList.push(element);
-      //   }
-      // }
       setList(newList);
     }
   };
