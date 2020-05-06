@@ -5,8 +5,33 @@ import ActionButton from 'react-native-action-button';
 import {Icon} from 'react-native-elements';
 
 import Aladin from '../modules/Aladin';
+import Database from '../modules/database';
 
-function Main(props) {
+function Main({navigation}) {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.menuContainer}>
+          <Icon
+            iconStyle={styles.menuItem}
+            onPress={() => {
+              Database.clearAllDatabase();
+            }}
+            name="delete"
+            type="material-community"
+          />
+          <Icon
+            iconStyle={styles.menuItem}
+            onPress={() => {
+              Database.clearAllDatabase();
+            }}
+            name="sort"
+            type="material-community"
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Main Screen</Text>
@@ -21,7 +46,7 @@ function Main(props) {
           buttonColor="#1abc9c"
           title="바코드 검색"
           onPress={() => {
-            props.navigation.navigate('BarcodeScanner');
+            navigation.navigate('BarcodeScanner');
           }}>
           <Icon
             name="barcode-scan"
@@ -37,6 +62,12 @@ function Main(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  menuContainer: {
+    flexDirection: 'row',
+  },
+  menuItem: {
+    marginRight: 10,
   },
   actionButtonIcon: {
     fontSize: 20,
