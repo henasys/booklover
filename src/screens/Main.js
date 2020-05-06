@@ -7,9 +7,9 @@ import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
 import {Image, Icon, SearchBar} from 'react-native-elements';
-import {useNavigation} from '@react-navigation/native';
 
 import Database from '../modules/database';
+import AndroidBackHandler from '../modules/AndroidBackHandler';
 
 const renderItem = (item, navigation) => {
   if (!item) {
@@ -83,6 +83,14 @@ function Main({navigation}) {
     });
     return () => {
       Database.close(realm);
+    };
+  }, []);
+  React.useEffect(() => {
+    const backHandler = new AndroidBackHandler();
+    backHandler.addRoutesToBeStopped(['Main']);
+    backHandler.initBackHandler();
+    return () => {
+      backHandler.removeBackHandler();
     };
   }, []);
   React.useLayoutEffect(() => {
