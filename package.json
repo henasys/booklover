@@ -20,7 +20,6 @@
     "react-native-action-button": "git://github.com/henasys/react-native-action-button.git#b48e5e0d0cbec228ae319fb34b56abcd96fdd214",
     "react-native-camera": "^3.23.1",
     "react-native-elements": "^2.0.0",
-    "react-native-floating-action": "^1.20.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-get-random-values": "^1.4.0",
     "react-native-reanimated": "^1.8.0",
