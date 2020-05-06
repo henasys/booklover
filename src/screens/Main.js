@@ -30,6 +30,37 @@ const renderItem = (realm, item, setList) => {
   );
 };
 
+const renderActionButton = navigation => {
+  return (
+    <ActionButton buttonColor="rgba(231,76,60,1)">
+      <ActionButton.Item
+        buttonColor="#9b59b6"
+        title="수동 입력"
+        onPress={() => console.log('notes tapped!')}>
+        <Icon name="form" type="antdesign" style={styles.actionButtonIcon} />
+      </ActionButton.Item>
+      <ActionButton.Item
+        buttonColor="#3498db"
+        title="제목 검색"
+        onPress={() => {}}>
+        <Icon name="search" type="material" style={styles.actionButtonIcon} />
+      </ActionButton.Item>
+      <ActionButton.Item
+        buttonColor="#1abc9c"
+        title="바코드 검색"
+        onPress={() => {
+          navigation.navigate('BarcodeScanner');
+        }}>
+        <Icon
+          name="barcode-scan"
+          type="material-community"
+          style={styles.actionButtonIcon}
+        />
+      </ActionButton.Item>
+    </ActionButton>
+  );
+};
+
 function Main({navigation}) {
   const [realm, setRealm] = React.useState(null);
   const [list, setList] = React.useState([]);
@@ -90,30 +121,7 @@ function Main({navigation}) {
             keyExtractor={(item, index) => String(index)}
           />
         </View>
-        <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item
-            buttonColor="#3498db"
-            title="제목 검색"
-            onPress={() => {}}>
-            <Icon
-              name="search"
-              type="material"
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="바코드 검색"
-            onPress={() => {
-              navigation.navigate('BarcodeScanner');
-            }}>
-            <Icon
-              name="barcode-scan"
-              type="material-community"
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-        </ActionButton>
+        {renderActionButton(navigation)}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
