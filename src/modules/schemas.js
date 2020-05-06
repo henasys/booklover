@@ -32,6 +32,7 @@ Book.schema = {
     priceStandard: {type: 'int', indexed: true, optional: true},
     categoryName: {type: 'string', indexed: true, optional: true},
     category: {type: 'Category', optional: true},
+    published: {type: 'int', indexed: true, optional: true},
     created: {type: 'int', indexed: true},
   },
 };

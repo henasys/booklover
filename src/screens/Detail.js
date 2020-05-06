@@ -4,6 +4,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 
+import TimeUtil from '../modules/timeUtil';
+
 const sanitizeHtml = require('sanitize-html');
 
 function Detail({navigation, route}) {
@@ -30,7 +32,7 @@ function Detail({navigation, route}) {
               style={styles.author}
               numberOfLines={1}
               ellipsizeMode={'tail'}>
-              {book.publisher} {book.pubDate}
+              {book.publisher} {TimeUtil.timeToYearMonth(book.published)}
             </Text>
             <View style={styles.spacer} />
             <Text

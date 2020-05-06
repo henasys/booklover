@@ -5,6 +5,7 @@ import {v1 as uuidv1} from 'uuid';
 import {schemas} from '../modules/schemas';
 import {Category, Book} from '../modules/schemas';
 import {splitCategoryName} from '../modules/util';
+import TimeUtil from '../modules/timeUtil';
 
 let _realm = null;
 
@@ -183,6 +184,7 @@ const saveBook = (
     typeof priceStandard === 'string'
       ? parseInt(priceStandard, 10)
       : priceStandard;
+  const published = TimeUtil.dateToTimestamp(pubDate);
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -201,6 +203,7 @@ const saveBook = (
           priceSales: priceSalesValue,
           priceStandard: priceStandardValue,
           categoryName: categoryName,
+          published: published,
           created: created ? created : new Date().getTime(),
         });
         book.category = category;
