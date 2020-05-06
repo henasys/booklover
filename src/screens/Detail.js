@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native-elements';
+import HTMLView from 'react-native-htmlview';
 
 function Detail({navigation, route}) {
   const {book} = route.params;
@@ -46,11 +47,11 @@ function Detail({navigation, route}) {
         <View style={styles.spacer} />
         <Text>내용 소개</Text>
         <View style={styles.spacer} />
-        <Text>{book.description}</Text>
+        <HTMLView value={book.description} />
         <View style={styles.spacer} />
         <Text>목차</Text>
         <View style={styles.spacer} />
-        <Text>{book.toc}</Text>
+        <HTMLView value={book.toc} />
         <View style={styles.spacer} />
       </ScrollView>
     </SafeAreaView>
