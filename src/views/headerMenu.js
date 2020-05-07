@@ -38,7 +38,7 @@ const renderMenuItem = (item, callback = null) => {
   );
 };
 
-export const renderHeaderMenu = (callback = null) => {
+const renderHeaderMenu = (callback = null) => {
   return (
     <Menu
       ref={headerMenu.setMenuRef}
@@ -60,3 +60,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default {
+  items,
+  renderHeaderMenu,
+};

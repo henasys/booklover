@@ -10,7 +10,7 @@ import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
-import {renderHeaderMenu} from '../views/headerMenu';
+import HeaderMenu from '../views/headerMenu';
 
 const printIdList = list => {
   console.log(
@@ -58,6 +58,7 @@ function Main({navigation}) {
   const [search, setSearch] = React.useState(null);
   const [sort, setSort] = React.useState(null);
   React.useEffect(() => {
+    setSort(5);
     let bookList;
     Database.open(_realm => {
       setRealm(_realm);
@@ -90,7 +91,7 @@ function Main({navigation}) {
             name="delete"
             type="material-community"
           />
-          {renderHeaderMenu()}
+          {HeaderMenu.renderHeaderMenu()}
         </View>
       ),
     });
