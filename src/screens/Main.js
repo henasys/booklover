@@ -60,7 +60,7 @@ function Main({navigation}) {
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
-      setSort(1);
+      setSort(5);
     });
     return () => {
       Database.close(realm);
