@@ -11,6 +11,15 @@ import AndroidBackHandler from '../modules/AndroidBackHandler';
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 
+const printIdList = list => {
+  console.log(
+    'id list',
+    list.map((x, index) => {
+      return {index, id: x.id};
+    }),
+  );
+};
+
 const renderActionButton = navigation => {
   return (
     <ActionButton buttonColor="rgba(231,76,60,1)">
@@ -96,24 +105,40 @@ function Main({navigation}) {
     const books = Database.getBookListBySearch(realm, text);
     setList(books);
   };
-  const listListener = (newList, changes) => {
+  const listListener = (oldList, changes) => {
     console.log('main listListener changes', changes);
-    console.log('main listListener newList', newList);
+    console.log('main listListener oldList', oldList);
+    printIdList(list);
     if (changes.deletions.length > 0) {
       console.log('changes.deletions exists');
+      const newList = [];
+      for (let index = 0; index < oldList.length; index++) {
+        const element = oldList[index];
+        if (!changes.deletions.includes(index)) {
+          newList.push(element);
+        }
+      }
       setList(newList);
     }
     if (changes.modifications.length > 0) {
       console.log('changes.modifications exists');
+      const newList = [...oldList];
+      changes.insertions.forEach(index => {
+        newList[index] = oldList[index];
+      });
       setList(newList);
     }
     if (changes.insertions.length > 0) {
       console.log('changes.insertions exists');
+      const newList = [...oldList];
+      changes.insertions.forEach(index => {
+        newList[index] = oldList[index];
+      });
       setList(newList);
     }
   };
   const onDeleteRow = rowKey => {
-    console.log('_onDeleteRow', rowKey);
+    console.log('onDeleteRow', rowKey);
     if (!rowKey) {
       return;
     }
@@ -129,6 +154,7 @@ function Main({navigation}) {
         console.log('Database.deleteBookById error', rowKey, e);
       });
   };
+  printIdList(list);
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.flexOne}>
