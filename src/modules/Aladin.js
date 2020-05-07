@@ -27,6 +27,7 @@ class Aladin {
       version: '20070901', // 20131101, 20070901
     };
     const url = this.getUrlForIsbn(params);
+    // console.log('searchIsbn url', url);
     return this.fetch(url);
   }
 
