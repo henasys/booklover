@@ -70,3 +70,6 @@ default.realm.inMemory.management/access_control.control.mx
 default.realm.inMemory.management/access_control.write.mx
 default.realm.management/access_control.control.mx
 default.realm.management/access_control.write.mx
+
+# Firebase
+android/app/google-services.json
