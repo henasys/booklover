@@ -83,6 +83,9 @@ const renderItem = ({realm, item, setList, setError}) => {
         <Text style={styles.isbn} numberOfLines={2} ellipsizeMode={'tail'}>
           {item.isbn} {item.isbn13}
         </Text>
+        <Text style={styles.category} numberOfLines={2} ellipsizeMode={'tail'}>
+          {item.categoryName}
+        </Text>
       </View>
       {getIcon({realm, item, setList, setError})}
     </View>
@@ -129,6 +132,9 @@ const styles = StyleSheet.create({
   },
   isbn: {
     color: 'navy',
+  },
+  category: {
+    color: 'chocolate',
   },
   errorContainer: {
     justifyContent: 'center',

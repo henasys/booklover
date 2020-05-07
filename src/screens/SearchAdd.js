@@ -38,7 +38,7 @@ function SearchAdd({navigation, route}) {
     searcher
       .searchKeyword(search)
       .then(response => {
-        console.log('searchKeyword response', response);
+        // console.log('searchKeyword response', response);
         if (response.errorCode) {
           const msg = `${response.errorCode} ${response.errorMessage}`;
           console.log(msg);
