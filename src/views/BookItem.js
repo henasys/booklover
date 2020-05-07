@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     marginLeft: 10,
+    marginTop: 10,
     marginBottom: 10,
     // marginVertical: 10,
     // borderWidth: 1,

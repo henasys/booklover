@@ -202,6 +202,7 @@ function BarcodeScanner(props) {
       <View style={styles.listContainer}>
         <FlatList
           data={list}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({item}) => renderItem({realm, item, setList, setError})}
           keyExtractor={(item, index) => String(index)}
         />
@@ -227,6 +228,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     // paddingHorizontal: 10,
+  },
+  separator: {
+    backgroundColor: 'rgb(200, 199, 204)',
+    height: StyleSheet.hairlineWidth,
   },
   itemContainer: {
     flexDirection: 'row',
@@ -260,7 +265,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#eeee',
     padding: 10,
     // borderWidth: 1,
   },
