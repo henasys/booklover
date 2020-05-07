@@ -62,7 +62,7 @@ const setBarcodeTimer = setBarcode => {
   }, 2000);
 };
 
-function BarcodeScanner() {
+function BarcodeAdd() {
   const [realm, setRealm] = useState(null);
   const [barcode, setBarcode] = useState(null);
   const [list, setList] = useState([]);
@@ -180,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BarcodeScanner;
+export default BarcodeAdd;

@@ -42,7 +42,7 @@ const renderActionButton = navigation => {
         buttonColor="#1abc9c"
         title="바코드 검색"
         onPress={() => {
-          navigation.navigate('BarcodeScanner');
+          navigation.navigate('BarcodeAdd');
         }}>
         <Icon
           name="barcode-scan"

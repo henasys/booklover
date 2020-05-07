@@ -5,7 +5,7 @@ import {Icon} from 'react-native-elements';
 
 import Main from '../screens/Main';
 import Detail from '../screens/Detail';
-import BarcodeScanner from '../screens/BarcodeScanner';
+import BarcodeAdd from '../screens/BarcodeAdd';
 import SearchAdd from '../screens/SearchAdd';
 
 const Stack = createStackNavigator();
@@ -14,8 +14,8 @@ export default function MyStack() {
   return (
     <Stack.Navigator initialRouteName={'Main'}>
       <Stack.Screen
-        name="BarcodeScanner"
-        component={BarcodeScanner}
+        name="BarcodeAdd"
+        component={BarcodeAdd}
         options={({navigation, route}) => ({
           title: '바코드 검색 추가 ',
         })}
