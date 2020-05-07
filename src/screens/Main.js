@@ -1,10 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
 import {Icon, SearchBar} from 'react-native-elements';
+import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
@@ -20,12 +22,48 @@ const printIdList = list => {
   );
 };
 
+const headerMenu = {_menu: null};
+
+headerMenu.setMenuRef = ref => {
+  headerMenu._menu = ref;
+};
+
+headerMenu.hide = () => {
+  headerMenu._menu.hide();
+};
+
+headerMenu.show = () => {
+  headerMenu._menu.show();
+};
+
+const renderHeaderMenu = () => {
+  return (
+    <Menu
+      ref={headerMenu.setMenuRef}
+      button={
+        <Icon
+          iconStyle={styles.menuItem}
+          onPress={headerMenu.show}
+          name="sort"
+          type="material-community"
+        />
+      }>
+      <MenuItem onPress={headerMenu.hide}>제목 정렬</MenuItem>
+      <MenuItem onPress={headerMenu.hide}>제목 역순</MenuItem>
+      <MenuItem onPress={headerMenu.hide}>저자 정렬</MenuItem>
+      <MenuItem onPress={headerMenu.hide}>저자 역순</MenuItem>
+      <MenuItem onPress={headerMenu.hide}>입력일 정렬</MenuItem>
+      <MenuItem onPress={headerMenu.hide}>입력일 역순</MenuItem>
+    </Menu>
+  );
+};
+
 const renderActionButton = navigation => {
   return (
     <ActionButton buttonColor="rgba(231,76,60,1)">
       <ActionButton.Item
         buttonColor="#9b59b6"
-        title="수동 입력"
+        title="직접 입력"
         onPress={() => console.log('notes tapped!')}>
         <Icon name="form" type="antdesign" style={styles.actionButtonIcon} />
       </ActionButton.Item>
@@ -88,14 +126,7 @@ function Main({navigation}) {
             name="delete"
             type="material-community"
           />
-          <Icon
-            iconStyle={styles.menuItem}
-            onPress={() => {
-              Database.clearAllDatabase();
-            }}
-            name="sort"
-            type="material-community"
-          />
+          {renderHeaderMenu()}
         </View>
       ),
     });
