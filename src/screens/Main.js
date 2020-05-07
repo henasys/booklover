@@ -13,12 +13,12 @@ import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/headerMenu';
 
 const printIdList = list => {
-  console.log(
-    'id list',
-    list.map((x, index) => {
-      return {index, id: x.id};
-    }),
-  );
+  // console.log(
+  //   'id list',
+  //   list.map((x, index) => {
+  //     return {index, id: x.id};
+  //   }),
+  // );
 };
 
 const renderActionButton = navigation => {
@@ -58,16 +58,11 @@ function Main({navigation}) {
   const [search, setSearch] = React.useState(null);
   const [sort, setSort] = React.useState(null);
   React.useEffect(() => {
-    setSort(5);
-    let bookList;
     Database.open(_realm => {
       setRealm(_realm);
-      bookList = Database.getBookList(_realm);
-      bookList.addListener(listListener);
-      setList(bookList);
+      setSort(1);
     });
     return () => {
-      bookList && bookList.removeAllListeners();
       Database.close(realm);
     };
   }, []);
@@ -79,6 +74,23 @@ function Main({navigation}) {
       backHandler.removeBackHandler();
     };
   }, []);
+  React.useEffect(() => {
+    console.log('list query', realm, sort);
+    if (sort === undefined || sort === null) {
+      return;
+    }
+    const sortItem = HeaderMenu.items.getItem(sort);
+    console.log('sortItem', sortItem);
+    const bookList = Database.getBookList(realm).sorted(
+      sortItem.field,
+      sortItem.reverse,
+    );
+    bookList.addListener(listListener);
+    setList(bookList);
+    return () => {
+      bookList && bookList.removeAllListeners();
+    };
+  }, [realm, sort]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -91,11 +103,11 @@ function Main({navigation}) {
             name="delete"
             type="material-community"
           />
-          {HeaderMenu.renderHeaderMenu()}
+          {HeaderMenu.renderHeaderMenu(sort, setSort)}
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, sort]);
   const onUpdateSearch = text => {
     setSearch(text);
     const books = Database.getBookListBySearch(realm, text);
