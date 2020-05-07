@@ -29,6 +29,7 @@ const items = [
 const renderMenuItem = (item, callback = null) => {
   return (
     <MenuItem
+      key={item.index}
       onPress={() => {
         headerMenu.hide();
         callback && callback(item.index);
