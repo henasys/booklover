@@ -3,8 +3,10 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
+// import SearchBar from 'react-native-search-bar';
 import {SearchBar} from 'react-native-elements';
 
+import Aladin from '../modules/Aladin';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
 
@@ -22,7 +24,37 @@ function SearchAdd({navigation, route}) {
     };
   }, []);
   const onUpdateSearch = text => {
+    console.log('onUpdateSearch', text);
     setSearch(text);
+  };
+  const onSearchButtonPress = () => {
+    console.log('onSearchButtonPress');
+  };
+  const onEndEditing = () => {
+    console.log('onEndEditing');
+    setError(null);
+    setList([]);
+    const searcher = new Aladin();
+    searcher
+      .searchKeyword(search)
+      .then(response => {
+        console.log('searchKeyword response', response);
+        if (response.errorCode) {
+          const msg = `${response.errorCode} ${response.errorMessage}`;
+          console.log(msg);
+          setError(msg);
+          return;
+        }
+        const item = response.item;
+        setList(item);
+      })
+      .catch(e => {
+        console.log('searchKeyword error', e);
+        setError(`검색 오류입니다. ${e}`);
+      });
+  };
+  const onSubmitEditing = () => {
+    console.log('onSubmitEditing');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -33,6 +65,10 @@ function SearchAdd({navigation, route}) {
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={onUpdateSearch}
+          onSearchButtonPress={onSearchButtonPress}
+          onEndEditing={onEndEditing}
+          onSubmitEditing={onSubmitEditing}
+          autoCapitalize={'none'}
           value={search}
         />
         {SearchItem.renderError(error)}

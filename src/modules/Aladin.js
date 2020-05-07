@@ -31,6 +31,29 @@ class Aladin {
     return this.fetch(url);
   }
 
+  getUrlForKeyword(p) {
+    const keyword = encodeURI(p.keyword);
+    return `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${
+      p.ttbkey
+    }&Query=${keyword}&QueryType=Keyword&SearchTarget=Book&output=${
+      p.output
+    }&Omitkey=1&Version=${
+      p.version
+    }&OptResult=c2binfo,fulldescription,toc&MaxResults=50`;
+  }
+
+  searchKeyword(keyword) {
+    const params = {
+      ttbkey: this.apiKey,
+      keyword: keyword,
+      output: 'XML',
+      version: '20070901', // 20131101, 20070901
+    };
+    const url = this.getUrlForKeyword(params);
+    // console.log('searchKeyword url', url);
+    return this.fetch(url);
+  }
+
   fetch(url) {
     return fetch(url)
       .then(response => response.text())
