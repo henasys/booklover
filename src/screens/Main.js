@@ -75,13 +75,14 @@ function Main({navigation}) {
     };
   }, []);
   React.useEffect(() => {
-    console.log('list query', realm, sort);
+    console.log('list query', realm, sort, search);
     if (sort === undefined || sort === null) {
       return;
     }
     const sortItem = HeaderMenu.items.getItem(sort);
-    console.log('sortItem', sortItem);
-    const bookList = Database.getBookList(realm).sorted(
+    const bookList = Database.getBookListBySearch(
+      realm,
+      search,
       sortItem.field,
       sortItem.reverse,
     );
@@ -90,7 +91,7 @@ function Main({navigation}) {
     return () => {
       bookList && bookList.removeAllListeners();
     };
-  }, [realm, sort]);
+  }, [realm, sort, search]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -110,8 +111,6 @@ function Main({navigation}) {
   }, [navigation, sort]);
   const onUpdateSearch = text => {
     setSearch(text);
-    const books = Database.getBookListBySearch(realm, text);
-    setList(books);
   };
   const listListener = (oldList, changes) => {
     console.log('main listListener changes', changes);

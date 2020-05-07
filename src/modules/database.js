@@ -230,11 +230,12 @@ const getBookList = realm => {
   return realm.objects('Book');
 };
 
-const getBookListBySearch = (realm, text) => {
-  const list = realm
-    .objects('Book')
-    .filtered('title CONTAINS[c] $0 or author CONTAINS[c] $0', text);
-  return list;
+const getBookListBySearch = (realm, text, sortField, sortReverse) => {
+  let list = realm.objects('Book');
+  if (text) {
+    list = list.filtered('title CONTAINS[c] $0 or author CONTAINS[c] $0', text);
+  }
+  return list.sorted(sortField, sortReverse);
 };
 
 const deleteBookById = (realm, id) => {
