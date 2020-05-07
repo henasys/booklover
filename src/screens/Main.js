@@ -33,7 +33,9 @@ const renderActionButton = navigation => {
       <ActionButton.Item
         buttonColor="#3498db"
         title="제목 검색"
-        onPress={() => {}}>
+        onPress={() => {
+          navigation.navigate('SearchAdd');
+        }}>
         <Icon name="search" type="material" style={styles.actionButtonIcon} />
       </ActionButton.Item>
       <ActionButton.Item

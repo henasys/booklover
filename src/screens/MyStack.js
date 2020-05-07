@@ -6,6 +6,7 @@ import {Icon} from 'react-native-elements';
 import Main from '../screens/Main';
 import Detail from '../screens/Detail';
 import BarcodeScanner from '../screens/BarcodeScanner';
+import SearchAdd from '../screens/SearchAdd';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,7 @@ export default function MyStack() {
         name="BarcodeScanner"
         component={BarcodeScanner}
         options={({navigation, route}) => ({
-          title: '바코드 스캐너',
+          title: '바코드 검색 추가 ',
         })}
       />
       <Stack.Screen
@@ -31,6 +32,13 @@ export default function MyStack() {
         component={Detail}
         options={({navigation, route}) => ({
           title: '상세 정보',
+        })}
+      />
+      <Stack.Screen
+        name="SearchAdd"
+        component={SearchAdd}
+        options={({navigation, route}) => ({
+          title: '제목 검색 추가',
         })}
       />
     </Stack.Navigator>
