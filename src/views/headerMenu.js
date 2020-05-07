@@ -56,15 +56,6 @@ export const renderHeaderMenu = (callback = null) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  flexOne: {
-    flex: 1,
-  },
-  menuContainer: {
-    flexDirection: 'row',
-  },
   menuItem: {
     marginRight: 10,
   },
