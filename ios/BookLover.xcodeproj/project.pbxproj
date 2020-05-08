@@ -16,6 +16,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BookLoverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BookLoverTests.m */; };
+		43BE1C782465213300975FAB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43BE1C772465213300975FAB /* GoogleService-Info.plist */; };
 		69D8F37851725EB8222FDAC5 /* libPods-BookLover-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 538CAFB1549B56F6EDE6E8E5 /* libPods-BookLover-tvOS.a */; };
 		95F6E34B4AE1E08406C51538 /* libPods-BookLover-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B980090B511F88C3519BF322 /* libPods-BookLover-tvOSTests.a */; };
 		E40AB9A521E315FBDE2FA709 /* libPods-BookLoverTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C34F0DCDE741A1EC4E071D /* libPods-BookLoverTests.a */; };
@@ -58,6 +59,7 @@
 		2D02E4901E0B4A5D006451C7 /* BookLover-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BookLover-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34B05F4F3C3BACBEC96B1C3B /* libPods-BookLover.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3683F857DE48D2F6B2B7131E /* Pods-BookLover-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-tvOSTests/Pods-BookLover-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		43BE1C772465213300975FAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		538CAFB1549B56F6EDE6E8E5 /* libPods-BookLover-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7466F157EED060FA060A27D9 /* Pods-BookLover-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-tvOS/Pods-BookLover-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		B980090B511F88C3519BF322 /* libPods-BookLover-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,9 +124,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		074092FAA13944A3852B3773 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* BookLover */ = {
 			isa = PBXGroup;
 			children = (
+				43BE1C772465213300975FAB /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -197,14 +207,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		074092FAA13944A3852B3773 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -299,10 +301,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 8CNAK8DRQG;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = D7T5A2BG6Y;
+						DevelopmentTeam = 8CNAK8DRQG;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -351,6 +354,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				43BE1C782465213300975FAB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,6 +648,7 @@
 			baseConfigurationReference = 09966C4F6B03628F055C711E /* Pods-BookLoverTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -668,6 +673,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				INFOPLIST_FILE = BookLoverTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -689,7 +695,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = D7T5A2BG6Y;
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				INFOPLIST_FILE = BookLover/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -709,7 +715,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D7T5A2BG6Y;
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				INFOPLIST_FILE = BookLover/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

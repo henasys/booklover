@@ -36,6 +36,12 @@ target 'BookLover' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  # Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Crashlytics'
+  # add pods for any other desired Firebase products
+  # https://firebase.google.com/docs/ios/setup#available-pods  
+  
   target 'BookLoverTests' do
     inherit! :search_paths
     # Pods for testing
