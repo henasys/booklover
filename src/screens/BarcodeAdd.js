@@ -39,13 +39,18 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
         setError(msg);
         return;
       }
-      const item = response.item;
-      item._alreadyAdded =
-        Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
-      if (item._alreadyAdded) {
-        setError('이미 추가된 도서입니다.');
-      }
-      setList([item]);
+      const items =
+        response.item && Array.isArray(response.item)
+          ? response.item
+          : [response.item];
+      items.forEach(item => {
+        item._alreadyAdded =
+          Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
+        if (item._alreadyAdded) {
+          setError('이미 추가된 도서입니다.');
+        }
+      });
+      setList(items);
     })
     .catch(e => {
       console.log('searchIsbn error', e);
