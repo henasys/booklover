@@ -13,6 +13,8 @@ function Detail({navigation, route}) {
   if (!book) {
     return <View />;
   }
+  const description = book.description ? sanitizeHtml(book.description) : '';
+  const toc = book.toc ? book.toc : '';
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -51,13 +53,13 @@ function Detail({navigation, route}) {
         <Text style={styles.sectionTitle}>내용 소개</Text>
         <View style={styles.spacer} />
         <View style={styles.htmlContainer}>
-          <HTMLView value={sanitizeHtml(book.description)} />
+          <HTMLView value={description} />
         </View>
         <View style={styles.spacer} />
         <Text style={styles.sectionTitle}>목차</Text>
         <View style={styles.spacer} />
         <View style={styles.htmlContainer}>
-          <HTMLView value={book.toc} />
+          <HTMLView value={toc} />
         </View>
         <View style={styles.spacer} />
       </ScrollView>
