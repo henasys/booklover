@@ -4,41 +4,46 @@ import {Image, Icon} from 'react-native-elements';
 
 import Database from '../modules/database';
 
-const addBook = async ({realm, item, setList, setError}) => {
+const addBook = async ({
+  realm,
+  item,
+  callback = null,
+  errorCallback = null,
+}) => {
   const category = await Database.saveCategoryName(realm, item.categoryName);
   console.log(category.id, category.parentId, category.name, category.level);
   const toc = item.bookinfo && item.bookinfo.toc;
-  const book = await Database.saveBook(realm, {...item, ...{category, toc}});
-  console.log('new book', book.id, book.title);
-  if (book) {
-    book._alreadyAdded = true;
-    setList([book]);
-  } else {
-    item._alreadyAdded = false;
-    setList([item]);
-  }
-  setError(null);
+  Database.saveBook(realm, {...item, ...{category, toc}})
+    .then(book => {
+      console.log('Database.saveBook done', book.id, book.title);
+      book._alreadyAdded = true;
+      callback(book);
+    })
+    .catch(e => {
+      console.log('Database.saveBook error', item.title, e);
+      errorCallback(e);
+    });
 };
 
-const deleteBook = ({realm, item, setList, setError}) => {
+const deleteBook = ({realm, item, callback = null, errorCallback = null}) => {
   const bookId = item.id;
   console.log('Database.deleteBookById bookId', bookId);
   if (!bookId) {
     console.log('Database.deleteBookById bookId is not defined');
     return;
   }
-  Database.deleteBookById(realm, item.id)
+  callback();
+  Database.deleteBookById(realm, bookId)
     .then(() => {
       console.log('Database.deleteBookById done', bookId);
-      setList([]);
-      setError(null);
     })
     .catch(e => {
       console.log('Database.deleteBookById error', bookId, e);
+      errorCallback(e);
     });
 };
 
-const getIcon = ({realm, item, setList, setError}) => {
+const getIcon = ({item, addBookCallback = null, deleteBookCallback = null}) => {
   if (!item._alreadyAdded) {
     return (
       <Icon
@@ -46,7 +51,7 @@ const getIcon = ({realm, item, setList, setError}) => {
         name="add"
         type="material"
         onPress={() => {
-          addBook({realm, item, setList, setError});
+          addBookCallback && addBookCallback(item);
         }}
       />
     );
@@ -58,18 +63,24 @@ const getIcon = ({realm, item, setList, setError}) => {
         type="material"
         color="crimson"
         onPress={() => {
-          deleteBook({realm, item, setList, setError});
+          deleteBookCallback && deleteBookCallback(item);
         }}
       />
     );
   }
 };
 
-const renderItem = ({realm, item, setList, setError}) => {
+const renderItem = ({
+  item,
+  index,
+  addBookCallback = null,
+  deleteBookCallback = null,
+}) => {
   // console.log('item', item);
   if (!item) {
     return null;
   }
+  item._index = index;
   return (
     <View style={styles.itemContainer}>
       <Image style={styles.cover} source={{uri: item.cover}} />
@@ -87,7 +98,7 @@ const renderItem = ({realm, item, setList, setError}) => {
           {item.categoryName}
         </Text>
       </View>
-      {getIcon({realm, item, setList, setError})}
+      {getIcon({item, addBookCallback, deleteBookCallback})}
     </View>
   );
 };
@@ -151,4 +162,6 @@ const styles = StyleSheet.create({
 export default {
   renderItem,
   renderError,
+  addBook,
+  deleteBook,
 };

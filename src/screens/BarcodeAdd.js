@@ -85,6 +85,26 @@ function BarcodeAdd() {
   const onBarcodeRead = event => {
     handleOnBarcodeRead(event, setBarcode, setError, setList, realm);
   };
+  const addBookCallback = item => {
+    const callback = book => {
+      setError(null);
+      const newList = [...list];
+      newList[item._index] = book;
+      setList(newList);
+    };
+    const errorCallback = e => {};
+    SearchItem.addBook({realm, item, callback, errorCallback});
+  };
+  const deleteBookCallback = item => {
+    const callback = () => {
+      setError(null);
+      const newList = [...list];
+      newList.splice(item._index, 1);
+      setList(newList);
+    };
+    const errorCallback = e => {};
+    SearchItem.deleteBook({realm, item, callback, errorCallback});
+  };
   const barCodeTypes = barcode ? [] : defaultBarCodeTypes;
   return (
     <SafeAreaView style={styles.container}>
@@ -112,8 +132,13 @@ function BarcodeAdd() {
         <FlatList
           data={list}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
-          renderItem={({item}) =>
-            SearchItem.renderItem({realm, item, setList, setError})
+          renderItem={({item, index}) =>
+            SearchItem.renderItem({
+              item,
+              index,
+              addBookCallback,
+              deleteBookCallback,
+            })
           }
           keyExtractor={(item, index) => String(index)}
         />
