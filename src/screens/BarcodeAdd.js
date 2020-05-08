@@ -98,8 +98,11 @@ function BarcodeAdd() {
   const deleteBookCallback = item => {
     const callback = () => {
       setError(null);
+      const itemClone = Database.bookToObject(item);
       const newList = [...list];
-      newList.splice(item._index, 1);
+      itemClone._alreadyAdded = false;
+      console.log('itemClone', itemClone);
+      newList[item._index] = itemClone;
       setList(newList);
     };
     const errorCallback = e => {};

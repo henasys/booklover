@@ -38,15 +38,22 @@ function SearchAdd({navigation, route}) {
     searcher
       .searchKeyword(search)
       .then(response => {
-        // console.log('searchKeyword response', response);
+        console.log('searchKeyword response', response);
         if (response.errorCode) {
           const msg = `${response.errorCode} ${response.errorMessage}`;
           console.log(msg);
           setError(msg);
           return;
         }
-        const item = response.item;
-        setList(item);
+        const items =
+          response.item && Array.isArray(response.item)
+            ? response.item
+            : [response.item];
+        items.forEach(item => {
+          item._alreadyAdded =
+            Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
+        });
+        setList(items);
       })
       .catch(e => {
         console.log('searchKeyword error', e);
@@ -55,6 +62,28 @@ function SearchAdd({navigation, route}) {
   };
   const onSubmitEditing = () => {
     console.log('onSubmitEditing');
+  };
+  const addBookCallback = item => {
+    const callback = book => {
+      const newList = [...list];
+      newList[item._index] = book;
+      setList(newList);
+    };
+    const errorCallback = e => {};
+    SearchItem.addBook({realm, item, callback, errorCallback});
+  };
+  const deleteBookCallback = item => {
+    const callback = () => {
+      setError(null);
+      const itemClone = Database.bookToObject(item);
+      const newList = [...list];
+      itemClone._alreadyAdded = false;
+      console.log('itemClone', itemClone);
+      newList[item._index] = itemClone;
+      setList(newList);
+    };
+    const errorCallback = e => {};
+    SearchItem.deleteBook({realm, item, callback, errorCallback});
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -76,8 +105,13 @@ function SearchAdd({navigation, route}) {
           <FlatList
             data={list}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={({item}) =>
-              SearchItem.renderItem({realm, item, setList, setError})
+            renderItem={({item, index}) =>
+              SearchItem.renderItem({
+                item,
+                index,
+                addBookCallback,
+                deleteBookCallback,
+              })
             }
             keyExtractor={(item, index) => String(index)}
           />
