@@ -57,3 +57,13 @@ test('saveMultiCategoryName', async () => {
     console.log(cat.id, cat.parentId, cat.name, cat.level);
   });
 });
+
+test('realmToObject', async () => {
+  const categoryName = '국내도서>사회과학>사회학>사회학 일반';
+  const category = await Database.saveCategoryName(_realm, categoryName);
+  const result = Database.realmToObject(category, Database.Category.schema);
+  console.log('category', category.id, category.name, category.level);
+  console.log('category keys', Object.keys(category));
+  console.log('result', result);
+  console.log('result', result.id, result.name, result.level);
+});

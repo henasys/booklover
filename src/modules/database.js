@@ -79,6 +79,19 @@ const migrate = () => {
   }
 };
 
+const realmToObject = (realmObject, schema) => {
+  const object = {};
+  const properties = Object.keys(schema.properties);
+  for (var property of properties) {
+    object[property] = realmObject[property];
+  }
+  return object;
+};
+
+const bookToObject = book => {
+  return realmToObject(book, Book.schema);
+};
+
 const clearAllDatabase = () => {
   return new Promise((resolve, reject) => {
     Realm.open(schemas.getLatestConfig())
@@ -261,6 +274,8 @@ export default {
   getRealm,
   open,
   close,
+  realmToObject,
+  bookToObject,
   clearAllDatabase,
   saveCategoryOrGet,
   getCategoryList,
