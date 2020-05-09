@@ -4,7 +4,7 @@ import {v1 as uuidv1} from 'uuid';
 
 import {schemas} from '../modules/schemas';
 import {Category, Book} from '../modules/schemas';
-import {splitCategoryName} from '../modules/util';
+import Util from '../modules/util';
 import TimeUtil from '../modules/timeUtil';
 
 let _realm = null;
@@ -160,7 +160,7 @@ const deleteCategoryAll = realm => {
 };
 
 const saveCategoryName = async (realm, categoryName) => {
-  const categories = splitCategoryName(categoryName);
+  const categories = Util.splitCategoryName(categoryName);
   let parentId = null;
   let category = null;
   for (let index = 0; index < categories.length; index++) {
@@ -191,12 +191,6 @@ const saveBook = (
     created = null,
   },
 ) => {
-  const priceSalesValue =
-    typeof priceSales === 'string' ? parseInt(priceSales, 10) : priceSales;
-  const priceStandardValue =
-    typeof priceStandard === 'string'
-      ? parseInt(priceStandard, 10)
-      : priceStandard;
   const published = TimeUtil.dateToTimestamp(pubDate);
   return new Promise((resolve, reject) => {
     try {
@@ -213,8 +207,8 @@ const saveBook = (
           pubDate: pubDate,
           description: description,
           toc: toc,
-          priceSales: priceSalesValue,
-          priceStandard: priceStandardValue,
+          priceSales: Util.parseInt(priceSales),
+          priceStandard: Util.parseInt(priceStandard),
           categoryName: categoryName,
           published: published,
           created: created ? created : new Date().getTime(),
@@ -224,6 +218,61 @@ const saveBook = (
       });
     } catch (e) {
       console.warn('realm.write at saveBook', e);
+      reject(new Error(e));
+    }
+  });
+};
+
+const updateBook = (
+  realm,
+  {
+    id,
+    title,
+    author,
+    isbn,
+    isbn13,
+    publisher,
+    link,
+    cover,
+    pubDate,
+    description,
+    toc,
+    priceSales,
+    priceStandard,
+    categoryName,
+    category,
+  },
+) => {
+  return new Promise((resolve, reject) => {
+    const book = realm.objectForPrimaryKey('Book', id);
+    if (!book) {
+      const msg = `no book with id ${id}`;
+      console.log(msg);
+      reject(new Error(msg));
+      return;
+    }
+    try {
+      realm.write(() => {
+        book.title = title;
+        book.author = author;
+        book.isbn = isbn;
+        book.isbn13 = isbn13;
+        book.publisher = publisher;
+        book.link = link;
+        book.cover = cover;
+        book.pubDate = pubDate;
+        book.description = description;
+        book.toc = toc;
+        book.priceSales = Util.parseInt(priceSales);
+        book.priceStandard = Util.parseInt(priceStandard);
+        book.categoryName = categoryName;
+        book.category = category;
+        book.published = TimeUtil.dateToTimestamp(pubDate);
+        book.created = new Date().getTime();
+        resolve(book);
+      });
+    } catch (e) {
+      console.warn('realm.write', e);
       reject(new Error(e));
     }
   });
@@ -266,6 +315,71 @@ const deleteBookById = (realm, id) => {
   });
 };
 
+const saveOrUpdateBook = async (
+  realm,
+  {
+    id,
+    title,
+    author,
+    isbn,
+    isbn13,
+    publisher,
+    link,
+    cover,
+    pubDate,
+    description,
+    toc,
+    priceSales,
+    priceStandard,
+    categoryName,
+    category,
+  },
+) => {
+  const newCategory = await saveCategoryName(realm, categoryName);
+  const lastCategory = categoryName
+    ? newCategory
+      ? newCategory
+      : category
+    : category;
+  console.log('lastCategory', lastCategory?.name);
+  if (id) {
+    return updateBook(realm, {
+      id,
+      title,
+      author,
+      isbn,
+      isbn13,
+      publisher,
+      link,
+      cover,
+      pubDate,
+      description,
+      toc,
+      priceSales,
+      priceStandard,
+      categoryName,
+      category: lastCategory,
+    });
+  } else {
+    return saveBook(realm, {
+      title,
+      author,
+      isbn,
+      isbn13,
+      publisher,
+      link,
+      cover,
+      pubDate,
+      description,
+      toc,
+      priceSales,
+      priceStandard,
+      categoryName,
+      category: lastCategory,
+    });
+  }
+};
+
 export default {
   Category,
   Book,
@@ -282,8 +396,10 @@ export default {
   deleteCategoryAll,
   saveCategoryName,
   saveBook,
+  updateBook,
   getBookByIsbn,
   getBookList,
   getBookListBySearch,
   deleteBookById,
+  saveOrUpdateBook,
 };

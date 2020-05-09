@@ -33,6 +33,9 @@ function Detail({navigation, route}) {
   }, [navigation]);
   const description = book.description ? sanitizeHtml(book.description) : '';
   const toc = book.toc ? book.toc : '';
+  const published = published
+    ? TimeUtil.timeToYearMonth(book.published, 'Y-MM')
+    : '';
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -52,7 +55,7 @@ function Detail({navigation, route}) {
               style={styles.author}
               numberOfLines={1}
               ellipsizeMode={'tail'}>
-              {book.publisher} {TimeUtil.timeToYearMonth(book.published, 'Y-MM')}
+              {book.publisher} {published}
             </Text>
             <View style={styles.spacer} />
             <Text

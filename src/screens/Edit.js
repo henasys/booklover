@@ -4,6 +4,9 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Input, Icon} from 'react-native-elements';
+import Toast from 'react-native-simple-toast';
+
+import Database from '../modules/database';
 
 function TextInputBox({
   placeholder,
@@ -12,7 +15,7 @@ function TextInputBox({
   onEndEditing,
   errorMessage = null,
 }) {
-  const numberOfLines = value && value.length > 100 ? 5 : 2;
+  const numberOfLines = value && value.length > 100 ? 5 : 1;
   return (
     <Input
       containerStyle={styles.textInputBox}
@@ -32,6 +35,7 @@ function TextInputBox({
 }
 
 function Edit({navigation, route}) {
+  const [realm, setRealm] = React.useState(null);
   const [book, setBook] = useState(null);
   const [title, setTitle] = useState(null);
   const [titleError, setTitleError] = useState(null);
@@ -45,6 +49,16 @@ function Edit({navigation, route}) {
   const [toc, setToc] = useState(null);
   const [pubDate, setPubDate] = useState(null);
   const [categoryName, setCategoryName] = useState(null);
+  useEffect(() => {
+    Database.open(_realm => {
+      setRealm(_realm);
+      // console.log('Database.open');
+    });
+    return () => {
+      Database.close(realm);
+      // console.log('Database.close');
+    };
+  }, []);
   useEffect(() => {
     const paramBook = route.params?.book;
     setBook(paramBook);
@@ -71,7 +85,7 @@ function Edit({navigation, route}) {
           <Icon
             iconStyle={styles.menuItem}
             onPress={() => {
-              //
+              saveBook();
             }}
             name="save"
             type="material"
@@ -79,14 +93,65 @@ function Edit({navigation, route}) {
         </View>
       ),
     });
-  }, [navigation, book]);
+  }, [navigation, book, realm, title]);
   const onEndEditing = params => {
     console.log('onEndEditing', params);
+    checkInvalidParams();
+  };
+  const checkInvalidParams = () => {
     if (!title) {
       setTitleError('필수 항목입니다.');
+      return true;
     } else {
       setTitleError(null);
+      return false;
     }
+  };
+  const saveBook = () => {
+    if (!realm) {
+      console.log('no realm in saveBook');
+      return;
+    }
+    console.log('title', title);
+    if (checkInvalidParams()) {
+      Toast.show('필수항목을 점검해주십시오.');
+      return;
+    }
+    const item = {
+      title,
+      author,
+      isbn,
+      isbn13,
+      publisher,
+      link,
+      cover,
+      description,
+      toc,
+      pubDate,
+      categoryName,
+      id: book ? book.id : null,
+      priceSales: book ? book.priceSales : null,
+      priceStandard: book ? book.priceStandard : null,
+      category: book ? book.category : null,
+    };
+    const callback = resultBook => {
+      const msg = `저장 성공: ${resultBook.title}`;
+      console.log(msg);
+      Toast.show(msg);
+    };
+    const errorCallback = e => {
+      const msg = `저장 오류: ${e}`;
+      console.log(msg);
+      console.log(e.stack);
+      Toast.show(msg);
+    };
+    Database.saveOrUpdateBook(realm, item)
+      .then(resultBook => {
+        callback(resultBook);
+      })
+      .catch(e => {
+        errorCallback(e);
+      });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -147,7 +212,7 @@ function Edit({navigation, route}) {
           onEndEditing={() => onEndEditing({toc})}
         />
         <TextInputBox
-          placeholder={'출판일: 2020/04'}
+          placeholder={'출판일: 2020-04'}
           value={pubDate}
           setValue={setPubDate}
           onEndEditing={() => onEndEditing({pubDate})}
