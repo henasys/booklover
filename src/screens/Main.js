@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
-import {Icon, SearchBar} from 'react-native-elements';
+import {Icon, SearchBar, ListItem} from 'react-native-elements';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
@@ -63,6 +63,7 @@ function Main({navigation}) {
   const [search, setSearch] = React.useState(null);
   const [sort, setSort] = React.useState(null);
   const [stack, setStack] = React.useState([]);
+  const [categoryList, setCategoryList] = React.useState([]);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -81,6 +82,7 @@ function Main({navigation}) {
     };
   }, []);
   React.useEffect(() => {
+    navigate();
     console.log('list query', realm, sort, search);
     if (sort === undefined || sort === null) {
       return;
@@ -169,11 +171,27 @@ function Main({navigation}) {
   };
   const onPressTop = () => {
     console.log('onPressTop');
+    navigate();
   };
-  const onPressSub = category => {
-    console.log('onPressSub', category);
+  const onPressSub = categoryId => {
+    console.log('onPressSub', categoryId);
+    navigate(categoryId);
+  };
+  const navigate = categoryId => {
+    if (!realm) {
+      return;
+    }
+    const newStack = categoryId
+      ? Database.getCategoryStackOnly2Level(realm, categoryId)
+      : [];
+    setStack(newStack);
+    const cList = Database.getCategoryListByParent(realm, categoryId);
+    console.log('cList', cList);
+    setCategoryList(cList);
   };
   printIdList(list);
+  console.log('stack', stack.map(c => c.name + ' ' + c.id));
+  console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.flexOne}>
@@ -190,6 +208,21 @@ function Main({navigation}) {
           onPressTop={onPressTop}
           onPressSub={onPressSub}
         />
+        <View>
+          <FlatList
+            data={categoryList}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderItem={({item, index}) => (
+              <ListItem
+                key={index}
+                title={item.name}
+                chevron
+                onPress={() => navigate(item.id)}
+              />
+            )}
+            keyExtractor={item => item.id}
+          />
+        </View>
         <View style={styles.listContainer}>
           <FlatList
             data={list}

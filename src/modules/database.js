@@ -171,6 +171,32 @@ const saveCategoryName = async (realm, categoryName) => {
   return category;
 };
 
+const getCategoryStackOnly2Level = (realm, categoryId, stack = []) => {
+  if (stack.length >= 2) {
+    return stack;
+  }
+  // const category = realm.objectForPrimaryKey('Category', categoryId);
+  // if (!category) {
+  //   return stack;
+  // }
+  const rs = getCategoryList(realm).filtered('id = $0', categoryId);
+  if (rs.isEmpty()) {
+    return stack;
+  }
+  const category = rs[0];
+  stack.unshift(category);
+  getCategoryStackOnly2Level(realm, category.parentId, stack);
+  return stack;
+};
+
+const getCategoryListByParent = (realm, parentId = null) => {
+  const categoryList = getCategoryList(realm).filtered(
+    'parentId = $0',
+    parentId,
+  );
+  return categoryList;
+};
+
 const saveBook = (
   realm,
   {
@@ -395,6 +421,8 @@ export default {
   getCategoryList,
   deleteCategoryAll,
   saveCategoryName,
+  getCategoryStackOnly2Level,
+  getCategoryListByParent,
   saveBook,
   updateBook,
   getBookByIsbn,

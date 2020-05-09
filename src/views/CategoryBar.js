@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 function CategoryBar({stack, onPressTop, onPressSub = null}) {
-  console.log('stack', stack);
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
       TOP
