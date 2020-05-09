@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Input, Icon} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 
 import Database from '../modules/database';
@@ -10,7 +10,13 @@ function Setting({navigation, route}) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <View>
-          <Text>Setting Screen</Text>
+          <View style={styles.spacer} />
+          <Button
+            title="데이터베이스 삭제"
+            type="outline"
+            icon={<Icon name="delete" type="material-community" />}
+          />
+          <View style={styles.spacer} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -32,6 +38,9 @@ const styles = StyleSheet.create({
   },
   textInputBox: {
     marginVertical: 5,
+  },
+  spacer: {
+    paddingVertical: 5,
   },
 });
 

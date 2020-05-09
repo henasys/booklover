@@ -207,8 +207,8 @@ const saveBook = (
           pubDate: pubDate,
           description: description,
           toc: toc,
-          priceSales: Util.parseInt(priceSales),
-          priceStandard: Util.parseInt(priceStandard),
+          priceSales: Util.parseInteger(priceSales),
+          priceStandard: Util.parseInteger(priceStandard),
           categoryName: categoryName,
           published: published,
           created: created ? created : new Date().getTime(),
@@ -263,8 +263,8 @@ const updateBook = (
         book.pubDate = pubDate;
         book.description = description;
         book.toc = toc;
-        book.priceSales = Util.parseInt(priceSales);
-        book.priceStandard = Util.parseInt(priceStandard);
+        book.priceSales = Util.parseInteger(priceSales);
+        book.priceStandard = Util.parseInteger(priceStandard);
         book.categoryName = categoryName;
         book.category = category;
         book.published = TimeUtil.dateToTimestamp(pubDate);
