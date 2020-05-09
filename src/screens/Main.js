@@ -57,6 +57,32 @@ const renderActionButton = navigation => {
   );
 };
 
+const renderBrowsableIcon = (browsable, setBrowsable) => {
+  if (browsable) {
+    return (
+      <Icon
+        iconStyle={styles.menuItem}
+        onPress={() => {
+          setBrowsable(false);
+        }}
+        name="search"
+        type="material"
+      />
+    );
+  } else {
+    return (
+      <Icon
+        iconStyle={styles.menuItem}
+        onPress={() => {
+          setBrowsable(true);
+        }}
+        name="swap-horiz"
+        type="material"
+      />
+    );
+  }
+};
+
 function Main({navigation}) {
   const [realm, setRealm] = React.useState(null);
   const [list, setList] = React.useState([]);
@@ -64,6 +90,7 @@ function Main({navigation}) {
   const [sort, setSort] = React.useState(null);
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
+  const [browsable, setBrowsable] = React.useState(true);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -104,6 +131,7 @@ function Main({navigation}) {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.menuContainer}>
+          {renderBrowsableIcon(browsable, setBrowsable)}
           {HeaderMenu.renderHeaderMenu(sort, setSort)}
           <Icon
             iconStyle={styles.menuItem}
@@ -116,7 +144,7 @@ function Main({navigation}) {
         </View>
       ),
     });
-  }, [navigation, sort]);
+  }, [navigation, sort, browsable]);
   const onUpdateSearch = text => {
     setSearch(text);
   };
@@ -189,26 +217,15 @@ function Main({navigation}) {
     console.log('cList', cList);
     setCategoryList(cList);
   };
-  printIdList(list);
-  console.log('stack', stack.map(c => c.name + ' ' + c.id));
-  console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
-  return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView style={styles.flexOne}>
-        <SearchBar
-          platform="default"
-          placeholder={'제목, 저자'}
-          containerStyle={styles.searchBarContainer}
-          inputContainerStyle={styles.searchBarInputContainer}
-          onChangeText={onUpdateSearch}
-          value={search}
-        />
-        <CategoryBar
-          stack={stack}
-          onPressTop={onPressTop}
-          onPressSub={onPressSub}
-        />
+  const renderBar = () => {
+    if (browsable) {
+      return (
         <View>
+          <CategoryBar
+            stack={stack}
+            onPressTop={onPressTop}
+            onPressSub={onPressSub}
+          />
           <FlatList
             data={categoryList}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -223,6 +240,27 @@ function Main({navigation}) {
             keyExtractor={item => item.id}
           />
         </View>
+      );
+    } else {
+      return (
+        <SearchBar
+          platform="default"
+          placeholder={'제목, 저자'}
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.searchBarInputContainer}
+          onChangeText={onUpdateSearch}
+          value={search}
+        />
+      );
+    }
+  };
+  printIdList(list);
+  console.log('stack', stack.map(c => c.name + ' ' + c.id));
+  console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
+  return (
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.flexOne}>
+        {renderBar()}
         <View style={styles.listContainer}>
           <FlatList
             data={list}
