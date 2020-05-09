@@ -11,6 +11,7 @@ import AndroidBackHandler from '../modules/AndroidBackHandler';
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/headerMenu';
+import CategoryBar from '../views/CategoryBar';
 
 const printIdList = list => {
   // console.log(
@@ -61,6 +62,7 @@ function Main({navigation}) {
   const [list, setList] = React.useState([]);
   const [search, setSearch] = React.useState(null);
   const [sort, setSort] = React.useState(null);
+  const [stack, setStack] = React.useState([]);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -165,6 +167,12 @@ function Main({navigation}) {
         console.log('Database.deleteBookById error', rowKey, e);
       });
   };
+  const onPressTop = () => {
+    console.log('onPressTop');
+  };
+  const onPressSub = category => {
+    console.log('onPressSub', category);
+  };
   printIdList(list);
   return (
     <SafeAreaView style={styles.container}>
@@ -176,6 +184,11 @@ function Main({navigation}) {
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={onUpdateSearch}
           value={search}
+        />
+        <CategoryBar
+          stack={stack}
+          onPressTop={onPressTop}
+          onPressSub={onPressSub}
         />
         <View style={styles.listContainer}>
           <FlatList
