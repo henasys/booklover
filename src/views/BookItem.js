@@ -27,7 +27,7 @@ function BookItem({item}) {
             style={styles.category}
             numberOfLines={2}
             ellipsizeMode={'tail'}>
-            {item.category.name}
+            {item.category?.name}
           </Text>
         </View>
       </View>
