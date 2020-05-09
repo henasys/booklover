@@ -11,12 +11,24 @@ function Setting({navigation, route}) {
       <ScrollView style={styles.contentContainer}>
         <View>
           <View style={styles.spacer} />
+          <View style={styles.spacer} />
+          <Button
+            title="데이터 백업"
+            type="outline"
+            icon={<Icon name="save" type="material" />}
+          />
+          <View style={styles.spacer} />
+          <Button
+            title="데이터 복원"
+            type="outline"
+            icon={<Icon name="backup-restore" type="material-community" />}
+          />
+          <View style={styles.spacer} />
           <Button
             title="데이터베이스 삭제"
             type="outline"
             icon={<Icon name="delete" type="material-community" />}
           />
-          <View style={styles.spacer} />
         </View>
       </ScrollView>
     </SafeAreaView>
