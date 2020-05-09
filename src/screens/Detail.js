@@ -52,14 +52,14 @@ function Detail({navigation, route}) {
               style={styles.author}
               numberOfLines={1}
               ellipsizeMode={'tail'}>
-              {book.publisher} {TimeUtil.timeToYearMonth(book.published)}
+              {book.publisher} {TimeUtil.timeToYearMonth(book.published, 'Y-MM')}
             </Text>
             <View style={styles.spacer} />
             <Text
               style={styles.category}
               numberOfLines={1}
               ellipsizeMode={'tail'}>
-              {book.category.name}
+              {book.category?.name}
             </Text>
             <View style={styles.spacer} />
             <Text style={styles.isbn} numberOfLines={2} ellipsizeMode={'tail'}>
