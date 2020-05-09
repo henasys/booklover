@@ -90,11 +90,13 @@ function Main({navigation}) {
   const [sort, setSort] = React.useState(null);
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
-  const [browsable, setBrowsable] = React.useState(true);
+  const [browsable, setBrowsable] = React.useState(null);
+  const [categoryId, setCategoryId] = React.useState(null);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
       setSort(5);
+      setBrowsable(true);
     });
     return () => {
       Database.close(realm);
@@ -109,24 +111,34 @@ function Main({navigation}) {
     };
   }, []);
   React.useEffect(() => {
-    navigate();
-    console.log('list query', realm, sort, search);
+    console.log('list_query', realm, sort, search, browsable);
     if (sort === undefined || sort === null) {
       return;
     }
+    if (browsable === undefined || browsable === null) {
+      return;
+    }
     const sortItem = HeaderMenu.items.getItem(sort);
-    const bookList = Database.getBookListBySearch(
-      realm,
-      search,
-      sortItem.field,
-      sortItem.reverse,
-    );
+    let bookList = browsable
+      ? Database.getBookListByCategory(realm, categoryId)
+      : Database.getBookListBySearch(realm, search);
+    bookList = bookList.sorted(sortItem.field, sortItem.reverse);
     bookList.addListener(listListener);
     setList(bookList);
+    console.log('list_query done', bookList);
     return () => {
       bookList && bookList.removeAllListeners();
+      console.log('list_query removeAllListeners');
     };
-  }, [realm, sort, search]);
+  }, [realm, sort, search, browsable, categoryId]);
+  React.useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const cList = Database.getCategoryListByParentId(realm, categoryId);
+    console.log('cList', cList);
+    setCategoryList(cList);
+  }, [realm, categoryId]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -199,23 +211,22 @@ function Main({navigation}) {
   };
   const onPressTop = () => {
     console.log('onPressTop');
-    navigate();
+    browse();
   };
-  const onPressSub = categoryId => {
-    console.log('onPressSub', categoryId);
-    navigate(categoryId);
+  const onPressSub = newCategoryId => {
+    console.log('onPressSub', newCategoryId);
+    browse(newCategoryId);
   };
-  const navigate = categoryId => {
+  const browse = newCategoryId => {
+    console.log('browse', realm, newCategoryId);
     if (!realm) {
       return;
     }
-    const newStack = categoryId
-      ? Database.getCategoryStackOnly2Level(realm, categoryId)
+    const newStack = newCategoryId
+      ? Database.getCategoryStackOnly2Level(realm, newCategoryId)
       : [];
     setStack(newStack);
-    const cList = Database.getCategoryListByParent(realm, categoryId);
-    console.log('cList', cList);
-    setCategoryList(cList);
+    setCategoryId(newCategoryId);
   };
   const renderBar = () => {
     if (browsable) {
@@ -234,7 +245,7 @@ function Main({navigation}) {
                 key={index}
                 title={item.name}
                 chevron
-                onPress={() => navigate(item.id)}
+                onPress={() => browse(item.id)}
               />
             )}
             keyExtractor={item => item.id}
@@ -254,9 +265,9 @@ function Main({navigation}) {
       );
     }
   };
-  printIdList(list);
-  console.log('stack', stack.map(c => c.name + ' ' + c.id));
-  console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
+  // printIdList(list);
+  // console.log('stack', stack.map(c => c.name + ' ' + c.id));
+  // console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.flexOne}>
