@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Image} from 'react-native-elements';
+import {Image, Icon} from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 
 import TimeUtil from '../modules/timeUtil';
@@ -13,6 +15,22 @@ function Detail({navigation, route}) {
   if (!book) {
     return <View />;
   }
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.menuContainer}>
+          <Icon
+            iconStyle={styles.menuItem}
+            onPress={() => {
+              navigation.navigate('Edit', {book: book});
+            }}
+            name="edit"
+            type="material"
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   const description = book.description ? sanitizeHtml(book.description) : '';
   const toc = book.toc ? book.toc : '';
   return (
@@ -70,6 +88,12 @@ function Detail({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  menuContainer: {
+    flexDirection: 'row',
+  },
+  menuItem: {
+    marginRight: 10,
   },
   contentContainer: {
     margin: 20,

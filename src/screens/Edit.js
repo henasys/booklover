@@ -1,25 +1,42 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, TextInput} from 'react-native';
+import {StyleSheet, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Input, Icon} from 'react-native-elements';
 
-function TextInputBox({placeholder, value, setValue, onEndEditing}) {
+function TextInputBox({
+  placeholder,
+  value,
+  setValue,
+  onEndEditing,
+  errorMessage = null,
+}) {
   return (
-    <TextInput
+    <Input
+      containerStyle={styles.textInputBox}
       style={styles.textInput}
+      labelStyle={{fontSize: 14}}
       onChangeText={setValue}
       onEndEditing={onEndEditing}
       defaultValue={value}
-      placeholder={placeholder}
+      errorMessage={errorMessage}
+      label={placeholder}
       keyboardType="default"
       autoCapitalize="none"
+      multiline={true}
+      numberOfLines={2}
     />
   );
 }
 
 function Edit({navigation, route}) {
+  const [book, setBook] = useState(null);
   const [title, setTitle] = useState(null);
+  const [titleError, setTitleError] = useState(null);
   const [author, setAuthor] = useState(null);
   const [isbn, setIsbn] = useState(null);
+  const [isbn13, setIsbn13] = useState(null);
   const [publisher, setPublisher] = useState(null);
   const [link, setLink] = useState(null);
   const [cover, setCover] = useState(null);
@@ -28,10 +45,47 @@ function Edit({navigation, route}) {
   const [pubDate, setPubDate] = useState(null);
   const [categoryName, setCategoryName] = useState(null);
   useEffect(() => {
-    //
+    const paramBook = route.params?.book;
+    setBook(paramBook);
+    if (!paramBook) {
+      return;
+    }
+    setTitle(paramBook.title);
+    setAuthor(paramBook.author);
+    setIsbn(paramBook.isbn);
+    setIsbn13(paramBook.isbn13);
+    setPublisher(paramBook.publisher);
+    setLink(paramBook.link);
+    setCover(paramBook.cover);
+    setDescription(paramBook.description);
+    setToc(paramBook.toc);
+    setPubDate(paramBook.pubDate);
+    setCategoryName(paramBook.categoryName);
   }, []);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: book ? '상세 정보 수정' : '직접 입력 추가',
+      headerRight: () => (
+        <View style={styles.menuContainer}>
+          <Icon
+            iconStyle={styles.menuItem}
+            onPress={() => {
+              //
+            }}
+            name="save"
+            type="material"
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   const onEndEditing = params => {
     console.log('onEndEditing', params);
+    if (!title) {
+      setTitleError('필수 항목입니다.');
+    } else {
+      setTitleError(null);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -41,6 +95,7 @@ function Edit({navigation, route}) {
           value={title}
           setValue={setTitle}
           onEndEditing={() => onEndEditing({title})}
+          errorMessage={titleError}
         />
         <TextInputBox
           placeholder={'저자'}
@@ -53,6 +108,12 @@ function Edit({navigation, route}) {
           value={isbn}
           setValue={setIsbn}
           onEndEditing={() => onEndEditing({isbn})}
+        />
+        <TextInputBox
+          placeholder={'ISBN13'}
+          value={isbn13}
+          setValue={setIsbn13}
+          onEndEditing={() => onEndEditing({isbn13})}
         />
         <TextInputBox
           placeholder={'출판사'}
@@ -105,44 +166,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  menuContainer: {
+    flexDirection: 'row',
+  },
+  menuItem: {
+    marginRight: 10,
+  },
   contentContainer: {
     margin: 20,
   },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  spacer: {
-    paddingVertical: 5,
-  },
-  cover: {
-    width: 100,
-    height: 100,
-  },
-  bookInfo: {
-    flexDirection: 'column',
-    width: '70%',
-    // marginHorizontal: 10,
-    marginLeft: 10,
-    // marginVertical: 10,
-  },
-  title: {
-    fontSize: 18,
-  },
-  author: {
-    color: 'darkslategrey',
-  },
-  category: {
-    color: 'navy',
-  },
-  isbn: {
-    color: 'darkslategrey',
-  },
-  sectionTitle: {
-    fontSize: 18,
-  },
-  htmlContainer: {
-    marginHorizontal: 20,
+  textInputBox: {
+    marginVertical: 5,
   },
 });
 

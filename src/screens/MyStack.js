@@ -42,13 +42,7 @@ export default function MyStack() {
           title: '제목 검색 추가',
         })}
       />
-      <Stack.Screen
-        name="Edit"
-        component={Edit}
-        options={({navigation, route}) => ({
-          title: '직접 입력 추가',
-        })}
-      />
+      <Stack.Screen name="Edit" component={Edit} />
     </Stack.Navigator>
   );
 }
