@@ -78,7 +78,7 @@ function Edit({navigation, route}) {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, book]);
   const onEndEditing = params => {
     console.log('onEndEditing', params);
     if (!title) {
