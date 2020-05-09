@@ -8,6 +8,7 @@ import Detail from '../screens/Detail';
 import BarcodeAdd from '../screens/BarcodeAdd';
 import SearchAdd from '../screens/SearchAdd';
 import Edit from '../screens/Edit';
+import Setting from '../screens/Setting';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,13 @@ export default function MyStack() {
         })}
       />
       <Stack.Screen name="Edit" component={Edit} />
+      <Stack.Screen
+        name="Setting"
+        component={Setting}
+        options={({navigation, route}) => ({
+          title: '설정',
+        })}
+      />
     </Stack.Navigator>
   );
 }

@@ -100,15 +100,15 @@ function Main({navigation}) {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.menuContainer}>
+          {HeaderMenu.renderHeaderMenu(sort, setSort)}
           <Icon
             iconStyle={styles.menuItem}
             onPress={() => {
-              Database.clearAllDatabase();
+              navigation.navigate('Setting');
             }}
-            name="delete"
+            name="settings"
             type="material-community"
           />
-          {HeaderMenu.renderHeaderMenu(sort, setSort)}
         </View>
       ),
     });
