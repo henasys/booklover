@@ -12,6 +12,7 @@ function TextInputBox({
   onEndEditing,
   errorMessage = null,
 }) {
+  const numberOfLines = value && value.length > 100 ? 5 : 2;
   return (
     <Input
       containerStyle={styles.textInputBox}
@@ -25,7 +26,7 @@ function TextInputBox({
       keyboardType="default"
       autoCapitalize="none"
       multiline={true}
-      numberOfLines={2}
+      numberOfLines={numberOfLines}
     />
   );
 }
