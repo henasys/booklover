@@ -46,55 +46,55 @@ function Edit({navigation, route}) {
           placeholder={'저자'}
           value={author}
           setValue={setAuthor}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({author})}
         />
         <TextInputBox
           placeholder={'ISBN'}
           value={isbn}
           setValue={setIsbn}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({isbn})}
         />
         <TextInputBox
           placeholder={'출판사'}
           value={publisher}
           setValue={setPublisher}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({publisher})}
         />
         <TextInputBox
           placeholder={'링크'}
           value={link}
           setValue={setLink}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({link})}
         />
         <TextInputBox
           placeholder={'커버 이미지 링크'}
           value={cover}
           setValue={setCover}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({cover})}
         />
         <TextInputBox
           placeholder={'주요 내용'}
           value={description}
           setValue={setDescription}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({description})}
         />
         <TextInputBox
           placeholder={'목차'}
           value={toc}
           setValue={setToc}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({toc})}
         />
         <TextInputBox
           placeholder={'출판일: 2020/04'}
           value={pubDate}
           setValue={setPubDate}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({pubDate})}
         />
         <TextInputBox
           placeholder={'카테고리 이름: 레벨1>레벨2'}
           value={categoryName}
           setValue={setCategoryName}
-          onEndEditing={onEndEditing}
+          onEndEditing={() => onEndEditing({categoryName})}
         />
       </ScrollView>
     </SafeAreaView>
