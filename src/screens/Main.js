@@ -27,7 +27,9 @@ const renderActionButton = navigation => {
       <ActionButton.Item
         buttonColor="#9b59b6"
         title="직접 입력"
-        onPress={() => console.log('notes tapped!')}>
+        onPress={() => {
+          navigation.navigate('Edit');
+        }}>
         <Icon name="form" type="antdesign" style={styles.actionButtonIcon} />
       </ActionButton.Item>
       <ActionButton.Item

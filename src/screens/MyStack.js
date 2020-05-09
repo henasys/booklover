@@ -7,6 +7,7 @@ import Main from '../screens/Main';
 import Detail from '../screens/Detail';
 import BarcodeAdd from '../screens/BarcodeAdd';
 import SearchAdd from '../screens/SearchAdd';
+import Edit from '../screens/Edit';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,13 @@ export default function MyStack() {
         component={SearchAdd}
         options={({navigation, route}) => ({
           title: '제목 검색 추가',
+        })}
+      />
+      <Stack.Screen
+        name="Edit"
+        component={Edit}
+        options={({navigation, route}) => ({
+          title: '직접 입력 추가',
         })}
       />
     </Stack.Navigator>
