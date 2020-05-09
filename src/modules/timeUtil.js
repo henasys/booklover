@@ -27,8 +27,8 @@ export function timeToYear(timestamp) {
   return moment(timestamp).format('Y');
 }
 
-export function timeToYearMonth(timestamp) {
-  return moment(timestamp).format('Y/MM');
+export function timeToYearMonth(timestamp, format = 'Y/MM') {
+  return moment(timestamp).format(format);
 }
 
 export function timeToWeek(timestamp) {
@@ -78,6 +78,9 @@ export function timeToYearAndMonthValue(timestamp) {
 }
 
 export function dateToTimestamp(date) {
+  if (!date) {
+    return null;
+  }
   const m = moment(date);
   const timestamp = m.format('x');
   return parseInt(timestamp, 10);
