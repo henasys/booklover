@@ -83,6 +83,8 @@ const renderBrowsableIcon = (browsable, setBrowsable) => {
   }
 };
 
+const backHandler = new AndroidBackHandler();
+
 function Main({navigation}) {
   const [realm, setRealm] = React.useState(null);
   const [list, setList] = React.useState([]);
@@ -103,13 +105,14 @@ function Main({navigation}) {
     };
   }, []);
   React.useEffect(() => {
-    const backHandler = new AndroidBackHandler();
+    console.log('backHandler.initBackHandler');
     backHandler.addRoutesToBeStopped(['Main']);
-    backHandler.initBackHandler();
+    backHandler.initBackHandler(backHandlerCallback);
     return () => {
       backHandler.removeBackHandler();
+      console.log('backHandler.removeBackHandler');
     };
-  }, []);
+  }, [stack]);
   React.useEffect(() => {
     console.log('list_query', realm, sort, search, browsable);
     if (sort === undefined || sort === null) {
@@ -157,6 +160,22 @@ function Main({navigation}) {
       ),
     });
   }, [navigation, sort, browsable]);
+  const backHandlerCallback = () => {
+    console.log('backHandler callback');
+    const length = stack.length;
+    if (length === 0) {
+      console.log('stack.length == 0');
+      return false;
+    }
+    console.log('stack is not empty');
+    if (length === 1) {
+      browse();
+      return true;
+    }
+    const parentCategory = stack[length - 2];
+    browse(parentCategory.id);
+    return true;
+  };
   const onUpdateSearch = text => {
     setSearch(text);
   };

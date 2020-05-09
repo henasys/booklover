@@ -9,9 +9,9 @@ export default class AndroidBackHandler {
     this.routes = [];
   }
 
-  initBackHandler() {
+  initBackHandler(callback = null) {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      return this.handleBackButtonPress();
+      return this.handleBackButtonPress(callback);
     });
   }
 
@@ -32,7 +32,13 @@ export default class AndroidBackHandler {
     });
   }
 
-  handleBackButtonPress = () => {
+  handleBackButtonPress = (callback = null) => {
+    if (callback) {
+      const result = callback();
+      if (result) {
+        return result;
+      }
+    }
     const currentRouteName = Navigator.routeNameRef.current;
     console.log('currentRouteName', currentRouteName);
     if (currentRouteName && !this.routes.includes(currentRouteName)) {
