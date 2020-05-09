@@ -189,7 +189,7 @@ const getCategoryStackOnly2Level = (realm, categoryId, stack = []) => {
   return stack;
 };
 
-const getCategoryListByParent = (realm, parentId = null) => {
+const getCategoryListByParentId = (realm, parentId = null) => {
   const categoryList = getCategoryList(realm).filtered(
     'parentId = $0',
     parentId,
@@ -318,12 +318,17 @@ const getBookList = realm => {
   return realm.objects('Book');
 };
 
-const getBookListBySearch = (realm, text, sortField, sortReverse) => {
+const getBookListBySearch = (realm, text) => {
   let list = realm.objects('Book');
   if (text) {
     list = list.filtered('title CONTAINS[c] $0 or author CONTAINS[c] $0', text);
   }
-  return list.sorted(sortField, sortReverse);
+  return list;
+};
+
+const getBookListByCategory = (realm, categoryId = null) => {
+  const bookList = getBookList(realm).filtered('category.id = $0', categoryId);
+  return bookList;
 };
 
 const deleteBookById = (realm, id) => {
@@ -422,12 +427,13 @@ export default {
   deleteCategoryAll,
   saveCategoryName,
   getCategoryStackOnly2Level,
-  getCategoryListByParent,
+  getCategoryListByParentId,
   saveBook,
   updateBook,
   getBookByIsbn,
   getBookList,
   getBookListBySearch,
+  getBookListByCategory,
   deleteBookById,
   saveOrUpdateBook,
 };
