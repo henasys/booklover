@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Image} from 'react-native-elements';
@@ -9,13 +9,21 @@ function BookItem({item}) {
   if (!item) {
     return null;
   }
+  const source = item.cover
+    ? {uri: item.cover}
+    : require('../images/no-image.png');
   return (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('Detail', {bookId: item.id});
       }}>
       <View style={styles.itemContainer}>
-        <Image style={styles.cover} source={{uri: item.cover}} />
+        <Image
+          style={styles.cover}
+          source={source}
+          defaultSource={require('../images/no-image.png')}
+          PlaceholderContent={<ActivityIndicator />}
+        />
         <View style={styles.bookInfo}>
           <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
             {item.title}
