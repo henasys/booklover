@@ -62,7 +62,7 @@ function Detail({navigation, route}) {
               style={styles.category}
               numberOfLines={1}
               ellipsizeMode={'tail'}>
-              {book.categoryName}
+              {book.category?.name}
             </Text>
             <View style={styles.spacer} />
             <Text style={styles.isbn} numberOfLines={2} ellipsizeMode={'tail'}>
