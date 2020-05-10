@@ -71,6 +71,7 @@ function Detail({navigation, route}) {
   if (!book) {
     return <View />;
   }
+  console.log('book', Database.bookToObject(book));
   const description = book.description ? sanitizeHtml(book.description) : '';
   const toc = book.toc ? book.toc : '';
   const published = published
