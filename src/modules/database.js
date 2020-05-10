@@ -330,11 +330,14 @@ const getBookListBySearch = (realm, text) => {
 };
 
 const getBookListByCategory = (realm, categoryId = null) => {
-  const bookList = getBookList(realm).filtered(
-    'category.id = $0 or category = $0',
-    categoryId,
-  );
-  return bookList;
+  if (categoryId) {
+    return getBookList(realm).filtered('category.id = $0', categoryId);
+  } else {
+    return getBookList(realm).filtered(
+      'category = $0 or category.id = $0',
+      categoryId,
+    );
+  }
 };
 
 const getBookById = (realm, bookId) => {
