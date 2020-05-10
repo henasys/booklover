@@ -34,6 +34,15 @@ function Detail({navigation, route}) {
     }
     const newBook = Database.getBookById(realm, bookId);
     setBook(newBook);
+    if (!newBook) {
+      return;
+    }
+    newBook.addListener && newBook.addListener(bookListener);
+    console.log('newBook.addListener');
+    return () => {
+      newBook.removeAllListeners && newBook.removeAllListeners();
+      console.log('newBook.removeAllListeners');
+    };
   }, [realm]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -51,6 +60,14 @@ function Detail({navigation, route}) {
       ),
     });
   }, [navigation, book]);
+  const bookListener = (oldBook, changes) => {
+    console.log('bookListener changes', changes);
+    console.log('bookListener oldBook', oldBook);
+    if (changes.changedProperties.length > 0) {
+      const newBook = Database.bookToObject(oldBook);
+      setBook(newBook);
+    }
+  };
   if (!book) {
     return <View />;
   }
