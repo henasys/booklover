@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
@@ -12,6 +13,7 @@ import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/headerMenu';
 import CategoryBar from '../views/CategoryBar';
+import MyColor from '../modules/myColor';
 
 const printIdList = list => {
   // console.log(
@@ -266,8 +268,15 @@ function Main({navigation}) {
               <ListItem
                 key={index}
                 title={item.name}
-                chevron
+                chevron={
+                  <Icon
+                    name="chevron-right"
+                    type="material"
+                    color={MyColor.font1}
+                  />
+                }
                 onPress={() => browse(item.id)}
+                titleStyle={{color: MyColor.font1, paddingLeft: 10}}
               />
             )}
             keyExtractor={item => item.id}

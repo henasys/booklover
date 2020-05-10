@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
+import MyColor from '../modules/myColor';
+
 function CategoryBar({stack, onPressTop, onPressSub = null}) {
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
@@ -49,20 +51,19 @@ function CategoryBar({stack, onPressTop, onPressSub = null}) {
 
 const style = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    padding: 0,
+    backgroundColor: MyColor.bg1,
     margin: 0,
-    marginLeft: 16,
-    marginRight: 16,
-    marginTop: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: 'row',
+    // borderWidth: 1,
   },
   text: {
     fontWeight: 'bold',
     fontSize: 18,
   },
   subText: {
-    color: 'navy',
+    color: MyColor.font1,
   },
 });
 
