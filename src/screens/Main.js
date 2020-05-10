@@ -92,9 +92,9 @@ function Main({navigation}) {
   const [list, setList] = React.useState([]);
   const [search, setSearch] = React.useState(null);
   const [sort, setSort] = React.useState(null);
+  const [browsable, setBrowsable] = React.useState(null);
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
-  const [browsable, setBrowsable] = React.useState(null);
   const [categoryId, setCategoryId] = React.useState(null);
   React.useEffect(() => {
     Database.open(_realm => {
@@ -125,6 +125,8 @@ function Main({navigation}) {
     }
     if (browsable === false) {
       setStack([]);
+      setCategoryId(null);
+      setCategoryList([]);
     }
     const sortItem = HeaderMenu.items.getItem(sort);
     let bookList = browsable
@@ -185,8 +187,8 @@ function Main({navigation}) {
     setSearch(text);
   };
   const listListener = (oldList, changes) => {
-    console.log('main listListener changes', changes);
-    console.log('main listListener oldList', oldList);
+    // console.log('main listListener changes', changes);
+    // console.log('main listListener oldList', oldList);
     printIdList(list);
     if (changes.deletions.length > 0) {
       console.log('changes.deletions exists');
