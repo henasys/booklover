@@ -93,7 +93,22 @@ function Edit({navigation, route}) {
         </View>
       ),
     });
-  }, [navigation, book, realm, title]);
+  }, [
+    navigation,
+    book,
+    realm,
+    title,
+    author,
+    isbn,
+    isbn13,
+    publisher,
+    link,
+    cover,
+    description,
+    toc,
+    pubDate,
+    categoryName,
+  ]);
   const onEndEditing = params => {
     console.log('onEndEditing', params);
     checkInvalidParams();
@@ -145,6 +160,7 @@ function Edit({navigation, route}) {
       console.log(e.stack);
       Toast.show(msg);
     };
+    // console.log('before saveOrUpdateBook', item);
     Database.saveOrUpdateBook(realm, item)
       .then(resultBook => {
         callback(resultBook);

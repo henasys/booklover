@@ -161,11 +161,13 @@ const deleteCategoryAll = realm => {
 
 const saveCategoryName = async (realm, categoryName) => {
   const categories = Util.splitCategoryName(categoryName);
+  // console.log('saveCategoryName categories', categoryName, categories);
   let parentId = null;
   let category = null;
   for (let index = 0; index < categories.length; index++) {
     const name = categories[index];
     category = await saveCategoryOrGet(realm, {name, level: index, parentId});
+    // console.log('saveCategoryName', category.name, category.level, category.id);
     parentId = category.id;
   }
   return category;
