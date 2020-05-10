@@ -116,17 +116,30 @@ function Main({navigation}) {
     };
   }, [stack]);
   React.useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const newStack = categoryId
+      ? Database.getCategoryStackOnly2Level(realm, categoryId)
+      : [];
+    setStack(newStack);
+    console.log('setStack', newStack);
+  }, [realm, categoryId]);
+  React.useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const cList = Database.getCategoryListByParentId(realm, categoryId);
+    console.log('cList', cList);
+    setCategoryList(cList);
+  }, [realm, categoryId]);
+  React.useEffect(() => {
     console.log('list_query', realm, sort, search, browsable);
     if (sort === undefined || sort === null) {
       return;
     }
     if (browsable === undefined || browsable === null) {
       return;
-    }
-    if (browsable === false) {
-      setStack([]);
-      setCategoryId(null);
-      setCategoryList([]);
     }
     const sortItem = HeaderMenu.items.getItem(sort);
     let bookList = browsable
@@ -141,14 +154,6 @@ function Main({navigation}) {
       console.log('list_query removeAllListeners');
     };
   }, [realm, sort, search, browsable, categoryId]);
-  React.useEffect(() => {
-    if (!realm) {
-      return;
-    }
-    const cList = Database.getCategoryListByParentId(realm, categoryId);
-    console.log('cList', cList);
-    setCategoryList(cList);
-  }, [realm, categoryId]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -248,10 +253,6 @@ function Main({navigation}) {
     if (!realm) {
       return;
     }
-    const newStack = newCategoryId
-      ? Database.getCategoryStackOnly2Level(realm, newCategoryId)
-      : [];
-    setStack(newStack);
     setCategoryId(newCategoryId);
   };
   const renderBar = () => {
