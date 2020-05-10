@@ -115,9 +115,10 @@ const clearAllDatabase = () => {
 };
 
 const saveCategoryOrGet = (realm, {name, level, parentId = null}) => {
+  const nameTrimmed = name.trim();
   const list = realm
     .objects('Category')
-    .filtered('name = $0 and level = $1', name, level);
+    .filtered('name = $0 and level = $1', nameTrimmed, level);
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -127,7 +128,7 @@ const saveCategoryOrGet = (realm, {name, level, parentId = null}) => {
         }
         const category = realm.create('Category', {
           id: uuidv1(),
-          name: name,
+          name: nameTrimmed,
           level: level,
           parentId: parentId,
         });
