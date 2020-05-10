@@ -19,7 +19,6 @@ function TextInputBox({
   return (
     <Input
       containerStyle={styles.textInputBox}
-      style={styles.textInput}
       labelStyle={{fontSize: 14}}
       onChangeText={setValue}
       onEndEditing={onEndEditing}
