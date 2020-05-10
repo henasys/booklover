@@ -12,7 +12,7 @@ function BookItem({item}) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('Detail', {book: item});
+        navigation.navigate('Detail', {bookId: item.id});
       }}>
       <View style={styles.itemContainer}>
         <Image style={styles.cover} source={{uri: item.cover}} />

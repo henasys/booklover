@@ -333,6 +333,14 @@ const getBookListByCategory = (realm, categoryId = null) => {
   return bookList;
 };
 
+const getBookById = (realm, bookId) => {
+  const rs = getBookList(realm).filtered('id = $0', bookId);
+  if (rs.isEmpty()) {
+    return null;
+  }
+  return rs[0];
+};
+
 const deleteBookById = (realm, id) => {
   return new Promise((resolve, reject) => {
     try {
@@ -436,6 +444,7 @@ export default {
   getBookList,
   getBookListBySearch,
   getBookListByCategory,
+  getBookById,
   deleteBookById,
   saveOrUpdateBook,
 };

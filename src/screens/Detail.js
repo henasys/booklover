@@ -1,20 +1,40 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image, Icon} from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 
+import Database from '../modules/database';
 import TimeUtil from '../modules/timeUtil';
 
 const sanitizeHtml = require('sanitize-html');
 
 function Detail({navigation, route}) {
-  const {book} = route.params;
-  if (!book) {
-    return <View />;
-  }
+  const [realm, setRealm] = useState(null);
+  const [book, setBook] = useState(null);
+  useEffect(() => {
+    Database.open(_realm => {
+      setRealm(_realm);
+      // console.log('Database.open');
+    });
+    return () => {
+      Database.close(realm);
+      // console.log('Database.close');
+    };
+  }, []);
+  useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const {bookId} = route.params;
+    if (!bookId) {
+      return;
+    }
+    const newBook = Database.getBookById(realm, bookId);
+    setBook(newBook);
+  }, [realm]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -30,7 +50,10 @@ function Detail({navigation, route}) {
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, book]);
+  if (!book) {
+    return <View />;
+  }
   const description = book.description ? sanitizeHtml(book.description) : '';
   const toc = book.toc ? book.toc : '';
   const published = published
