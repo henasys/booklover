@@ -1,13 +1,13 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Image, Icon} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 
 import Database from '../modules/database';
 import TimeUtil from '../modules/timeUtil';
+import BookCover from '../views/BookCover';
 
 const sanitizeHtml = require('sanitize-html');
 
@@ -83,7 +83,7 @@ function Detail({navigation, route}) {
         <Text style={styles.title}>{book.title}</Text>
         <View style={styles.spacer} />
         <View style={styles.rowContainer}>
-          <Image style={styles.cover} source={{uri: book.cover}} />
+          <BookCover book={book} />
           <View style={styles.bookInfo}>
             <Text
               style={styles.author}
