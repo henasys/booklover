@@ -1,6 +1,6 @@
 import {BackHandler} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
-import {toast} from './toast';
 import Navigator from './navigator';
 
 export default class AndroidBackHandler {
@@ -49,7 +49,7 @@ export default class AndroidBackHandler {
     console.log('handleBackPress', this.backHandlerClickCount);
     if (this.backHandlerClickCount < 2) {
       const msg = '"뒤로" 버튼을 한 번 더 누르시면 앱이 종료됩니다.';
-      toast(msg);
+      Toast.show(msg);
     } else {
       BackHandler.exitApp();
     }
