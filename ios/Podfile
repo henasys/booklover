@@ -42,6 +42,8 @@ target 'BookLover' do
   # add pods for any other desired Firebase products
   # https://firebase.google.com/docs/ios/setup#available-pods  
   
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'BookLoverTests' do
     inherit! :search_paths
     # Pods for testing
