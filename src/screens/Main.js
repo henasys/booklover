@@ -121,6 +121,9 @@ function Main({navigation}) {
     if (browsable === undefined || browsable === null) {
       return;
     }
+    if (browsable === false) {
+      setStack([]);
+    }
     const sortItem = HeaderMenu.items.getItem(sort);
     let bookList = browsable
       ? Database.getBookListByCategory(realm, categoryId)

@@ -33,19 +33,18 @@ export default class AndroidBackHandler {
   }
 
   handleBackButtonPress = (callback = null) => {
-    if (callback) {
-      const result = callback();
-      if (result) {
-        return result;
-      }
-    }
     const currentRouteName = Navigator.routeNameRef.current;
     console.log('currentRouteName', currentRouteName);
     if (currentRouteName && !this.routes.includes(currentRouteName)) {
       console.log('The screen is not stopped with Back Button');
       return false;
     }
-
+    if (callback) {
+      const result = callback();
+      if (result) {
+        return result;
+      }
+    }
     this.backHandlerClickCount += 1;
     console.log('handleBackPress', this.backHandlerClickCount);
     if (this.backHandlerClickCount < 2) {
