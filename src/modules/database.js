@@ -390,7 +390,8 @@ const saveOrUpdateBook = async (
       : category
     : category;
   console.log('lastCategory', lastCategory?.name);
-  if (id) {
+  const book = id && realm.objectForPrimaryKey('Book', id);
+  if (book) {
     return updateBook(realm, {
       id,
       title,
