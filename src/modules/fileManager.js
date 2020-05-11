@@ -2,27 +2,54 @@ import RNFS from 'react-native-fs';
 // import {Platform} from 'react-native';
 
 const getExternalStorage = () => {
+  // return RNFS.ExternalDirectoryPath;
   return RNFS.ExternalStorageDirectoryPath;
 };
 
-const readExternalStorage = () => {
+const readDirExternalStorage = () => {
   const dir = getExternalStorage();
   return RNFS.readDir(dir);
 };
 
-const writeToExternalStorage = (filename, contents, encoding = 'utf8') => {
-  const path = getExternalStorage() + '/' + filename;
-  return RNFS.writeFile(path, contents, encoding);
+const getBookLoverFolder = () => {
+  return 'BookLover';
 };
 
-const readFromExternalStorage = (filename, encoding = 'utf8') => {
+const getBookLoverPath = (fileName = null) => {
+  const rootDir = getExternalStorage();
+  const folerName = getBookLoverFolder();
+  const base = `${rootDir}/${folerName}`;
+  if (fileName) {
+    return `${base}/${fileName}`;
+  } else {
+    return base;
+  }
+};
+
+const readDirBookLoverPath = () => {
+  const dir = getBookLoverPath();
+  return RNFS.readDir(dir);
+};
+
+const writeBookLoverPath = (fileName, contents, encoding = 'utf8') => {
+  const base = getBookLoverPath();
+  const path = getBookLoverPath(fileName);
+  console.log('base', base);
+  console.log('path', path);
+  return RNFS.mkdir(base).then(() => RNFS.writeFile(path, contents, encoding));
+};
+
+const readBookLoverPath = (filename, encoding = 'utf8') => {
   const path = getExternalStorage() + '/' + filename;
   return RNFS.readFile(path, encoding);
 };
 
 export default {
   getExternalStorage,
-  readExternalStorage,
-  writeToExternalStorage,
-  readFromExternalStorage,
+  readDirExternalStorage,
+  getBookLoverFolder,
+  getBookLoverPath,
+  readDirBookLoverPath,
+  writeBookLoverPath,
+  readBookLoverPath,
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
@@ -10,8 +11,19 @@ import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
 function Setting({navigation, route}) {
+  const [realm, setRealm] = useState(null);
   const [fileName, setFileName] = useState('booklover-backup.json');
   const [fileNameError, setFileNameError] = useState(null);
+  useEffect(() => {
+    Database.open(_realm => {
+      setRealm(_realm);
+      // console.log('Database.open');
+    });
+    return () => {
+      Database.close(realm);
+      // console.log('Database.close');
+    };
+  }, []);
   const onEndEditingFileName = () => {
     if (!fileName || fileName.length === 0) {
       setFileNameError('백업 파일 이름이 비어있습니다.');
@@ -38,6 +50,28 @@ function Setting({navigation, route}) {
             title="데이터 백업"
             type="outline"
             icon={<Icon name="save" type="material" />}
+            onPress={() => {
+              const list = Database.getBookList(realm);
+              const content = JSON.stringify(list);
+              console.log('content', content);
+              Permission.checkPermissionForWriteExternalStorage(() => {
+                FileManager.writeBookLoverPath(fileName, content)
+                  .then(() => {
+                    console.log(
+                      'FileManager.writeBookLoverPath done',
+                      fileName,
+                    );
+                    const folder = FileManager.getBookLoverFolder();
+                    const msg = `백업 파일 저장 완료: \n${folder}/${fileName}`;
+                    Toast.show(msg);
+                  })
+                  .catch(e => {
+                    console.log('FileManager.writeBookLoverPath error', e);
+                    const msg = `백업 파일 저장 실패 ${fileName} ${e}`;
+                    Toast.show(msg);
+                  });
+              });
+            }}
           />
           <View style={styles.spacer} />
           <Button
@@ -46,15 +80,15 @@ function Setting({navigation, route}) {
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               Permission.checkPermissionForReadExternalStorage(() => {
-                FileManager.readExternalStorage()
+                FileManager.readDirBookLoverPath()
                   .then(result => {
                     console.log(
-                      'FileManager.readExternalDirectory result',
+                      'FileManager.readDirBookLoverPath result',
                       result,
                     );
                   })
                   .catch(e => {
-                    console.log('FileManager.readExternalDirectory error', e);
+                    console.log('FileManager.readDirBookLoverPath error', e);
                   });
               });
             }}
@@ -87,9 +121,6 @@ const styles = StyleSheet.create({
   },
   textInputBox: {
     marginVertical: 5,
-  },
-  textInput: {
-
   },
   spacer: {
     paddingVertical: 5,
