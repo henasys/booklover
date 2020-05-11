@@ -10,6 +10,31 @@ import Database from '../modules/database';
 import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
+const write = (fileName, content) => {
+  FileManager.writeBookLoverPath(fileName, content)
+    .then(() => {
+      console.log('FileManager.writeBookLoverPath done', fileName);
+      const folder = FileManager.getBookLoverFolder();
+      const msg = `백업 파일 저장 완료: \n${folder}/${fileName}`;
+      Toast.show(msg);
+    })
+    .catch(e => {
+      console.log('FileManager.writeBookLoverPath error', e);
+      const msg = `백업 파일 저장 실패 ${fileName} ${e}`;
+      Toast.show(msg);
+    });
+};
+
+const read = () => {
+  FileManager.readDirBookLoverPath()
+    .then(result => {
+      console.log('FileManager.readDirBookLoverPath result', result);
+    })
+    .catch(e => {
+      console.log('FileManager.readDirBookLoverPath error', e);
+    });
+};
+
 function Setting({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [fileName, setFileName] = useState('booklover-backup.json');
@@ -57,21 +82,7 @@ function Setting({navigation, route}) {
               const content = JSON.stringify(list);
               console.log('content', content);
               Permission.checkPermissionForWriteExternalStorage(() => {
-                FileManager.writeBookLoverPath(fileName, content)
-                  .then(() => {
-                    console.log(
-                      'FileManager.writeBookLoverPath done',
-                      fileName,
-                    );
-                    const folder = FileManager.getBookLoverFolder();
-                    const msg = `백업 파일 저장 완료: \n${folder}/${fileName}`;
-                    Toast.show(msg);
-                  })
-                  .catch(e => {
-                    console.log('FileManager.writeBookLoverPath error', e);
-                    const msg = `백업 파일 저장 실패 ${fileName} ${e}`;
-                    Toast.show(msg);
-                  });
+                write(fileName, content);
               });
             }}
           />
@@ -82,16 +93,7 @@ function Setting({navigation, route}) {
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               Permission.checkPermissionForReadExternalStorage(() => {
-                FileManager.readDirBookLoverPath()
-                  .then(result => {
-                    console.log(
-                      'FileManager.readDirBookLoverPath result',
-                      result,
-                    );
-                  })
-                  .catch(e => {
-                    console.log('FileManager.readDirBookLoverPath error', e);
-                  });
+                read();
               });
             }}
           />
