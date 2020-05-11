@@ -43,8 +43,8 @@ const writeBookLoverPath = (fileName, contents, encoding = 'utf8') => {
   return RNFS.mkdir(base).then(() => RNFS.writeFile(path, contents, encoding));
 };
 
-const readBookLoverPath = (filename, encoding = 'utf8') => {
-  const path = getExternalStorage() + '/' + filename;
+const readBookLoverPath = (fileName, encoding = 'utf8') => {
+  const path = getBookLoverPath(fileName);
   return RNFS.readFile(path, encoding);
 };
 
