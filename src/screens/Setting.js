@@ -51,7 +51,9 @@ function Setting({navigation, route}) {
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
-              const list = Database.getBookList(realm);
+              const list = Database.getBookList(realm).map(b =>
+                Database.bookToObject(b),
+              );
               const content = JSON.stringify(list);
               console.log('content', content);
               Permission.checkPermissionForWriteExternalStorage(() => {
