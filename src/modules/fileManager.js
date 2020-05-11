@@ -6,6 +6,10 @@ const getExternalStorage = () => {
   return RNFS.ExternalStorageDirectoryPath;
 };
 
+const getDownloadDirectory = () => {
+  return RNFS.DownloadDirectoryPath;
+};
+
 const readDirExternalStorage = () => {
   const dir = getExternalStorage();
   return RNFS.readDir(dir);
@@ -16,7 +20,7 @@ const getBookLoverFolder = () => {
 };
 
 const getBookLoverPath = (fileName = null) => {
-  const rootDir = getExternalStorage();
+  const rootDir = getDownloadDirectory();
   const folerName = getBookLoverFolder();
   const base = `${rootDir}/${folerName}`;
   if (fileName) {
@@ -46,6 +50,7 @@ const readBookLoverPath = (filename, encoding = 'utf8') => {
 
 export default {
   getExternalStorage,
+  getDownloadDirectory,
   readDirExternalStorage,
   getBookLoverFolder,
   getBookLoverPath,
