@@ -6,6 +6,8 @@ import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 
 import Database from '../modules/database';
+import Permission from '../modules/permission';
+import FileManager from '../modules/fileManager';
 
 function Setting({navigation, route}) {
   const [fileName, setFileName] = useState('booklover-backup.json');
@@ -42,6 +44,20 @@ function Setting({navigation, route}) {
             title="데이터 복원"
             type="outline"
             icon={<Icon name="backup-restore" type="material-community" />}
+            onPress={() => {
+              Permission.checkPermissionForReadExternalStorage(() => {
+                FileManager.readExternalDirectory()
+                  .then(result => {
+                    console.log(
+                      'FileManager.readExternalDirectory result',
+                      result,
+                    );
+                  })
+                  .catch(e => {
+                    console.log('FileManager.readExternalDirectory error', e);
+                  });
+              });
+            }}
           />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
