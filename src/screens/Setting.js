@@ -25,13 +25,32 @@ const write = (fileName, content) => {
     });
 };
 
-const read = () => {
-  FileManager.readDirBookLoverPath()
+const read = (realm, fileName) => {
+  FileManager.readBookLoverPath(fileName)
     .then(result => {
-      console.log('FileManager.readDirBookLoverPath result', result);
+      console.log('FileManager.readBookLoverPath result', result);
+      const list = JSON.parse(result);
+      const errors = [];
+      list.forEach((book, index) => {
+        Database.saveOrUpdateBook(realm, book)
+          .then(resultBook => {})
+          .catch(e => {
+            errors.push(e);
+          })
+          .finally(() => {
+            if (index === list.length - 1) {
+              console.log('errors', errors);
+              const msg =
+                errors.length === 0
+                  ? `데이터 복원 성공: ${list.length} 건`
+                  : `데이터 복원 실패: ${errors.length} 건`;
+              Toast.show(msg);
+            }
+          });
+      });
     })
     .catch(e => {
-      console.log('FileManager.readDirBookLoverPath error', e);
+      console.log('FileManager.readBookLoverPath error', e);
     });
 };
 
@@ -93,7 +112,7 @@ function Setting({navigation, route}) {
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               Permission.checkPermissionForReadExternalStorage(() => {
-                read();
+                read(realm, fileName);
               });
             }}
           />
