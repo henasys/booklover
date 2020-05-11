@@ -46,7 +46,7 @@ function Setting({navigation, route}) {
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               Permission.checkPermissionForReadExternalStorage(() => {
-                FileManager.readExternalDirectory()
+                FileManager.readExternalStorage()
                   .then(result => {
                     console.log(
                       'FileManager.readExternalDirectory result',

@@ -1,28 +1,28 @@
 import RNFS from 'react-native-fs';
 // import {Platform} from 'react-native';
 
-const getExternalDirectory = () => {
+const getExternalStorage = () => {
   return RNFS.ExternalStorageDirectoryPath;
 };
 
-const readExternalDirectory = () => {
-  const dir = getExternalDirectory();
+const readExternalStorage = () => {
+  const dir = getExternalStorage();
   return RNFS.readDir(dir);
 };
 
-const writeToExternalDirectory = (filename, contents, encoding = 'utf8') => {
-  const path = getExternalDirectory() + '/' + filename;
+const writeToExternalStorage = (filename, contents, encoding = 'utf8') => {
+  const path = getExternalStorage() + '/' + filename;
   return RNFS.writeFile(path, contents, encoding);
 };
 
-const readFromExternalDirectory = (filename, encoding = 'utf8') => {
-  const path = getExternalDirectory() + '/' + filename;
+const readFromExternalStorage = (filename, encoding = 'utf8') => {
+  const path = getExternalStorage() + '/' + filename;
   return RNFS.readFile(path, encoding);
 };
 
 export default {
-  getExternalDirectory,
-  readExternalDirectory,
-  writeToExternalDirectory,
-  readFromExternalDirectory,
+  getExternalStorage,
+  readExternalStorage,
+  writeToExternalStorage,
+  readFromExternalStorage,
 };
