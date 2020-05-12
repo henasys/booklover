@@ -10,12 +10,10 @@ import Database from '../modules/database';
 import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 import Bundle from '../modules/bundle';
-import Util from '../modules/util';
 import MyAlert from '../views/alert';
 
 const write = (fileName, content) => {
-  const ext = Util.getExtension(fileName);
-  const encoding = ext === 'xlsx' ? 'ascii' : 'utf8';
+  const encoding = Bundle.getEncoding(fileName);
   FileManager.writeBookLoverPath(fileName, content, encoding)
     .then(() => {
       console.log('FileManager.writeBookLoverPath done', fileName);
@@ -31,10 +29,10 @@ const write = (fileName, content) => {
 };
 
 const read = (realm, fileName) => {
-  FileManager.readBookLoverPath(fileName)
+  const encoding = Bundle.getEncoding(fileName);
+  FileManager.readBookLoverPath(fileName, encoding)
     .then(result => {
-      console.log('FileManager.readBookLoverPath result', result);
-      const list = JSON.parse(result);
+      const list = Bundle.parseBookList(fileName, result);
       const successes = [];
       const errors = [];
       list.forEach((book, index) => {

@@ -58,6 +58,12 @@ const makeExcel = data => {
   return XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
 };
 
+const readExcelToJsonList = data => {
+  const wb = XLSX.read(data, {type: 'binary', bookType: 'xlsx'});
+  const wsList = wb.SheetNames;
+  return XLSX.utils.sheet_to_json(wb.Sheets[wsList[0]]);
+};
+
 const bundleBooListkExcel = realm => {
   return makeExcel(excelData(realm));
 };
@@ -76,4 +82,25 @@ const bundleBookList = (realm, fileName) => {
   }
 };
 
-export default {bundleBooListkExcel, bundleBookListJson, bundleBookList};
+const getEncoding = fileName => {
+  const ext = Util.getExtension(fileName);
+  const encoding = ext === 'xlsx' ? 'ascii' : 'utf8';
+  return encoding;
+};
+
+const parseBookList = (fileName, content) => {
+  const ext = Util.getExtension(fileName);
+  if (ext === 'xlsx') {
+    return readExcelToJsonList(content);
+  } else {
+    return JSON.parse(content);
+  }
+};
+
+export default {
+  bundleBooListkExcel,
+  bundleBookListJson,
+  bundleBookList,
+  getEncoding,
+  parseBookList,
+};
