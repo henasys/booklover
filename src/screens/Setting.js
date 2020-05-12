@@ -8,7 +8,7 @@ import Toast from 'react-native-simple-toast';
 import ProgressBar from 'react-native-progress/Bar';
 
 import Database from '../modules/database';
-import Permission from '../modules/permission';
+// import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 import Bundle from '../modules/bundle';
 import MyAlert from '../views/alert';
@@ -81,6 +81,10 @@ function Setting({navigation, route}) {
       })
       .catch(e => {
         console.log('FileManager.readBookLoverPath error', e);
+        const folder = FileManager.getBookLoverFolder();
+        const msg = `${folder}/${fileName}\n파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.`;
+        Toast.show(msg, Toast.LONG);
+        setShowProgress(false);
       });
   };
   return (
