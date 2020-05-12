@@ -106,9 +106,10 @@ function Setting({navigation, route}) {
             icon={<Icon name="save" type="material" />}
             onPress={() => {
               const content = Bundle.bundleBookList(realm, fileName);
-              Permission.checkPermissionForWriteExternalStorage(() => {
-                write(fileName, content);
-              });
+              write(fileName, content);
+              // Permission.checkPermissionForWriteExternalStorage(() => {
+              //   write(fileName, content);
+              // });
             }}
           />
           <View style={styles.spacer} />
@@ -119,9 +120,10 @@ function Setting({navigation, route}) {
             onPress={() => {
               setShowProgress(true);
               setProgress(0);
-              Permission.checkPermissionForReadExternalStorage(() => {
-                read(realm, fileName, progress, setProgress);
-              });
+              read(realm, fileName, progress, setProgress);
+              // Permission.checkPermissionForReadExternalStorage(() => {
+              //   read(realm, fileName, progress, setProgress);
+              // });
             }}
           />
           {showProgress && (
