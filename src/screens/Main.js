@@ -319,7 +319,7 @@ function Main({navigation}) {
                 <BookItem item={item} />
               </SwipeableRow>
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => item.id + '_' + String(index)}
           />
         </View>
         {renderActionButton(navigation)}
