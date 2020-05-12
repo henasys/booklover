@@ -69,8 +69,9 @@ function Setting({navigation, route}) {
             .finally(() => {
               const progressValue = 1 / list.length;
               progressTotal += progressValue;
+              console.log('progressTotal', progressTotal);
               setProgress(progressTotal);
-              if (index === list.length - 1) {
+              if (progressTotal >= 1) {
                 setTimeout(() => {
                   setShowProgress(false);
                 }, 5000);
