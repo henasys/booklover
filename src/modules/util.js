@@ -7,7 +7,14 @@ export function parseInteger(value) {
   return typeof value === 'string' ? parseInt(value, 10) : value;
 }
 
+export function getExtension(fileName) {
+  const re = /(?:\.([^.]+))?$/;
+  const ext = re.exec(fileName)[1];
+  return ext;
+}
+
 export default {
   splitCategoryName,
   parseInteger,
+  getExtension,
 };
