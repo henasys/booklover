@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
+import {Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
@@ -162,34 +163,31 @@ function Setting({navigation, route}) {
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
-          <TouchableOpacity
-            onPress={() => {
-              console.log('onPress TouchableOpacity');
+          <Input
+            onFocus={() => {
+              console.log('onFocus Input');
+              Keyboard.dismiss();
               pickFile(setIsbnFile);
-            }}>
-            <Input
-              disabled
-              onFocus={() => {
-                console.log('onFocus Input');
-              }}
-              onBlur={() => {
-                console.log('onBlur Input');
-              }}
-              onKeyPress={() => {
-                console.log('onKeyPress Input');
-              }}
-              disabledInputStyle={{color: 'black', opacity: 1}}
-              containerStyle={styles.textInputBox}
-              labelStyle={{fontSize: 14}}
-              defaultValue={isbnFile}
-              label={'ISBN 파일'}
-              keyboardType="default"
-              autoCapitalize="none"
-              multiline={true}
-              numberOfLines={1}
-            />
-          </TouchableOpacity>
-
+            }}
+            onBlur={() => {
+              console.log('onBlur Input');
+            }}
+            onKeyPress={() => {
+              console.log('onKeyPress Input');
+            }}
+            onPress={() => {
+              console.log('onPress Input');
+            }}
+            disabledInputStyle={{color: 'black', opacity: 1}}
+            containerStyle={styles.textInputBox}
+            labelStyle={{fontSize: 14}}
+            defaultValue={isbnFile}
+            label={'ISBN 파일'}
+            keyboardType="default"
+            autoCapitalize="none"
+            multiline={true}
+            numberOfLines={1}
+          />
           <Button
             title="ISBN 검색 추가"
             type="outline"
