@@ -117,6 +117,7 @@ function Setting({navigation, route}) {
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               setShowProgress(true);
+              setProgress(0);
               Permission.checkPermissionForReadExternalStorage(() => {
                 read(realm, fileName, progress, setProgress);
               });
