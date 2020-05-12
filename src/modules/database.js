@@ -203,6 +203,7 @@ const getCategoryListByParentId = (realm, parentId = null) => {
 const saveBook = (
   realm,
   {
+    id = null,
     title,
     author,
     isbn,
@@ -225,7 +226,7 @@ const saveBook = (
     try {
       realm.write(() => {
         const book = realm.create('Book', {
-          id: uuidv1(),
+          id: id ? id : uuidv1(),
           title: title,
           author: author,
           isbn: isbn,
@@ -411,6 +412,7 @@ const saveOrUpdateBook = async (
     });
   } else {
     return saveBook(realm, {
+      id,
       title,
       author,
       isbn,
