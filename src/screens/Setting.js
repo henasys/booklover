@@ -168,8 +168,15 @@ function Setting({navigation, route}) {
               pickFile(setIsbnFile);
             }}>
             <Input
-              onPress={() => {
-                console.log('onPress Input');
+              disabled
+              onFocus={() => {
+                console.log('onFocus Input');
+              }}
+              onBlur={() => {
+                console.log('onBlur Input');
+              }}
+              onKeyPress={() => {
+                console.log('onKeyPress Input');
               }}
               disabledInputStyle={{color: 'black', opacity: 1}}
               containerStyle={styles.textInputBox}
