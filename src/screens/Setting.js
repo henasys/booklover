@@ -35,6 +35,7 @@ function Setting({navigation, route}) {
   const [fileNameError, setFileNameError] = useState(null);
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
+  const [isbnFile, setIsbnFile] = useState('booklover-isbn.txt');
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -95,7 +96,6 @@ function Setting({navigation, route}) {
             containerStyle={styles.textInputBox}
             labelStyle={{fontSize: 14}}
             onChangeText={setFileName}
-            onEndEditing={onEndEditingFileName}
             defaultValue={fileName}
             errorMessage={fileNameError}
             label={'백업 파일'}
@@ -136,6 +136,30 @@ function Setting({navigation, route}) {
               <ProgressBar progress={progress} width={null} />
             </View>
           )}
+          <View style={styles.spacer} />
+          <View style={styles.spacer} />
+          <View style={styles.spacer} />
+          <Input
+            containerStyle={styles.textInputBox}
+            labelStyle={{fontSize: 14}}
+            onChangeText={setIsbnFile}
+            onEndEditing={onEndEditingFileName}
+            defaultValue={isbnFile}
+            label={'ISBN 파일'}
+            keyboardType="default"
+            autoCapitalize="none"
+            multiline={true}
+            numberOfLines={1}
+          />
+          <Button
+            title="ISBN 검색 추가"
+            type="outline"
+            icon={<Icon name="save" type="material" />}
+            onPress={() => {
+              //
+            }}
+          />
+          <View style={styles.spacer} />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
