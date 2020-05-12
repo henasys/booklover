@@ -5,6 +5,7 @@ import {StyleSheet, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
+import ProgressBar from 'react-native-progress/Bar';
 
 import Database from '../modules/database';
 import Permission from '../modules/permission';
@@ -28,41 +29,12 @@ const write = (fileName, content) => {
     });
 };
 
-const read = (realm, fileName) => {
-  const encoding = Bundle.getEncoding(fileName);
-  FileManager.readBookLoverPath(fileName, encoding)
-    .then(result => {
-      const list = Bundle.parseBookList(fileName, result);
-      const successes = [];
-      const errors = [];
-      list.forEach((book, index) => {
-        Database.saveOrUpdateBook(realm, book)
-          .then(resultBook => {
-            successes.push(resultBook.title);
-          })
-          .catch(e => {
-            errors.push(e);
-          })
-          .finally(() => {
-            if (index === list.length - 1) {
-              console.log('errors', errors);
-              const msg = `데이터 복원\n성공: ${successes.length} 건\n실패: ${
-                errors.length
-              } 건`;
-              Toast.show(msg);
-            }
-          });
-      });
-    })
-    .catch(e => {
-      console.log('FileManager.readBookLoverPath error', e);
-    });
-};
-
 function Setting({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [fileName, setFileName] = useState('booklover-backup.xlsx');
   const [fileNameError, setFileNameError] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [showProgress, setShowProgress] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -78,6 +50,38 @@ function Setting({navigation, route}) {
       setFileNameError('백업 파일 이름이 비어있습니다.');
     }
   };
+  const read = () => {
+    const encoding = Bundle.getEncoding(fileName);
+    let progressTotal = 0;
+    FileManager.readBookLoverPath(fileName, encoding)
+      .then(result => {
+        const list = Bundle.parseBookList(fileName, result);
+        list.forEach((book, index) => {
+          Database.saveOrUpdateBook(realm, book)
+            .then(resultBook => {
+              const msg = `데이터 복원 성공: ${resultBook.title}`;
+              console.log(msg);
+            })
+            .catch(e => {
+              const msg = `데이터 복원 실패: ${e}`;
+              Toast.show(msg);
+            })
+            .finally(() => {
+              const progressValue = 1 / list.length;
+              progressTotal += progressValue;
+              setProgress(progressTotal);
+              if (index === list.length - 1) {
+                setTimeout(() => {
+                  setShowProgress(false);
+                }, 5000);
+              }
+            });
+        });
+      })
+      .catch(e => {
+        console.log('FileManager.readBookLoverPath error', e);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -89,7 +93,7 @@ function Setting({navigation, route}) {
             onEndEditing={onEndEditingFileName}
             defaultValue={fileName}
             errorMessage={fileNameError}
-            label={'백업 파일: .xlsx 또는 .json'}
+            label={'백업 파일'}
             keyboardType="default"
             autoCapitalize="none"
             multiline={true}
@@ -112,12 +116,14 @@ function Setting({navigation, route}) {
             type="outline"
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
+              setShowProgress(true);
               Permission.checkPermissionForReadExternalStorage(() => {
-                read(realm, fileName);
+                read(realm, fileName, progress, setProgress);
               });
             }}
           />
           <View style={styles.spacer} />
+          {showProgress && <ProgressBar progress={progress} width={null} />}
           <View style={styles.spacer} />
           <Button
             title="데이터베이스 삭제"
