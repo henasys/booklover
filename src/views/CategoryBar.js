@@ -6,7 +6,7 @@ import MyColor from '../modules/myColor';
 function CategoryBar({stack, onPressTop, onPressSub = null}) {
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
-      TOP
+      분류
     </Text>
   );
   const topDivider = <Text style={[style.text, style.subText]}> | </Text>;
