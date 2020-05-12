@@ -20,6 +20,7 @@
     "react-native": "0.62.2",
     "react-native-action-button": "git://github.com/henasys/react-native-action-button.git#b48e5e0d0cbec228ae319fb34b56abcd96fdd214",
     "react-native-camera": "^3.23.1",
+    "react-native-document-picker": "^3.4.0",
     "react-native-elements": "^2.0.0",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
