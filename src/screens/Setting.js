@@ -9,9 +9,14 @@ import Toast from 'react-native-simple-toast';
 import Database from '../modules/database';
 import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
+import Bundle from '../modules/bundle';
+import Util from '../modules/util';
+import MyAlert from '../views/alert';
 
 const write = (fileName, content) => {
-  FileManager.writeBookLoverPath(fileName, content)
+  const ext = Util.getExtension(fileName);
+  const encoding = ext === 'xlsx' ? 'ascii' : 'utf8';
+  FileManager.writeBookLoverPath(fileName, content, encoding)
     .then(() => {
       console.log('FileManager.writeBookLoverPath done', fileName);
       const folder = FileManager.getBookLoverFolder();
@@ -30,20 +35,22 @@ const read = (realm, fileName) => {
     .then(result => {
       console.log('FileManager.readBookLoverPath result', result);
       const list = JSON.parse(result);
+      const successes = [];
       const errors = [];
       list.forEach((book, index) => {
         Database.saveOrUpdateBook(realm, book)
-          .then(resultBook => {})
+          .then(resultBook => {
+            successes.push(resultBook.title);
+          })
           .catch(e => {
             errors.push(e);
           })
           .finally(() => {
             if (index === list.length - 1) {
               console.log('errors', errors);
-              const msg =
-                errors.length === 0
-                  ? `데이터 복원 성공: ${list.length} 건`
-                  : `데이터 복원 실패: ${errors.length} 건`;
+              const msg = `데이터 복원\n성공: ${successes.length} 건\n실패: ${
+                errors.length
+              } 건`;
               Toast.show(msg);
             }
           });
@@ -56,7 +63,7 @@ const read = (realm, fileName) => {
 
 function Setting({navigation, route}) {
   const [realm, setRealm] = useState(null);
-  const [fileName, setFileName] = useState('booklover-backup.json');
+  const [fileName, setFileName] = useState('booklover-backup.xlsx');
   const [fileNameError, setFileNameError] = useState(null);
   useEffect(() => {
     Database.open(_realm => {
@@ -84,7 +91,7 @@ function Setting({navigation, route}) {
             onEndEditing={onEndEditingFileName}
             defaultValue={fileName}
             errorMessage={fileNameError}
-            label={'백업 파일'}
+            label={'백업 파일: .xlsx 또는 .json'}
             keyboardType="default"
             autoCapitalize="none"
             multiline={true}
@@ -95,11 +102,7 @@ function Setting({navigation, route}) {
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
-              const list = Database.getBookList(realm).map(b =>
-                Database.bookToObject(b),
-              );
-              const content = JSON.stringify(list);
-              console.log('content', content);
+              const content = Bundle.bundleBookList(realm, fileName);
               Permission.checkPermissionForWriteExternalStorage(() => {
                 write(fileName, content);
               });
@@ -122,6 +125,20 @@ function Setting({navigation, route}) {
             title="데이터베이스 삭제"
             type="outline"
             icon={<Icon name="delete" type="material-community" />}
+            onPress={() => {
+              const title = '삭제';
+              const message = '데이터베이스 전체 데이터를 삭제하시겠습니까?';
+              const okCallback = async () => {
+                await Database.clearAllDatabase();
+              };
+              const cancelCallback = () => {};
+              MyAlert.showTwoButtonAlert(
+                title,
+                message,
+                okCallback,
+                cancelCallback,
+              );
+            }}
           />
         </View>
       </ScrollView>
