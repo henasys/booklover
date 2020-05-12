@@ -122,8 +122,14 @@ function Setting({navigation, route}) {
               });
             }}
           />
+          {showProgress && (
+            <View>
+              <View style={styles.spacer} />
+              <ProgressBar progress={progress} width={null} />
+            </View>
+          )}
           <View style={styles.spacer} />
-          {showProgress && <ProgressBar progress={progress} width={null} />}
+          <View style={styles.spacer} />
           <View style={styles.spacer} />
           <Button
             title="데이터베이스 삭제"
