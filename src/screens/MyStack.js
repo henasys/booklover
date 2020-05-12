@@ -9,6 +9,8 @@ import BarcodeAdd from '../screens/BarcodeAdd';
 import SearchAdd from '../screens/SearchAdd';
 import Edit from '../screens/Edit';
 import Setting from '../screens/Setting';
+import Backup from '../screens/Backup';
+import ImportIsbn from '../screens/ImportIsbn';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +51,20 @@ export default function MyStack() {
         component={Setting}
         options={({navigation, route}) => ({
           title: '설정',
+        })}
+      />
+      <Stack.Screen
+        name="Backup"
+        component={Backup}
+        options={({navigation, route}) => ({
+          title: '데이터 백업, 복원',
+        })}
+      />
+      <Stack.Screen
+        name="ImportIsbn"
+        component={ImportIsbn}
+        options={({navigation, route}) => ({
+          title: 'ISBN 파일 데이터 추가',
         })}
       />
     </Stack.Navigator>
