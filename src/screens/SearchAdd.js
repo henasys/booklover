@@ -55,7 +55,7 @@ function SearchAdd({navigation, route}) {
         items.forEach(item => {
           const book = Database.getBookByIsbn(realm, item.isbn, item.isbn13);
           item._alreadyAdded = book !== null;
-          item.id = book.id;
+          item.id = book && book.id;
         });
         setList(items);
       })
