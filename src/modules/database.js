@@ -118,7 +118,12 @@ const saveCategoryOrGet = (realm, {name, level, parentId = null}) => {
   const nameTrimmed = name.trim();
   const list = realm
     .objects('Category')
-    .filtered('name = $0 and level = $1', nameTrimmed, level);
+    .filtered(
+      'name = $0 and level = $1 and parentId = $2',
+      nameTrimmed,
+      level,
+      parentId,
+    );
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
