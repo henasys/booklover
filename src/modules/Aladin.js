@@ -65,6 +65,7 @@ class Aladin {
   }
 
   fetch(url) {
+    console.debug('fetch url', url);
     return fetch(url)
       .then(response => response.text())
       .then(response => {
