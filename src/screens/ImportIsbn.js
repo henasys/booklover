@@ -10,11 +10,12 @@ import ProgressBar from 'react-native-progress/Bar';
 import DocumentPicker from 'react-native-document-picker';
 
 import Database from '../modules/database';
+import Aladin from '../modules/Aladin';
+import SearchItem from '../views/searchItem';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
-import MyAlert from '../views/alert';
 
-const pickFile = async setValue => {
+const pickFile = async (setValue, setUri) => {
   try {
     const res = await DocumentPicker.pick({
       type: [DocumentPicker.types.plainText],
@@ -26,6 +27,7 @@ const pickFile = async setValue => {
       res.size,
     );
     setValue(res.name);
+    setUri(res.uri);
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       // User cancelled the picker, exit any dialogs or menus and move on
@@ -35,9 +37,56 @@ const pickFile = async setValue => {
   }
 };
 
+const search = (realm, isbn, callback, errorCallback, finalCallback) => {
+  console.log('search', isbn);
+  const book = Database.getBookByIsbn(realm, isbn, isbn);
+  if (book) {
+    const msg = `already added book ${isbn}`;
+    console.log(msg);
+    book._prechecked = true;
+    callback(book);
+    finalCallback();
+    return;
+  }
+  const searcher = new Aladin();
+  searcher
+    .searchIsbn(isbn)
+    .then(response => {
+      console.log('searchIsbn response', response);
+      if (response.errorCode) {
+        const msg = `${response.errorCode} ${response.errorMessage}`;
+        console.log(msg);
+        errorCallback(new Error(msg));
+        finalCallback();
+        return;
+      }
+      const items =
+        response.item && Array.isArray(response.item)
+          ? response.item
+          : [response.item];
+      items.forEach(item => {
+        SearchItem.addBook({
+          realm,
+          item,
+          callback,
+          errorCallback,
+          finalCallback,
+        });
+      });
+    })
+    .catch(e => {
+      console.log('searchIsbn error', e);
+      errorCallback(e);
+      finalCallback();
+    });
+};
+
 function ImportIsbn({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [isbnFile, setIsbnFile] = useState('');
+  const [uri, setUri] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [showProgress, setShowProgress] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -48,6 +97,60 @@ function ImportIsbn({navigation, route}) {
       // console.log('Database.close');
     };
   }, []);
+  const read = () => {
+    let progressTotal = 0;
+    const errorList = [];
+    const precheckedList = [];
+    const successList = [];
+    FileManager.readFile(uri)
+      .then(result => {
+        console.log('FileManager.readFile result', result.length);
+        const list = result.split('\n');
+        console.log(list.length);
+        const limit = list.length;
+        const finalCallback = () => {
+          const progressValue = 1 / limit;
+          progressTotal += progressValue;
+          console.log('progressTotal', progressTotal);
+          console.log('successList', successList.length);
+          console.log('precheckedList', precheckedList.length);
+          console.log('errorList', errorList.length, errorList);
+          setProgress(progressTotal);
+          if (Math.ceil(progressTotal) >= 1) {
+            const msg = `전체 ${list.length} 성공: ${
+              successList.length
+            }\n중복: ${precheckedList.length} 실패: ${errorList.length}`;
+            Toast.show(msg, Toast.LONG);
+            setTimeout(() => {
+              setShowProgress(false);
+            }, 5000);
+          }
+        };
+        for (let index = 0; index < list.length; index++) {
+          const isbn = list[index];
+          if (index > limit) {
+            break;
+          }
+          const callback = book => {
+            if (book._prechecked) {
+              precheckedList.push(isbn);
+            } else {
+              successList.push(isbn);
+            }
+          };
+          const errorCallback = e => {
+            errorList.push(isbn);
+          };
+          search(realm, isbn, callback, errorCallback, finalCallback);
+        }
+      })
+      .catch(e => {
+        console.log('FileManager.readFile error', e);
+        const msg = '파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.';
+        Toast.show(msg, Toast.LONG);
+        setShowProgress(false);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -56,7 +159,7 @@ function ImportIsbn({navigation, route}) {
             onFocus={() => {
               console.log('onFocus Input');
               Keyboard.dismiss();
-              pickFile(setIsbnFile);
+              pickFile(setIsbnFile, setUri);
             }}
             onBlur={() => {
               console.log('onBlur Input');
@@ -82,9 +185,23 @@ function ImportIsbn({navigation, route}) {
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
-              //
+              if (!uri) {
+                const msg =
+                  '아직 ISBN 파일을 선택하지 않았습니다.\n다시 확인해주십시오.';
+                Toast.show(msg);
+                return;
+              }
+              setShowProgress(true);
+              setProgress(0);
+              read();
             }}
           />
+          {showProgress && (
+            <View>
+              <View style={styles.spacer} />
+              <ProgressBar progress={progress} width={null} />
+            </View>
+          )}
           <View style={styles.spacer} />
         </View>
       </ScrollView>
