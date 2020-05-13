@@ -66,11 +66,12 @@ function Backup() {
               Toast.show(msg);
             })
             .finally(() => {
-              const progressValue = 1 / list.length;
-              progressTotal += progressValue;
+              progressTotal += 1;
+              const progressValue = progressTotal / list.length;
               console.log('progressTotal', progressTotal);
-              setProgress(progressTotal);
-              if (progressTotal >= 1) {
+              console.log('progressValue', progressValue);
+              setProgress(progressValue);
+              if (progressTotal === list.length) {
                 setTimeout(() => {
                   setShowProgress(false);
                 }, 5000);
