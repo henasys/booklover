@@ -1,6 +1,7 @@
 import {REACT_APP_ALADIN_API_KEY} from 'react-native-dotenv';
 
 const parseString = require('react-native-xml2js').parseString;
+const IsbnUtil = require('isbn-utils');
 
 class Aladin {
   constructor() {
@@ -52,6 +53,15 @@ class Aladin {
     const url = this.getUrlForKeyword(params);
     // console.log('searchKeyword url', url);
     return this.fetch(url);
+  }
+
+  search(keyword) {
+    const checkIsbn = IsbnUtil.parse(keyword);
+    if (checkIsbn) {
+      return this.searchIsbn(keyword);
+    } else {
+      return this.searchKeyword(keyword);
+    }
   }
 
   fetch(url) {

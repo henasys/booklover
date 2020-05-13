@@ -36,7 +36,7 @@ function SearchAdd({navigation, route}) {
     setList([]);
     const searcher = new Aladin();
     searcher
-      .searchKeyword(search)
+      .search(search)
       .then(response => {
         console.log('searchKeyword response', response);
         if (response.errorCode) {
@@ -45,10 +45,13 @@ function SearchAdd({navigation, route}) {
           setError(msg);
           return;
         }
-        const items =
-          response.item && Array.isArray(response.item)
-            ? response.item
-            : [response.item];
+        if (!response.item) {
+          setError('검색 결과가 없습니다.');
+          return;
+        }
+        const items = Array.isArray(response.item)
+          ? response.item
+          : [response.item];
         items.forEach(item => {
           item._alreadyAdded =
             Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
@@ -90,7 +93,7 @@ function SearchAdd({navigation, route}) {
       <KeyboardAvoidingView style={styles.flexOne}>
         <SearchBar
           platform="default"
-          placeholder={'제목, 저자'}
+          placeholder={'제목, 저자, ISBN'}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={onUpdateSearch}
