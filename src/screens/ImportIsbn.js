@@ -53,7 +53,7 @@ const search = (realm, isbn, callback, errorCallback, finalCallback) => {
   searcher
     .searchIsbn(isbn)
     .then(response => {
-      console.log('searchIsbn response', response);
+      console.log('searchIsbn response', response.length);
       if (response.errorCode) {
         const msg = `${response.errorCode} ${response.errorMessage}`;
         console.log(msg);
