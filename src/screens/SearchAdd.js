@@ -53,8 +53,9 @@ function SearchAdd({navigation, route}) {
           ? response.item
           : [response.item];
         items.forEach(item => {
-          item._alreadyAdded =
-            Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
+          const book = Database.getBookByIsbn(realm, item.isbn, item.isbn13);
+          item._alreadyAdded = book !== null;
+          item.id = book.id;
         });
         setList(items);
       })
