@@ -129,7 +129,9 @@ function Main({navigation}) {
     if (!realm) {
       return;
     }
-    const cList = Database.getCategoryListByParentId(realm, categoryId);
+    const cList = Database.getCategoryListByParentId(realm, categoryId).sorted(
+      'name',
+    );
     console.log('cList', cList);
     setCategoryList(cList);
   }, [realm, categoryId]);
@@ -148,7 +150,7 @@ function Main({navigation}) {
     bookList = bookList.sorted(sortItem.field, sortItem.reverse);
     bookList.addListener(listListener);
     setList(bookList);
-    console.log('list_query done', bookList);
+    console.log('list_query done', bookList.length);
     return () => {
       bookList && bookList.removeAllListeners();
       console.log('list_query removeAllListeners');
