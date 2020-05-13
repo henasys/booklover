@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {ActivityIndicator} from 'react-native';
-import {Image} from 'react-native-elements';
+// import {Image} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 
 function BookCover({book, style = {}}) {
   const source = book.cover
@@ -9,7 +10,7 @@ function BookCover({book, style = {}}) {
     : require('../images/no-image.png');
   const imageStyle = {...styles.cover, ...style};
   return (
-    <Image
+    <FastImage
       style={imageStyle}
       source={source}
       defaultSource={require('../images/no-image.png')}
