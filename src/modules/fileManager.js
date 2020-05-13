@@ -48,6 +48,10 @@ const readBookLoverPath = (fileName, encoding = 'utf8') => {
   return RNFS.readFile(path, encoding);
 };
 
+const readFile = (path, encodingOrOptions = null) => {
+  return RNFS.readFile(path, encodingOrOptions);
+};
+
 export default {
   getExternalStorage,
   getDownloadDirectory,
@@ -57,4 +61,5 @@ export default {
   readDirBookLoverPath,
   writeBookLoverPath,
   readBookLoverPath,
+  readFile,
 };
