@@ -11,7 +11,6 @@ import DocumentPicker from 'react-native-document-picker';
 
 import Database from '../modules/database';
 import Aladin from '../modules/Aladin';
-import SearchItem from '../views/searchItem';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
@@ -65,13 +64,16 @@ const search = (realm, isbn, callback, errorCallback, finalCallback) => {
           ? response.item
           : [response.item];
       items.forEach(item => {
-        SearchItem.addBook({
-          realm,
-          item,
-          callback,
-          errorCallback,
-          finalCallback,
-        });
+        Database.saveOrUpdateBook(realm, item)
+          .then(resultBook => {
+            callback(resultBook);
+          })
+          .catch(e => {
+            errorCallback(e);
+          })
+          .finally(() => {
+            finalCallback();
+          });
       });
     })
     .catch(e => {
@@ -105,18 +107,24 @@ function ImportIsbn({navigation, route}) {
     FileManager.readFile(uri)
       .then(result => {
         console.log('FileManager.readFile result', result.length);
-        const list = result.split('\n');
+        if (!result || result.length === 0) {
+          const msg = '파일 내용이 없거나 잘못된 형식입니다.';
+          Toast.show(msg, Toast.LONG);
+          return;
+        }
+        const list = result.trim().split('\n');
         console.log(list.length);
         const limit = list.length;
         const finalCallback = () => {
-          const progressValue = 1 / limit;
-          progressTotal += progressValue;
+          progressTotal += 1;
+          const progressValue = progressTotal / limit;
           console.log('progressTotal', progressTotal);
+          console.log('progressValue', progressValue);
           console.log('successList', successList.length);
           console.log('precheckedList', precheckedList.length);
           console.log('errorList', errorList.length, errorList);
-          setProgress(progressTotal);
-          if (Math.ceil(progressTotal) >= 1) {
+          setProgress(progressValue);
+          if (progressTotal === limit) {
             const msg = `전체 ${list.length} 성공: ${
               successList.length
             }\n중복: ${precheckedList.length} 실패: ${errorList.length}`;
