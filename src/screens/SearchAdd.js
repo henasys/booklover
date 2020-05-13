@@ -38,7 +38,7 @@ function SearchAdd({navigation, route}) {
     searcher
       .search(search)
       .then(response => {
-        console.log('searchKeyword response', response);
+        console.log('search response', response);
         if (response.errorCode) {
           const msg = `${response.errorCode} ${response.errorMessage}`;
           console.log(msg);
@@ -59,7 +59,7 @@ function SearchAdd({navigation, route}) {
         setList(items);
       })
       .catch(e => {
-        console.log('searchKeyword error', e);
+        console.log('search error', e);
         setError(`검색 오류입니다. ${e}`);
       });
   };
