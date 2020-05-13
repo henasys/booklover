@@ -14,6 +14,8 @@ import Aladin from '../modules/Aladin';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
+const IsbnUtil = require('isbn-utils');
+
 const pickFile = async (setValue, setUri) => {
   try {
     const res = await DocumentPicker.pick({
@@ -135,9 +137,13 @@ function ImportIsbn({navigation, route}) {
           }
         };
         for (let index = 0; index < list.length; index++) {
-          const isbn = list[index];
           if (index > limit) {
             break;
+          }
+          const isbn = IsbnUtil.parse(list[index]);
+          if (!isbn) {
+            errorList.push(list[index]);
+            continue;
           }
           const callback = book => {
             if (book._prechecked) {
