@@ -18,9 +18,10 @@ const defaultBarCodeTypes = [
 ];
 
 const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
-  const isbn = IsbnUtil.parse(event.data);
-  if (!isbn) {
-    setBarcode(event.data);
+  const isbn = event.data;
+  const checkIsbn = IsbnUtil.parse(isbn);
+  if (!checkIsbn) {
+    setBarcode(isbn);
     setError('잘못된 ISBN 번호입니다.');
     setList([]);
     return;

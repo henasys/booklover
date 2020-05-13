@@ -140,9 +140,10 @@ function ImportIsbn({navigation, route}) {
           if (index > limit) {
             break;
           }
-          const isbn = IsbnUtil.parse(list[index]);
-          if (!isbn) {
-            errorList.push(list[index]);
+          const isbn = list[index];
+          const checkIsbn = IsbnUtil.parse(isbn);
+          if (!checkIsbn) {
+            errorList.push(isbn);
             continue;
           }
           const callback = book => {
