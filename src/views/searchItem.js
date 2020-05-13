@@ -9,6 +9,7 @@ const addBook = async ({
   item,
   callback = null,
   errorCallback = null,
+  finalCallback = null,
 }) => {
   const category = await Database.saveCategoryName(realm, item.categoryName);
   console.log(category.id, category.parentId, category.name, category.level);
@@ -17,11 +18,14 @@ const addBook = async ({
     .then(book => {
       console.log('Database.saveBook done', book.id, book.title);
       book._alreadyAdded = true;
-      callback(book);
+      callback && callback(book);
     })
     .catch(e => {
       console.log('Database.saveBook error', item.title, e);
-      errorCallback(e);
+      errorCallback && errorCallback(e);
+    })
+    .finally(() => {
+      finalCallback && finalCallback();
     });
 };
 
