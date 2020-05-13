@@ -10,13 +10,21 @@ import Aladin from '../modules/Aladin';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
 
+const IsbnUtil = require('isbn-utils');
+
 const defaultBarCodeTypes = [
   RNCamera.Constants.BarCodeType.ean13,
   RNCamera.Constants.BarCodeType.ean8,
 ];
 
 const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
-  const isbn = event.data;
+  const isbn = IsbnUtil.parse(event.data);
+  if (!isbn) {
+    setBarcode(event.data);
+    setError('잘못된 ISBN 번호입니다.');
+    setList([]);
+    return;
+  }
   setBarcode(isbn);
   setError(null);
   setList([]);
