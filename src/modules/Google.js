@@ -1,3 +1,6 @@
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
 const IsbnUtil = require('isbn-utils');
 
 class Google {
