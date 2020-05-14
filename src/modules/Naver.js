@@ -38,6 +38,12 @@ class Naver {
     return this.fetch(url);
   }
 
+  async getCategoryAndToc(link) {
+    const content = await fetch(link).then(response => response.text());
+    console.log('content', content);
+    return content;
+  }
+
   search(keyword) {
     const checkIsbn = IsbnUtil.parse(keyword);
     if (checkIsbn) {

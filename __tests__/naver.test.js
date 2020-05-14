@@ -5,4 +5,6 @@ it('naver_isbn', async () => {
   const searcher = new Naver();
   const result = await searcher.searchIsbn(isbn);
   console.log('result', result);
+  const link = result && result.items && result.items[0].link;
+  const category = await searcher.getCategoryAndToc(link);
 });
