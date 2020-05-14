@@ -176,6 +176,12 @@ function Backup() {
             type="outline"
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
+              if (!uri) {
+                const msg =
+                  '아직 복원 파일을 선택하지 않았습니다.\n다시 확인해주십시오.';
+                Toast.show(msg);
+                return;
+              }
               setShowProgress(true);
               setProgress(0);
               read(realm, fileName, progress, setProgress);
