@@ -81,8 +81,20 @@ function Backup() {
     let progressTotal = 0;
     FileManager.readFile(uri, encoding)
       .then(result => {
+        console.log('FileManager.readFile result', result.length);
+        if (!result || result.length === 0) {
+          const msg = '파일 내용이 없거나 잘못된 형식입니다.';
+          Toast.show(msg, Toast.LONG);
+          return;
+        }
         const list = Bundle.parseBookList(restoreFileName, result);
-        list.forEach(book => {
+        console.log(list.length);
+        const limit = 10;
+        for (let index = 0; index < list.length; index++) {
+          if (index > limit) {
+            break;
+          }
+          const book = list[index];
           Database.saveOrUpdateBook(realm, book)
             .then(resultBook => {
               const msg = `데이터 복원 성공: ${resultBook.title}`;
@@ -94,22 +106,21 @@ function Backup() {
             })
             .finally(() => {
               progressTotal += 1;
-              const progressValue = progressTotal / list.length;
+              const progressValue = progressTotal / limit;
               console.log('progressTotal', progressTotal);
               console.log('progressValue', progressValue);
               setProgress(progressValue);
-              if (progressTotal === list.length) {
+              if (progressTotal === limit) {
                 setTimeout(() => {
                   setShowProgress(false);
                 }, 5000);
               }
             });
-        });
+        }
       })
       .catch(e => {
-        console.log('FileManager.readBookLoverPath error', e);
-        const folder = FileManager.getBookLoverFolder();
-        const msg = `${folder}/${fileName}\n파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.`;
+        console.log('FileManager.readFile error', e);
+        const msg = `${restoreFileName}\n파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.`;
         Toast.show(msg, Toast.LONG);
         setShowProgress(false);
       });
