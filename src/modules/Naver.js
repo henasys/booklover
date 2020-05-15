@@ -94,11 +94,35 @@ class Naver {
       return books;
     }
     books.forEach(book => {
+      const [isbn, isbn13] = this._splitIsbn(book.isbn);
+      book.isbn = isbn;
+      book.isbn13 = isbn13;
       book.cover = book.image;
       book.priceStandard = parseInt(book.price, 10);
       book.priceSales = parseInt(book.discount, 10);
     });
     return books;
+  }
+
+  _splitIsbn(isbn) {
+    const trimmed = isbn.trim();
+    if (!trimmed) {
+      return [null, null];
+    }
+    const list = trimmed.split(' ');
+    if (list.length === 2) {
+      return list;
+    }
+    if (list.length === 1) {
+      const isbnOne = list[0];
+      if (isbnOne.length === 10) {
+        return [isbnOne, null];
+      } else {
+        return [null, isbnOne];
+      }
+    } else {
+      return [null, null];
+    }
   }
 
   _fetch(url) {
