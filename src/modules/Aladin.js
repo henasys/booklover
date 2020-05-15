@@ -8,7 +8,40 @@ class Aladin {
     this.apiKey = REACT_APP_ALADIN_API_KEY;
   }
 
-  getUrlForIsbn(p) {
+  search(keyword) {
+    const checkIsbn = IsbnUtil.parse(keyword);
+    if (checkIsbn) {
+      return this.searchIsbn(keyword);
+    } else {
+      return this.searchKeyword(keyword);
+    }
+  }
+
+  searchKeyword(keyword) {
+    const params = {
+      ttbkey: this.apiKey,
+      keyword: keyword,
+      output: 'XML',
+      version: '20070901', // 20131101, 20070901
+    };
+    const url = this._getUrlForKeyword(params);
+    // console.log('searchKeyword url', url);
+    return this._fetch(url);
+  }
+
+  searchIsbn(isbn) {
+    const params = {
+      ttbkey: this.apiKey,
+      isbn: isbn,
+      output: 'XML',
+      version: '20070901', // 20131101, 20070901
+    };
+    const url = this._getUrlForIsbn(params);
+    // console.log('searchIsbn url', url);
+    return this._fetch(url);
+  }
+
+  _getUrlForIsbn(p) {
     const itemIdType = p.isbn.length === 10 ? 'ISBN' : 'ISBN13';
     const isbn = encodeURI(p.isbn);
     return `http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=${
@@ -20,19 +53,7 @@ class Aladin {
     }&OptResult=c2binfo,fulldescription,toc,publisherFulldescription,ebookList,usedList,reviewList`;
   }
 
-  searchIsbn(isbn) {
-    const params = {
-      ttbkey: this.apiKey,
-      isbn: isbn,
-      output: 'XML',
-      version: '20070901', // 20131101, 20070901
-    };
-    const url = this.getUrlForIsbn(params);
-    // console.log('searchIsbn url', url);
-    return this.fetch(url);
-  }
-
-  getUrlForKeyword(p) {
+  _getUrlForKeyword(p) {
     const keyword = encodeURI(p.keyword);
     return `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${
       p.ttbkey
@@ -43,28 +64,25 @@ class Aladin {
     }&OptResult=c2binfo,fulldescription,toc&MaxResults=50`;
   }
 
-  searchKeyword(keyword) {
-    const params = {
-      ttbkey: this.apiKey,
-      keyword: keyword,
-      output: 'XML',
-      version: '20070901', // 20131101, 20070901
-    };
-    const url = this.getUrlForKeyword(params);
-    // console.log('searchKeyword url', url);
-    return this.fetch(url);
+  _getBooks(response) {
+    const items =
+      response.item && Array.isArray(response.item)
+        ? response.item
+        : [response.item];
+    return items;
   }
 
-  search(keyword) {
-    const checkIsbn = IsbnUtil.parse(keyword);
-    if (checkIsbn) {
-      return this.searchIsbn(keyword);
-    } else {
-      return this.searchKeyword(keyword);
+  _mapping(books) {
+    if (!books || !Array.isArray(books)) {
+      return books;
     }
+    books.forEach(book => {
+      book.toc = book.bookinfo && book.bookinfo.toc;
+    });
+    return books;
   }
 
-  fetch(url) {
+  _fetch(url) {
     console.debug('fetch url', url);
     return fetch(url)
       .then(response => response.text())
@@ -80,7 +98,16 @@ class Aladin {
             resolve(result);
           });
         });
-      });
+      })
+      .then(response => {
+        if (response.errorCode) {
+          const msg = `${response.errorCode} ${response.errorMessage}`;
+          throw new Error(msg);
+        }
+        return response;
+      })
+      .then(response => this._getBooks(response))
+      .then(books => this._mapping(books));
   }
 }
 

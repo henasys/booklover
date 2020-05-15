@@ -13,8 +13,8 @@ const addBook = async ({
 }) => {
   const category = await Database.saveCategoryName(realm, item.categoryName);
   console.log(category.id, category.parentId, category.name, category.level);
-  const toc = item.bookinfo && item.bookinfo.toc;
-  Database.saveBook(realm, {...item, ...{category, toc}})
+  // const toc = item.bookinfo && item.bookinfo.toc;
+  Database.saveBook(realm, {...item, ...{category}})
     .then(book => {
       console.log('Database.saveBook done', book.id, book.title);
       book._alreadyAdded = true;

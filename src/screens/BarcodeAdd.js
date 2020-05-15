@@ -38,23 +38,11 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
     setBarcodeTimer(setBarcode);
     return;
   }
-  const searcher = new Naver();
+  const searcher = new Aladin();
   searcher
     .searchIsbn(isbn)
-    .then(response => {
-      console.log('searchIsbn response', response);
-      if (response.errorCode) {
-        const msg = `${response.errorCode} ${response.errorMessage}`;
-        console.log(msg);
-        setError(msg);
-        return;
-      }
-      const items =
-        response.items && Array.isArray(response.items)
-          ? response.items
-          : response.item && Array.isArray(response.item)
-          ? response.item
-          : [response.item];
+    .then(items => {
+      console.log('searchIsbn items', items);
       items.forEach(item => {
         item._alreadyAdded =
           Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;

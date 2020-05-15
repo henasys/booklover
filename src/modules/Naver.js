@@ -13,75 +13,6 @@ class Naver {
     this.clientSecret = REACT_APP_NAVER_CLIENT_SECRET;
   }
 
-  getUrlForIsbn(p) {
-    const isbn = encodeURI(p.isbn);
-    return `https://openapi.naver.com/v1/search/book_adv.json?d_isbn=${isbn}`;
-  }
-
-  searchIsbn(isbn) {
-    const params = {
-      isbn: isbn,
-    };
-    const url = this.getUrlForIsbn(params);
-    return this.fetch(url).then(async response => {
-      const book = response && response.items && response.items[0];
-      if (!book) {
-        return response;
-      }
-      const catAndToc = await this.getCategoryAndToc(book.link);
-      book.cover = book.image;
-      book.priceStandard =
-        typeof book.price === 'number' ? book.price : parseInt(book.price, 10);
-      book.priceSales =
-        typeof book.discount === 'number'
-          ? book.discount
-          : parseInt(book.discount, 10);
-      book.categoryName = catAndToc.category;
-      book.toc = catAndToc.toc;
-      response.items[0] = book;
-      return response;
-    });
-  }
-
-  getUrlForKeyword(p) {
-    const keyword = encodeURI(p.keyword);
-    return `https://openapi.naver.com/v1/search/book.json?query=${keyword}&display=50`;
-  }
-
-  searchKeyword(keyword) {
-    const params = {
-      keyword: keyword,
-    };
-    const url = this.getUrlForKeyword(params);
-    return this.fetch(url);
-  }
-
-  async getCategoryAndToc(link) {
-    const content = await fetch(link).then(response => response.text());
-    const root = parse(content);
-    const toc = root.querySelector('#tableOfContentsContent');
-    console.log('toc', toc.innerHTML);
-    const cat_1 = root.querySelector('#category_location1_depth');
-    console.log('cat_1', cat_1.innerHTML);
-    const cat_2 = root.querySelector('#category_location2_depth');
-    const cat_3 = root.querySelector('#category_location3_depth');
-    const cat_4 = root.querySelector('#category_location4_depth');
-    const categoryList = [];
-    if (cat_1) {
-      categoryList.push(cat_1.text);
-    }
-    if (cat_2) {
-      categoryList.push(cat_2.text);
-    }
-    if (cat_3) {
-      categoryList.push(cat_3.text);
-    }
-    if (cat_4) {
-      categoryList.push(cat_4.text);
-    }
-    return {toc: toc.innerHTML, category: categoryList.join('>')};
-  }
-
   search(keyword) {
     const checkIsbn = IsbnUtil.parse(keyword);
     if (checkIsbn) {
@@ -91,13 +22,95 @@ class Naver {
     }
   }
 
-  fetch(url) {
+  searchIsbn(isbn) {
+    const params = {
+      isbn: isbn,
+    };
+    const url = this._getUrlForIsbn(params);
+    return this._fetch(url);
+  }
+
+  searchKeyword(keyword) {
+    const params = {
+      keyword: keyword,
+    };
+    const url = this._getUrlForKeyword(params);
+    return this._fetch(url);
+  }
+
+  _getUrlForIsbn(p) {
+    const isbn = encodeURI(p.isbn);
+    return `https://openapi.naver.com/v1/search/book_adv.json?d_isbn=${isbn}`;
+  }
+
+  _getUrlForKeyword(p) {
+    const keyword = encodeURI(p.keyword);
+    return `https://openapi.naver.com/v1/search/book.json?query=${keyword}&display=50`;
+  }
+
+  addTocAndCategoryName(book) {
+    return new Promise((resolve, reject) => {
+      fetch(book.link)
+        .then(response => response.text())
+        .then(html => {
+          const root = parse(html);
+          const tocEleement = root.querySelector('#tableOfContentsContent');
+          book.toc = tocEleement && tocEleement.innerHTML;
+          book.categoryName = this._getCategoryName(root);
+          resolve(book);
+        })
+        .catch(e => {
+          reject(new Error(e));
+        });
+    });
+  }
+
+  _getCategoryName(root) {
+    const categoryList = [];
+    for (let index = 1; index <= 4; index++) {
+      const categoryElement = this._getCategoryElement(root, index);
+      if (categoryElement && categoryElement.text) {
+        categoryList.push(categoryElement.text);
+      }
+    }
+    if (categoryList.length === 0) {
+      return null;
+    } else {
+      return categoryList.join('>');
+    }
+  }
+
+  _getCategoryElement(root, number) {
+    const selector = `#category_location${String(number)}_depth`;
+    return root.querySelector(selector);
+  }
+
+  _getBooks(response) {
+    return response && response.items;
+  }
+
+  _mapping(books) {
+    if (!books || !Array.isArray(books)) {
+      return books;
+    }
+    books.forEach(book => {
+      book.cover = book.image;
+      book.priceStandard = parseInt(book.price, 10);
+      book.priceSales = parseInt(book.discount, 10);
+    });
+    return books;
+  }
+
+  _fetch(url) {
     console.debug('fetch url', url);
     const headers = {
       'X-Naver-Client-Id': this.clientId,
       'X-Naver-Client-Secret': this.clientSecret,
     };
-    return fetch(url, {headers: headers}).then(response => response.json());
+    return fetch(url, {headers: headers})
+      .then(response => response.json())
+      .then(response => this._getBooks(response))
+      .then(books => this._mapping(books));
   }
 }
 
