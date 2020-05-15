@@ -38,19 +38,31 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
     setBarcodeTimer(setBarcode);
     return;
   }
-  const searcher = new Aladin();
+  const searcher = new Naver();
   searcher
     .searchIsbn(isbn)
     .then(items => {
       console.log('searchIsbn items', items);
-      items.forEach(item => {
-        item._alreadyAdded =
-          Database.getBookByIsbn(realm, item.isbn, item.isbn13) !== null;
+      if (items.length > 0) {
+        const item = items[0];
+        const bookByIsbn = Database.getBookByIsbn(
+          realm,
+          item.isbn,
+          item.isbn13,
+        );
+        item._alreadyAdded = bookByIsbn !== null;
         if (item._alreadyAdded) {
           setError('이미 추가된 도서입니다.');
+          setList(items);
+          return;
         }
-      });
-      setList(items);
+        searcher
+          .addTocAndCategoryName(item)
+          .then(mBook => {
+            setList([mBook]);
+          })
+          .catch(e => {});
+      }
     })
     .catch(e => {
       console.log('searchIsbn error', e);
