@@ -18,6 +18,7 @@ const excelHeader = [
   'priceSales',
   'priceStandard',
   'categoryName',
+  'apiSource',
 ];
 
 const excelDataRow = book => {
@@ -36,6 +37,7 @@ const excelDataRow = book => {
     book.priceSales,
     book.priceStandard,
     book.categoryName,
+    book.apiSource,
   ];
 };
 
