@@ -6,9 +6,10 @@ import {RNCamera} from 'react-native-camera';
 import {BarcodeMaskWithOuterLayout} from '@nartc/react-native-barcode-mask';
 import {FlatList} from 'react-native-gesture-handler';
 
-import Aladin from '../modules/Aladin';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
+import Aladin from '../modules/Aladin';
+import Naver from '../modules/Naver';
 
 const IsbnUtil = require('isbn-utils');
 
@@ -37,7 +38,7 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
     setBarcodeTimer(setBarcode);
     return;
   }
-  const searcher = new Aladin();
+  const searcher = new Naver();
   searcher
     .searchIsbn(isbn)
     .then(response => {
@@ -49,7 +50,9 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
         return;
       }
       const items =
-        response.item && Array.isArray(response.item)
+        response.items && Array.isArray(response.items)
+          ? response.items
+          : response.item && Array.isArray(response.item)
           ? response.item
           : [response.item];
       items.forEach(item => {

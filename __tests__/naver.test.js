@@ -1,7 +1,7 @@
 import Naver from '../src/modules/Naver';
 
 it('naver_isbn', async () => {
-  const isbn = '9791157410187';
+  const isbn = '9788984077843';
   const searcher = new Naver();
   const result = await searcher.searchIsbn(isbn);
   console.log('result', result);
