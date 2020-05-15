@@ -13,7 +13,7 @@ Category.schema = {
 
 export class Book {}
 
-Book.schema = {
+Book.schema0 = {
   name: 'Book',
   primaryKey: 'id',
   properties: {
@@ -37,7 +37,47 @@ Book.schema = {
   },
 };
 
-const schema0 = [Category, Book];
+Book.schema = {
+  name: 'Book',
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'string'},
+    title: {type: 'string', indexed: true},
+    author: {type: 'string', indexed: true, optional: true},
+    isbn: {type: 'string', indexed: true, optional: true},
+    isbn13: {type: 'string', indexed: true, optional: true},
+    publisher: {type: 'string', indexed: true, optional: true},
+    link: {type: 'string', indexed: true, optional: true},
+    cover: {type: 'string', indexed: true, optional: true},
+    pubDate: {type: 'string', indexed: true, optional: true},
+    description: {type: 'string', indexed: true, optional: true},
+    toc: {type: 'string', indexed: true, optional: true},
+    priceSales: {type: 'int', indexed: true, optional: true},
+    priceStandard: {type: 'int', indexed: true, optional: true},
+    categoryName: {type: 'string', indexed: true, optional: true},
+    category: {type: 'Category', optional: true},
+    published: {type: 'int', indexed: true, optional: true},
+    apiSource: {type: 'string', optional: true},
+    created: {type: 'int', indexed: true},
+  },
+};
+
+export class Setting {}
+
+Setting.schema = {
+  name: 'Setting',
+  properties: {
+    apiSource: {type: 'string', optional: true},
+  },
+};
+
+Setting.apiSourceType = {
+  ALADIN: 'ALADIN',
+  NAVER: 'NAVER',
+};
+
+const schema0 = [Category, Book.schema0];
+const schema1 = [Category, Book];
 
 function migrationFunctionNothing(oldRealm, newRealm) {
   console.log('migrationFunctionNothing', oldRealm, newRealm);
@@ -49,6 +89,11 @@ export const schemas = [
   {
     schema: schema0,
     schemaVersion: 0,
+    migration: migrationFunctionNothing,
+  },
+  {
+    schema: schema1,
+    schemaVersion: 1,
     migration: migrationFunctionNothing,
   },
 ];

@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import {v1 as uuidv1} from 'uuid';
 
 import {schemas} from '../modules/schemas';
-import {Category, Book} from '../modules/schemas';
+import {Category, Book, Setting} from '../modules/schemas';
 import Util from '../modules/util';
 import TimeUtil from '../modules/timeUtil';
 
@@ -223,6 +223,7 @@ const saveBook = (
     priceStandard,
     categoryName,
     category,
+    apiSource,
     created = null,
   },
 ) => {
@@ -246,6 +247,7 @@ const saveBook = (
           priceStandard: Util.parseInteger(priceStandard),
           categoryName: categoryName,
           published: published,
+          apiSource: apiSource,
           created: created ? created : new Date().getTime(),
         });
         book.category = category;
@@ -276,6 +278,7 @@ const updateBook = (
     priceStandard,
     categoryName,
     category,
+    apiSource,
   },
 ) => {
   return new Promise((resolve, reject) => {
@@ -303,6 +306,7 @@ const updateBook = (
         book.categoryName = categoryName;
         book.category = category;
         book.published = TimeUtil.dateToTimestamp(pubDate);
+        book.apiSource = apiSource;
         book.created = new Date().getTime();
         resolve(book);
       });
@@ -387,6 +391,7 @@ const saveOrUpdateBook = async (
     priceStandard,
     categoryName,
     category,
+    apiSource,
   },
 ) => {
   const newCategory = await saveCategoryName(realm, categoryName);
@@ -414,6 +419,7 @@ const saveOrUpdateBook = async (
       priceStandard,
       categoryName,
       category: lastCategory,
+      apiSource,
     });
   } else {
     return saveBook(realm, {
@@ -432,8 +438,43 @@ const saveOrUpdateBook = async (
       priceStandard,
       categoryName,
       category: lastCategory,
+      apiSource,
     });
   }
+};
+
+const saveSetting = (realm, apiSource) => {
+  return new Promise((resolve, reject) => {
+    try {
+      realm.write(() => {
+        const rs = realm.objects('Setting');
+        if (!rs.isEmpty()) {
+          const setting = rs[0];
+          setting.apiSource = Setting.apiSourceType.ALADIN;
+          resolve(setting);
+          return;
+        }
+        const setting = realm.create('Setting', {
+          apiSource: apiSource,
+        });
+        resolve(setting);
+      });
+    } catch (e) {
+      console.warn('realm.write', e);
+      reject(new Error(e));
+    }
+  });
+};
+
+const getSetting = (realm, listener = null) => {
+  const rs = realm.objects('Setting');
+  listener && rs.addListener(listener);
+  if (rs.isEmpty()) {
+    return {
+      apiSource: Setting.apiSourceType.ALADIN,
+    };
+  }
+  return rs[0];
 };
 
 export default {
@@ -462,4 +503,6 @@ export default {
   getBookById,
   deleteBookById,
   saveOrUpdateBook,
+  saveSetting,
+  getSetting,
 };
