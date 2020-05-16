@@ -1,4 +1,4 @@
-import Google from '../src/modules/Google';
+import Google from '../src/api/Google';
 
 it('google_isbn', async () => {
   const isbn = '9780295986241';

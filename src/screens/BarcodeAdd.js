@@ -8,8 +8,7 @@ import {FlatList} from 'react-native-gesture-handler';
 
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
-import Aladin from '../modules/Aladin';
-import Naver from '../modules/Naver';
+import Searcher from '../modules/searcher';
 
 const IsbnUtil = require('isbn-utils');
 
@@ -38,13 +37,14 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
     setBarcodeTimer(setBarcode);
     return;
   }
-  const searcher = new Naver();
+  const searcher = Searcher.getSearcher(realm);
   searcher
     .searchIsbn(isbn)
     .then(items => {
       console.log('searchIsbn items', items);
       if (items.length > 0) {
         const item = items[0];
+        item.apiSource = searcher.apiSource;
         const bookByIsbn = Database.getBookByIsbn(
           realm,
           item.isbn,
@@ -56,12 +56,16 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
           setList(items);
           return;
         }
-        searcher
-          .addTocAndCategoryName(item)
-          .then(mBook => {
-            setList([mBook]);
-          })
-          .catch(e => {});
+        if (searcher.isNaver) {
+          searcher
+            .addTocAndCategoryName(item)
+            .then(mBook => {
+              setList([mBook]);
+            })
+            .catch(e => {});
+        } else {
+          setList(items);
+        }
       }
     })
     .catch(e => {

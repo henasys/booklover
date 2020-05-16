@@ -1,4 +1,4 @@
-import Naver from '../src/modules/Naver';
+import Naver from '../src/api/Naver';
 
 it('naver_isbn', async () => {
   const isbn = '9788984077843';
