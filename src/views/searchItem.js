@@ -11,8 +11,16 @@ const addBook = async ({
   errorCallback = null,
   finalCallback = null,
 }) => {
+  if (!item.categoryName) {
+    const e = new Error('no item.categoryName');
+    console.log('addBook', e);
+    errorCallback && errorCallback(e);
+    finalCallback && finalCallback();
+    return;
+  }
+  // console.log('addBook categoryName', item.categoryName);
   const category = await Database.saveCategoryName(realm, item.categoryName);
-  console.log(category.id, category.parentId, category.name, category.level);
+  // console.log(category.id, category.parentId, category.name, category.level);
   // const toc = item.bookinfo && item.bookinfo.toc;
   Database.saveBook(realm, {...item, ...{category}})
     .then(book => {
