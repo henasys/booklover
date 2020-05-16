@@ -76,6 +76,10 @@ Setting.apiSourceType = {
   NAVER: 'NAVER',
 };
 
+Setting.findIndexByApiSource = apiSource => {
+  return Setting.apiSourceType.findIndex(item => item === apiSource);
+};
+
 const schema0 = [Category, Book.schema0];
 const schema1 = [Category, Book, Setting];
 
