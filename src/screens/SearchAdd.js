@@ -38,7 +38,7 @@ function SearchAdd({navigation, route}) {
     searcher
       .search(search)
       .then(items => {
-        console.log('search items', items);
+        console.log('search items', items.length);
         if (items.length === 0) {
           setError('검색 결과가 없습니다.');
           return;
@@ -59,13 +59,21 @@ function SearchAdd({navigation, route}) {
     console.log('onSubmitEditing');
   };
   const addBookCallback = item => {
+    setError('');
     const callback = book => {
       const newList = [...list];
       newList[item._index] = book;
       setList(newList);
     };
-    const errorCallback = e => {};
-    SearchItem.addBook({realm, item, callback, errorCallback});
+    const errorCallback = e => {
+      setError(`추가 오류입니다. ${e}`);
+    };
+    const searcher = Searcher.getSearcher(realm);
+    Searcher.postProcess(searcher, item)
+      .then(async book => {
+        await SearchItem.addBook({realm, item: book, callback, errorCallback});
+      })
+      .catch(e => {});
   };
   const deleteBookCallback = item => {
     const callback = () => {
