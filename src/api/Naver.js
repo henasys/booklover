@@ -6,6 +6,7 @@ import {REACT_APP_NAVER_CLIENT_SECRET} from 'react-native-dotenv';
 import {parse} from 'node-html-parser';
 
 const IsbnUtil = require('isbn-utils');
+const sanitizeHtml = require('sanitize-html');
 
 class Naver {
   constructor() {
@@ -98,8 +99,11 @@ class Naver {
       book.isbn = isbn;
       book.isbn13 = isbn13;
       book.cover = book.image;
+      book.pubDate = book.pubdate;
       book.priceStandard = parseInt(book.price, 10);
       book.priceSales = parseInt(book.discount, 10);
+      const options = {allowedTags: [], allowedAttributes: {}};
+      book.title = sanitizeHtml(book.title, options);
     });
     return books;
   }

@@ -10,7 +10,7 @@ import ProgressBar from 'react-native-progress/Bar';
 import DocumentPicker from 'react-native-document-picker';
 
 import Database from '../modules/database';
-import Aladin from '../modules/Aladin';
+import Aladin from '../api/Aladin';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
