@@ -77,7 +77,7 @@ Setting.apiSourceType = {
 };
 
 const schema0 = [Category, Book.schema0];
-const schema1 = [Category, Book];
+const schema1 = [Category, Book, Setting];
 
 function migrationFunctionNothing(oldRealm, newRealm) {
   console.log('migrationFunctionNothing', oldRealm, newRealm);
