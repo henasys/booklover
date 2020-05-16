@@ -480,6 +480,7 @@ const getSetting = (realm, listener = null) => {
 export default {
   Category,
   Book,
+  Setting,
   newRealm,
   setRealm,
   getRealm,
