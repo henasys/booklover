@@ -9,12 +9,14 @@ import {SearchBar} from 'react-native-elements';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
 import Searcher from '../modules/searcher';
+import SelectApiButton from '../views/SelectApiButton';
 
 function SearchAdd({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [search, setSearch] = React.useState(null);
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
+  const [apiSource, setApiSource] = useState(null);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -23,6 +25,27 @@ function SearchAdd({navigation, route}) {
       Database.close(realm);
     };
   }, []);
+  useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const setting = Database.getSetting(realm);
+    setApiSource(setting.apiSource);
+  }, [realm]);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.menuContainer}>
+          <View style={styles.menuItem}>
+            <SelectApiButton
+              apiSource={apiSource}
+              onValueChanged={setApiSource}
+            />
+          </View>
+        </View>
+      ),
+    });
+  }, [navigation, apiSource]);
   const onUpdateSearch = text => {
     console.log('onUpdateSearch', text);
     setSearch(text);
@@ -34,7 +57,7 @@ function SearchAdd({navigation, route}) {
     console.log('onEndEditing');
     setError(null);
     setList([]);
-    const searcher = Searcher.getSearcher(realm);
+    const searcher = Searcher.getSearcherBy(apiSource);
     searcher
       .search(search)
       .then(items => {
@@ -130,6 +153,12 @@ const styles = StyleSheet.create({
   },
   flexOne: {
     flex: 1,
+  },
+  menuContainer: {
+    flexDirection: 'row',
+  },
+  menuItem: {
+    marginRight: 10,
   },
   listContainer: {
     flex: 1,
