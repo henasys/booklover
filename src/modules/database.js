@@ -450,7 +450,7 @@ const saveSetting = (realm, apiSource) => {
         const rs = realm.objects('Setting');
         if (!rs.isEmpty()) {
           const setting = rs[0];
-          setting.apiSource = Setting.apiSourceType.ALADIN;
+          setting.apiSource = apiSource;
           resolve(setting);
           return;
         }
