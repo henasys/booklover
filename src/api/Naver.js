@@ -94,6 +94,7 @@ class Naver {
     if (!books || !Array.isArray(books)) {
       return books;
     }
+    const options = {allowedTags: [], allowedAttributes: {}};
     books.forEach(book => {
       const [isbn, isbn13] = this._splitIsbn(book.isbn);
       book.isbn = isbn;
@@ -102,7 +103,6 @@ class Naver {
       book.pubDate = book.pubdate;
       book.priceStandard = parseInt(book.price, 10);
       book.priceSales = parseInt(book.discount, 10);
-      const options = {allowedTags: [], allowedAttributes: {}};
       book.title = sanitizeHtml(book.title, options);
     });
     return books;
