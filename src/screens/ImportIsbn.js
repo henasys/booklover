@@ -10,7 +10,7 @@ import ProgressBar from 'react-native-progress/Bar';
 import DocumentPicker from 'react-native-document-picker';
 
 import Database from '../modules/database';
-import Aladin from '../api/Aladin';
+import Searcher from '../modules/searcher';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 
@@ -49,24 +49,16 @@ const search = (realm, isbn, callback, errorCallback, finalCallback) => {
     finalCallback();
     return;
   }
-  const searcher = new Aladin();
+  const searcher = Searcher.getSearcher(realm);
   searcher
     .searchIsbn(isbn)
-    .then(response => {
-      console.log('searchIsbn response', response.length);
-      if (response.errorCode) {
-        const msg = `${response.errorCode} ${response.errorMessage}`;
-        console.log(msg);
-        errorCallback(new Error(msg));
-        finalCallback();
-        return;
-      }
-      const items =
-        response.item && Array.isArray(response.item)
-          ? response.item
-          : [response.item];
+    .then(items => {
+      console.log('searchIsbn items', items.length);
       items.forEach(item => {
-        Database.saveOrUpdateBook(realm, item)
+        Searcher.postProcess(searcher, item)
+          .then(mBook => {
+            return Database.saveOrUpdateBook(realm, mBook);
+          })
           .then(resultBook => {
             callback(resultBook);
           })

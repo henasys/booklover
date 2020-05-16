@@ -56,16 +56,11 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
           setList(items);
           return;
         }
-        if (searcher.isNaver) {
-          searcher
-            .addTocAndCategoryName(item)
-            .then(mBook => {
-              setList([mBook]);
-            })
-            .catch(e => {});
-        } else {
-          setList(items);
-        }
+        Searcher.postProcess(searcher, item)
+          .then(mBook => {
+            setList([mBook]);
+          })
+          .catch(e => {});
       }
     })
     .catch(e => {

@@ -15,6 +15,17 @@ const getSearcher = realm => {
   return searcher;
 };
 
+const postProcess = (searcher, book) => {
+  if (searcher.isNaver) {
+    return searcher.addTocAndCategoryName(book);
+  } else {
+    return new Promise((resolve, reject) => {
+      resolve(book);
+    });
+  }
+};
+
 export default {
   getSearcher,
+  postProcess,
 };
