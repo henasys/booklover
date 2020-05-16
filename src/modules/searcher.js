@@ -4,6 +4,10 @@ import Naver from '../api/Naver';
 
 const getSearcher = realm => {
   const apiSource = Database.getSetting(realm).apiSource;
+  return getSearcherBy(apiSource);
+};
+
+const getSearcherBy = apiSource => {
   let searcher;
   if (apiSource === Database.Setting.apiSourceType.ALADIN) {
     searcher = new Aladin();
@@ -27,5 +31,6 @@ const postProcess = (searcher, book) => {
 
 export default {
   getSearcher,
+  getSearcherBy,
   postProcess,
 };

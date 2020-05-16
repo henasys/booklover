@@ -10,10 +10,11 @@ export default function SelectApiButton({apiSource, onValueChanged}) {
     <TouchableOpacity
       style={styles.buttonStyle}
       onPress={() => {
-        const value =
-          (index + 1) % Object.keys(Database.Setting.apiSourceType).length;
-        const label = Database.Setting.apiSourceType[value];
-        onValueChanged && onValueChanged(label);
+        const keys = Object.keys(Database.Setting.apiSourceType);
+        const nextIndex = (index + 1) % keys.length;
+        const keyValue = keys[nextIndex];
+        console.log('SelectApiButton', index, nextIndex, keyValue);
+        onValueChanged && onValueChanged(keyValue);
       }}>
       <Text style={styles.titleStyle}>{apiSource}</Text>
     </TouchableOpacity>

@@ -9,6 +9,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
 import Searcher from '../modules/searcher';
+import SelectApiButton from '../views/SelectApiButton';
 
 const IsbnUtil = require('isbn-utils');
 
@@ -17,7 +18,14 @@ const defaultBarCodeTypes = [
   RNCamera.Constants.BarCodeType.ean8,
 ];
 
-const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
+const handleOnBarcodeRead = ({
+  event,
+  realm,
+  apiSource,
+  setBarcode,
+  setError,
+  setList,
+}) => {
   const isbn = event.data;
   const checkIsbn = IsbnUtil.parse(isbn);
   if (!checkIsbn) {
@@ -37,7 +45,7 @@ const handleOnBarcodeRead = (event, setBarcode, setError, setList, realm) => {
     setBarcodeTimer(setBarcode);
     return;
   }
-  const searcher = Searcher.getSearcher(realm);
+  const searcher = Searcher.getSearcherBy(apiSource);
   searcher
     .searchIsbn(isbn)
     .then(items => {
@@ -78,11 +86,12 @@ const setBarcodeTimer = setBarcode => {
   }, 2000);
 };
 
-function BarcodeAdd() {
+function BarcodeAdd({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [barcode, setBarcode] = useState(null);
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
+  const [apiSource, setApiSource] = useState(null);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -93,8 +102,36 @@ function BarcodeAdd() {
       // console.log('Database.close');
     };
   }, []);
+  useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const setting = Database.getSetting(realm);
+    setApiSource(setting.apiSource);
+  }, [realm]);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.menuContainer}>
+          <View style={styles.menuItem}>
+            <SelectApiButton
+              apiSource={apiSource}
+              onValueChanged={setApiSource}
+            />
+          </View>
+        </View>
+      ),
+    });
+  }, [navigation, apiSource]);
   const onBarcodeRead = event => {
-    handleOnBarcodeRead(event, setBarcode, setError, setList, realm);
+    handleOnBarcodeRead({
+      event,
+      realm,
+      apiSource,
+      setBarcode,
+      setError,
+      setList,
+    });
   };
   const addBookCallback = item => {
     const callback = book => {
@@ -167,6 +204,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     // alignItems: 'center',
     backgroundColor: 'black',
+  },
+  menuContainer: {
+    flexDirection: 'row',
+  },
+  menuItem: {
+    marginRight: 10,
   },
   scanner: {
     flex: 1,
