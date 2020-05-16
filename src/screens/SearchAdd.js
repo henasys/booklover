@@ -6,9 +6,9 @@ import {FlatList} from 'react-native-gesture-handler';
 // import SearchBar from 'react-native-search-bar';
 import {SearchBar} from 'react-native-elements';
 
-import Aladin from '../modules/Aladin';
 import Database from '../modules/database';
 import SearchItem from '../views/searchItem';
+import Searcher from '../modules/searcher';
 
 function SearchAdd({navigation, route}) {
   const [realm, setRealm] = useState(null);
@@ -34,24 +34,15 @@ function SearchAdd({navigation, route}) {
     console.log('onEndEditing');
     setError(null);
     setList([]);
-    const searcher = new Aladin();
+    const searcher = Searcher.getSearcher(realm);
     searcher
       .search(search)
-      .then(response => {
-        console.log('search response', response);
-        if (response.errorCode) {
-          const msg = `${response.errorCode} ${response.errorMessage}`;
-          console.log(msg);
-          setError(msg);
-          return;
-        }
-        if (!response.item) {
+      .then(items => {
+        console.log('search items', items);
+        if (items.length === 0) {
           setError('검색 결과가 없습니다.');
           return;
         }
-        const items = Array.isArray(response.item)
-          ? response.item
-          : [response.item];
         items.forEach(item => {
           const book = Database.getBookByIsbn(realm, item.isbn, item.isbn13);
           item._alreadyAdded = book !== null;
