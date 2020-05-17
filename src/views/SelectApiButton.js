@@ -3,9 +3,14 @@ import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 import Database from '../modules/database';
 import MyColor from '../modules/myColor';
+import LocaleContext from '../modules/LocaleContext';
 
 export default function SelectApiButton({apiSource, onValueChanged}) {
+  const {t} = React.useContext(LocaleContext);
   const index = Database.Setting.findIndexByApiSource(apiSource);
+  const labelByLocale = value => {
+    return t('Setting.ApiSourceItem.' + value, {defaultValue: value});
+  };
   return (
     <TouchableOpacity
       style={styles.buttonStyle}
@@ -16,7 +21,7 @@ export default function SelectApiButton({apiSource, onValueChanged}) {
         console.log('SelectApiButton', index, nextIndex, keyValue);
         onValueChanged && onValueChanged(keyValue);
       }}>
-      <Text style={styles.titleStyle}>{apiSource}</Text>
+      <Text style={styles.titleStyle}>{labelByLocale(apiSource)}</Text>
     </TouchableOpacity>
   );
 }
