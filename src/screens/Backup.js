@@ -96,7 +96,7 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log(list.length);
-        const limit = 10;
+        const limit = list.length;
         for (let index = 0; index < list.length; index++) {
           if (index > limit) {
             break;
@@ -114,8 +114,8 @@ function Backup() {
             .finally(() => {
               progressTotal += 1;
               const progressValue = progressTotal / limit;
-              console.log('progressTotal', progressTotal);
-              console.log('progressValue', progressValue);
+              // console.log('progressTotal', progressTotal);
+              // console.log('progressValue', progressValue);
               setProgress(progressValue);
               if (progressTotal === limit) {
                 setTimeout(() => {
