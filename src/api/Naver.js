@@ -101,8 +101,8 @@ class Naver {
       book.isbn13 = isbn13;
       book.cover = book.image;
       book.pubDate = book.pubdate;
-      book.priceStandard = parseInt(book.price, 10);
-      book.priceSales = parseInt(book.discount, 10);
+      book.priceStandard = book.price ? parseInt(book.price, 10) : null;
+      book.priceSales = book.discount ? parseInt(book.discount, 10) : null;
       book.title = sanitizeHtml(book.title, options);
     });
     return books;
