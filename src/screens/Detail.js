@@ -7,6 +7,8 @@ import HTMLView from 'react-native-htmlview';
 
 import Database from '../modules/database';
 import TimeUtil from '../modules/timeUtil';
+import LocaleContext from '../modules/LocaleContext';
+
 import BookCover from '../views/BookCover';
 
 const sanitizeHtml = require('sanitize-html');
@@ -14,6 +16,7 @@ const sanitizeHtml = require('sanitize-html');
 function Detail({navigation, route}) {
   const [realm, setRealm] = useState(null);
   const [book, setBook] = useState(null);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -112,13 +115,13 @@ function Detail({navigation, route}) {
           </View>
         </View>
         <View style={styles.spacer} />
-        <Text style={styles.sectionTitle}>내용 소개</Text>
+        <Text style={styles.sectionTitle}>{t('Detail.description')}</Text>
         <View style={styles.spacer} />
         <View style={styles.htmlContainer}>
           <HTMLView value={description} />
         </View>
         <View style={styles.spacer} />
-        <Text style={styles.sectionTitle}>목차</Text>
+        <Text style={styles.sectionTitle}>{t('Detail.toc')}</Text>
         <View style={styles.spacer} />
         <View style={styles.htmlContainer}>
           <HTMLView value={toc} />

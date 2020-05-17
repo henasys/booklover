@@ -27,6 +27,8 @@ export default {
   },
   Detail: {
     title: '상세 정보',
+    description: '내용 소개',
+    toc: '목차',
   },
   Setting: {
     title: '설정',

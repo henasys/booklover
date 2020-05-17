@@ -27,6 +27,8 @@ export default {
   },
   Detail: {
     title: 'Detail',
+    description: 'Description',
+    toc: 'Table of Contents',
   },
   Setting: {
     title: 'Setting',
