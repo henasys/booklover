@@ -19,6 +19,16 @@ export default {
   },
   Setting: {
     title: 'Setting',
+    apiSourceLabel: 'Search API',
+    Button: {
+      backup: ' Backup, restore data',
+      import: ' Import ISBN file data',
+      delete: ' Delete all database data',
+    },
+    DeleteAlert: {
+      title: 'DELETE',
+      message: 'Are you sure to delete all database data?',
+    },
   },
   Backup: {
     title: 'Backup, restore data',

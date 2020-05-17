@@ -8,13 +8,24 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import Database from '../modules/database';
 import MyColor from '../modules/myColor';
+import LocaleContext from '../modules/LocaleContext';
+
 import MyAlert from '../views/alert';
 import LanguagePicker from '../views/LanguagePicker';
 
-const pickerApiSource = (realm, apiSource, setApiSource) => {
+const pickerApiSource = (t, realm, apiSource, setApiSource) => {
+  const labelByLocale = value => {
+    return t('Setting.ApiSourceItem.' + value, {defaultValue: value});
+  };
   const data = [
-    {label: '네이버', value: Database.Setting.apiSourceType.NAVER},
-    {label: '알라딘', value: Database.Setting.apiSourceType.ALADIN},
+    {
+      label: labelByLocale(Database.Setting.apiSourceType.NAVER),
+      value: Database.Setting.apiSourceType.NAVER,
+    },
+    {
+      label: labelByLocale(Database.Setting.apiSourceType.ALADIN),
+      value: Database.Setting.apiSourceType.ALADIN,
+    },
   ];
   return (
     <View
@@ -47,6 +58,7 @@ const pickerApiSource = (realm, apiSource, setApiSource) => {
 function Setting({navigation}) {
   const [realm, setRealm] = useState(null);
   const [apiSource, setApiSource] = useState(null);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -71,14 +83,14 @@ function Setting({navigation}) {
           <LanguagePicker />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
-          <Text>검색 API</Text>
+          <Text>{t('Setting.apiSourceLabel')}</Text>
           <View style={styles.spacer} />
-          {pickerApiSource(realm, apiSource, setApiSource)}
+          {pickerApiSource(t, realm, apiSource, setApiSource)}
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <Button
-            title="데이터 백업, 복원"
+            title={t('Setting.Button.backup')}
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
@@ -89,7 +101,7 @@ function Setting({navigation}) {
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <Button
-            title=" ISBN 파일 데이터 추가"
+            title={t('Setting.Button.import')}
             type="outline"
             icon={<Icon name="barcode" type="material-community" />}
             onPress={() => {
@@ -101,12 +113,12 @@ function Setting({navigation}) {
           <View style={styles.spacer} />
           <View style={styles.spacer} />
           <Button
-            title="데이터베이스 삭제"
+            title={t('Setting.Button.delete')}
             type="outline"
             icon={<Icon name="delete" type="material-community" />}
             onPress={() => {
-              const title = '삭제';
-              const message = '데이터베이스 전체 데이터를 삭제하시겠습니까?';
+              const title = t('Setting.DeleteAlert.title');
+              const message = t('Setting.DeleteAlert.message');
               const okCallback = async () => {
                 await Database.clearAllDatabase();
               };

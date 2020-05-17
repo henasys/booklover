@@ -19,6 +19,21 @@ export default {
   },
   Setting: {
     title: '설정',
+    apiSourceLabel: '검색 API',
+    ApiSourceItem: {
+      // only ko, not need to en
+      ALADIN: '알라딘',
+      NAVER: '네이버',
+    },
+    Button: {
+      backup: ' 데이터 백업, 복원',
+      import: ' ISBN 파일 데이터 추가',
+      delete: ' 데이터베이스 삭제',
+    },
+    DeleteAlert: {
+      title: '삭제',
+      message: '데이터베이스 전체 데이터를 삭제하시겠습니까?',
+    },
   },
   Backup: {
     title: '데이터 백업, 복원',
