@@ -7,6 +7,7 @@ import {Input, Icon} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 
 import Database from '../modules/database';
+import LocaleContext from '../modules/LocaleContext';
 
 function TextInputBox({
   placeholder,
@@ -34,6 +35,7 @@ function TextInputBox({
 }
 
 function Edit({navigation, route}) {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = React.useState(null);
   const [book, setBook] = useState(null);
   const [title, setTitle] = useState(null);
@@ -78,7 +80,7 @@ function Edit({navigation, route}) {
   }, []);
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: book ? '상세 정보 수정' : '직접 입력 추가',
+      title: book ? t('Edit.titleEdit') : t('Edit.titleInput'),
       headerRight: () => (
         <View style={styles.menuContainer}>
           <Icon
@@ -114,7 +116,7 @@ function Edit({navigation, route}) {
   };
   const checkInvalidParams = () => {
     if (!title) {
-      setTitleError('필수 항목입니다.');
+      setTitleError(t('Edit.Error.required'));
       return true;
     } else {
       setTitleError(null);
@@ -128,7 +130,7 @@ function Edit({navigation, route}) {
     }
     console.log('title', title);
     if (checkInvalidParams()) {
-      Toast.show('필수항목을 점검해주십시오.');
+      Toast.show(t('Edit.Toast.checkRequired'));
       return;
     }
     const item = {
@@ -149,12 +151,12 @@ function Edit({navigation, route}) {
       category: book ? book.category : null,
     };
     const callback = resultBook => {
-      const msg = `저장 성공: ${resultBook.title}`;
+      const msg = `${t('Edit.Toast.writeOk')}: ${resultBook.title}`;
       console.log(msg);
       Toast.show(msg);
     };
     const errorCallback = e => {
-      const msg = `저장 오류: ${e}`;
+      const msg = `${t('Edit.Toast.writeFail')}: ${e}`;
       console.log(msg);
       console.log(e.stack);
       Toast.show(msg);
@@ -172,14 +174,14 @@ function Edit({navigation, route}) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <TextInputBox
-          placeholder={'제목'}
+          placeholder={t('Edit.Placeholder.title')}
           value={title}
           setValue={setTitle}
           onEndEditing={() => onEndEditing({title})}
           errorMessage={titleError}
         />
         <TextInputBox
-          placeholder={'저자'}
+          placeholder={t('Edit.Placeholder.author')}
           value={author}
           setValue={setAuthor}
           onEndEditing={() => onEndEditing({author})}
@@ -197,43 +199,43 @@ function Edit({navigation, route}) {
           onEndEditing={() => onEndEditing({isbn13})}
         />
         <TextInputBox
-          placeholder={'출판사'}
+          placeholder={t('Edit.Placeholder.publisher')}
           value={publisher}
           setValue={setPublisher}
           onEndEditing={() => onEndEditing({publisher})}
         />
         <TextInputBox
-          placeholder={'링크'}
+          placeholder={t('Edit.Placeholder.link')}
           value={link}
           setValue={setLink}
           onEndEditing={() => onEndEditing({link})}
         />
         <TextInputBox
-          placeholder={'커버 이미지 링크'}
+          placeholder={t('Edit.Placeholder.cover')}
           value={cover}
           setValue={setCover}
           onEndEditing={() => onEndEditing({cover})}
         />
         <TextInputBox
-          placeholder={'주요 내용'}
+          placeholder={t('Edit.Placeholder.description')}
           value={description}
           setValue={setDescription}
           onEndEditing={() => onEndEditing({description})}
         />
         <TextInputBox
-          placeholder={'목차'}
+          placeholder={t('Edit.Placeholder.toc')}
           value={toc}
           setValue={setToc}
           onEndEditing={() => onEndEditing({toc})}
         />
         <TextInputBox
-          placeholder={'출판일: 2020-04'}
+          placeholder={t('Edit.Placeholder.pubDate')}
           value={pubDate}
           setValue={setPubDate}
           onEndEditing={() => onEndEditing({pubDate})}
         />
         <TextInputBox
-          placeholder={'카테고리 이름: 레벨1>레벨2'}
+          placeholder={t('Edit.Placeholder.categoryName')}
           value={categoryName}
           setValue={setCategoryName}
           onEndEditing={() => onEndEditing({categoryName})}

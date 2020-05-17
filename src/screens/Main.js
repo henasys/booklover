@@ -30,7 +30,7 @@ const renderActionButton = (navigation, t) => {
     <ActionButton buttonColor="rgba(231,76,60,1)">
       <ActionButton.Item
         buttonColor="#9b59b6"
-        title={t('Main.ActionButton.editManually')}
+        title={t('Main.ActionButton.inputManually')}
         onPress={() => {
           navigation.navigate('Edit');
         }}>

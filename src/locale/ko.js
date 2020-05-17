@@ -5,7 +5,7 @@ export default {
     ActionButton: {
       barcodeSearch: '바코드 검색',
       titleSearch: '제목, 저자 검색',
-      editManually: '직접 입력',
+      inputManually: '직접 입력',
     },
   },
   BarcodeAdd: {
@@ -29,6 +29,29 @@ export default {
     title: '상세 정보',
     description: '내용 소개',
     toc: '목차',
+  },
+  Edit: {
+    titleEdit: '상세 정보 수정',
+    titleInput: '직접 입력 추가',
+    Error: {
+      required: '필수 항목입니다.',
+    },
+    Toast: {
+      checkRequired: '필수항목을 점검해주십시오.',
+      writeOk: '저장 완료',
+      writeFail: '저장 실패',
+    },
+    Placeholder: {
+      title: '제목',
+      author: '저자',
+      publisher: '출판사',
+      link: '도서 링크',
+      cover: '커버 이미지 링크',
+      description: '주요 내용',
+      toc: '목차',
+      pubDate: '출판일: 2020-04',
+      categoryName: '카테고리 이름: 레벨1>레벨2',
+    },
   },
   Setting: {
     title: '설정',

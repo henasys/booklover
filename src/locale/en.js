@@ -5,7 +5,7 @@ export default {
     ActionButton: {
       barcodeSearch: 'Search by bardcode',
       titleSearch: 'Search with title',
-      editManually: 'Edit manually',
+      inputManually: 'Input manually',
     },
   },
   BarcodeAdd: {
@@ -29,6 +29,29 @@ export default {
     title: 'Detail',
     description: 'Description',
     toc: 'Table of Contents',
+  },
+  Edit: {
+    titleEdit: 'Edit',
+    titleInput: 'Input manually',
+    Error: {
+      required: 'This field is required.',
+    },
+    Toast: {
+      checkRequired: 'Check the required field.',
+      writeOk: 'Write done',
+      writeFail: 'Write failed',
+    },
+    Placeholder: {
+      title: 'Title',
+      author: 'Author',
+      publisher: 'Publisher',
+      link: 'Book Link',
+      cover: 'Book cover image link',
+      description: 'Description',
+      toc: 'Table of Contents',
+      pubDate: 'published date: 2020-04',
+      categoryName: 'Category name: Level1>Level2',
+    },
   },
   Setting: {
     title: 'Setting',
