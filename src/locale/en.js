@@ -1,6 +1,12 @@
 export default {
   Main: {
     title: 'Book Lover',
+    searchBarPlaceholder: 'Title, author',
+    ActionButton: {
+      barcodeSearch: 'Search by bardcode',
+      titleSearch: 'Search with title',
+      editManually: 'Edit manually',
+    },
   },
   BarcodeAdd: {
     title: 'Add by Barcode',
@@ -19,6 +25,17 @@ export default {
   },
   ImportIsbn: {
     title: 'Import ISBN file data',
+  },
+  CategoryBar: {
+    top: 'TOTAL',
+  },
+  HeaderMenu: {
+    title: 'Sort by title',
+    titleReverse: 'Sort by title reverse',
+    author: 'Sort by author',
+    authorReverse: 'Sort by author reverse',
+    date: 'Sort by date',
+    dateReverse: 'Sort by date reverse',
   },
   Button: {
     login: 'Login',

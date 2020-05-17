@@ -3,6 +3,8 @@ import {StyleSheet} from 'react-native';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import {Icon} from 'react-native-elements';
 
+import LocaleContext from '../modules/LocaleContext';
+
 const headerMenu = {_menu: null};
 
 headerMenu.setMenuRef = ref => {
@@ -18,20 +20,21 @@ headerMenu.show = () => {
 };
 
 const items = [
-  {index: 0, label: '제목 정렬', field: 'title', reverse: false},
-  {index: 1, label: '제목 역순', field: 'title', reverse: true},
-  {index: 2, label: '저자 정렬', field: 'author', reverse: false},
-  {index: 3, label: '저자 역순', field: 'author', reverse: true},
-  {index: 4, label: '입력일 정렬', field: 'created', reverse: false},
-  {index: 5, label: '입력일 역순', field: 'created', reverse: true},
+  {index: 0, label: 'title', field: 'title', reverse: false},
+  {index: 1, label: 'titleReverse', field: 'title', reverse: true},
+  {index: 2, label: 'author', field: 'author', reverse: false},
+  {index: 3, label: 'authorReverse', field: 'author', reverse: true},
+  {index: 4, label: 'date', field: 'created', reverse: false},
+  {index: 5, label: 'dateReverse', field: 'created', reverse: true},
 ];
 
 items.getItem = index => {
   return items[index];
 };
 
-const renderMenuItem = (item, sort, callback = null) => {
+const renderMenuItem = (t, item, sort, callback = null) => {
   const textStyle = sort === item.index ? {color: 'blue'} : null;
+  const label = t('HeaderMenu.' + item.label);
   return (
     <MenuItem
       key={item.index}
@@ -40,12 +43,12 @@ const renderMenuItem = (item, sort, callback = null) => {
         headerMenu.hide();
         callback && callback(item.index);
       }}>
-      {item.label}
+      {label}
     </MenuItem>
   );
 };
 
-const renderHeaderMenu = (sort, callback = null) => {
+const renderHeaderMenu = (t, sort, callback = null) => {
   return (
     <Menu
       ref={headerMenu.setMenuRef}
@@ -57,18 +60,20 @@ const renderHeaderMenu = (sort, callback = null) => {
           type="material-community"
         />
       }>
-      {items.map(item => renderMenuItem(item, sort, callback))}
+      {items.map(item => renderMenuItem(t, item, sort, callback))}
     </Menu>
   );
 };
+
+export default function HeaderMenu({sort, callback}) {
+  const {t} = React.useContext(LocaleContext);
+  return renderHeaderMenu(t, sort, callback);
+}
+
+HeaderMenu.items = items;
 
 const styles = StyleSheet.create({
   menuItem: {
     marginRight: 10,
   },
 });
-
-export default {
-  items,
-  renderHeaderMenu,
-};

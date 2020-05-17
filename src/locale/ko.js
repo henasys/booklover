@@ -1,6 +1,12 @@
 export default {
   Main: {
     title: '책사랑꾼',
+    searchBarPlaceholder: '제목, 저자',
+    ActionButton: {
+      barcodeSearch: '바코드 검색',
+      titleSearch: '제목, 저자 검색',
+      editManually: '직접 입력',
+    },
   },
   BarcodeAdd: {
     title: '바코드 검색 추가',
@@ -19,6 +25,17 @@ export default {
   },
   ImportIsbn: {
     title: 'ISBN 파일 데이터 추가',
+  },
+  CategoryBar: {
+    top: '전체',
+  },
+  HeaderMenu: {
+    title: '제목 정렬',
+    titleReverse: '제목 역순',
+    author: '저자 정렬',
+    authorReverse: '저자 역순',
+    date: '입력일 정렬',
+    dateReverse: '입력일 역순',
   },
   Button: {
     login: '로그인',

@@ -11,7 +11,7 @@ import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
-import HeaderMenu from '../views/headerMenu';
+import HeaderMenu from '../views/HeaderMenu';
 import CategoryBar from '../views/CategoryBar';
 import MyColor from '../modules/myColor';
 import LocaleContext from '../modules/LocaleContext';
@@ -25,12 +25,12 @@ const printIdList = list => {
   // );
 };
 
-const renderActionButton = navigation => {
+const renderActionButton = (navigation, t) => {
   return (
     <ActionButton buttonColor="rgba(231,76,60,1)">
       <ActionButton.Item
         buttonColor="#9b59b6"
-        title="직접 입력"
+        title={t('Main.ActionButton.editManually')}
         onPress={() => {
           navigation.navigate('Edit');
         }}>
@@ -38,7 +38,7 @@ const renderActionButton = navigation => {
       </ActionButton.Item>
       <ActionButton.Item
         buttonColor="#3498db"
-        title="제목 검색"
+        title={t('Main.ActionButton.titleSearch')}
         onPress={() => {
           navigation.navigate('SearchAdd');
         }}>
@@ -46,7 +46,7 @@ const renderActionButton = navigation => {
       </ActionButton.Item>
       <ActionButton.Item
         buttonColor="#1abc9c"
-        title="바코드 검색"
+        title={t('Main.ActionButton.barcodeSearch')}
         onPress={() => {
           navigation.navigate('BarcodeAdd');
         }}>
@@ -97,7 +97,7 @@ function Main({navigation}) {
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
   const [categoryId, setCategoryId] = React.useState(null);
-  const localeContext = React.useContext(LocaleContext);
+  const {t} = React.useContext(LocaleContext);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -163,7 +163,7 @@ function Main({navigation}) {
       headerRight: () => (
         <View style={styles.menuContainer}>
           {renderBrowsableIcon(browsable, setBrowsable)}
-          {HeaderMenu.renderHeaderMenu(sort, setSort)}
+          <HeaderMenu sort={sort} callback={setSort} />
           <Icon
             iconStyle={styles.menuItem}
             onPress={() => {
@@ -294,7 +294,7 @@ function Main({navigation}) {
       return (
         <SearchBar
           platform="default"
-          placeholder={'제목, 저자'}
+          placeholder={t('Main.searchBarPlaceholder')}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={onUpdateSearch}
@@ -326,7 +326,7 @@ function Main({navigation}) {
             keyExtractor={(item, index) => item.id + '_' + String(index)}
           />
         </View>
-        {renderActionButton(navigation)}
+        {renderActionButton(navigation, t)}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

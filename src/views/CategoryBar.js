@@ -2,11 +2,13 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 import MyColor from '../modules/myColor';
+import LocaleContext from '../modules/LocaleContext';
 
 function CategoryBar({stack, onPressTop, onPressSub = null}) {
+  const {t} = React.useContext(LocaleContext);
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
-      분류
+      {t('CategoryBar.top')}
     </Text>
   );
   const topDivider = <Text style={[style.text, style.subText]}> | </Text>;
