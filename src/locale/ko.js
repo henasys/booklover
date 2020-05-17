@@ -132,4 +132,7 @@ export default {
   Language: {
     label: '언어선택',
   },
+  Misc: {
+    toastExitApplication: '"뒤로" 버튼을 한 번 더 누르시면 앱이 종료됩니다.',
+  },
 };

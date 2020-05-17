@@ -127,4 +127,7 @@ export default {
   Language: {
     label: 'Language choice',
   },
+  Misc: {
+    toastExitApplication: 'Press again to quit the application!',
+  },
 };
