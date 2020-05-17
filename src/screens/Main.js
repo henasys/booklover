@@ -99,6 +99,7 @@ function Main({navigation}) {
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
   const [categoryId, setCategoryId] = React.useState(null);
+  const [countList, setCountList] = React.useState([]);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -127,6 +128,14 @@ function Main({navigation}) {
       : [];
     setStack(newStack);
     console.log('setStack', newStack);
+  }, [realm, categoryId]);
+  React.useEffect(() => {
+    if (!realm) {
+      return;
+    }
+    const count = Database.getBookCountByCategory(realm, categoryId, countList);
+    console.log('count', count);
+    console.log('countList', countList);
   }, [realm, categoryId]);
   React.useEffect(() => {
     if (!realm) {

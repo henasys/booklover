@@ -491,6 +491,20 @@ const getSetting = (realm, listener = null) => {
   return setting;
 };
 
+const getBookCountByCategory = (realm, categoryId, countList = []) => {
+  let count = 0;
+  const categoryList = getCategoryListByParentId(realm, categoryId);
+  categoryList.forEach(category => {
+    const subCount = getBookCountByCategory(realm, category.id, countList);
+    console.log('subCount', subCount);
+  });
+  const bookList = getBookListByCategory(realm, categoryId);
+  console.log('bookCount', bookList.length);
+  count += bookList.length;
+  countList.push({categoryId, count});
+  return count;
+};
+
 export default {
   Category,
   Book,
@@ -520,4 +534,5 @@ export default {
   saveOrUpdateBook,
   saveSetting,
   getSetting,
+  getBookCountByCategory,
 };
