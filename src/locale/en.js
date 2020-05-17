@@ -32,6 +32,25 @@ export default {
   },
   Backup: {
     title: 'Backup, restore data',
+    fileNameEmptyError: 'The backup file name is empty.',
+    Input: {
+      backup: 'Backup File',
+      restore: 'Restore File',
+    },
+    Button: {
+      backup: ' Backup data',
+      restore: ' Restore data',
+    },
+    Toast: {
+      restoreNoyReady:
+        'You did not specify the restore file.\nPleae check it out again.',
+      writeOk: 'To write backup file is done',
+      writeFail: 'To write backup file is failed',
+      restoreOk: 'To restore backup file is done',
+      restoreFail: 'To restore backup file is failed',
+      wrongFile:
+        'There is no file or wrong format.\nPlease check it out again.',
+    },
   },
   ImportIsbn: {
     title: 'Import ISBN file data',

@@ -14,19 +14,25 @@ import Database from '../modules/database';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 import Bundle from '../modules/bundle';
+import LocaleContext from '../modules/LocaleContext';
 
-const write = (fileName, content) => {
+const write = (t, fileName, content) => {
+  if (!fileName) {
+    const msg = t('Backup.fileNameEmptyError');
+    Toast.show(msg);
+    return;
+  }
   const encoding = Bundle.getEncoding(fileName);
   FileManager.writeBookLoverPath(fileName, content, encoding)
     .then(() => {
       console.log('FileManager.writeBookLoverPath done', fileName);
       const folder = FileManager.getBookLoverFolder();
-      const msg = `백업 파일 저장 완료: \n${folder}/${fileName}`;
+      const msg = `${t('Backup.Toast.writeOk')}: \n${folder}/${fileName}`;
       Toast.show(msg);
     })
     .catch(e => {
       console.log('FileManager.writeBookLoverPath error', e);
-      const msg = `백업 파일 저장 실패 ${fileName} ${e}`;
+      const msg = `${t('Backup.Toast.writeFail')}: ${fileName} ${e}`;
       Toast.show(msg);
     });
 };
@@ -61,6 +67,7 @@ function Backup() {
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -73,7 +80,7 @@ function Backup() {
   }, []);
   const onEndEditingFileName = () => {
     if (!fileName || fileName.length === 0) {
-      setFileNameError('백업 파일 이름이 비어있습니다.');
+      setFileNameError(t('Backup.fileNameEmptyError'));
     }
   };
   const read = () => {
@@ -83,7 +90,7 @@ function Backup() {
       .then(result => {
         console.log('FileManager.readFile result', result.length);
         if (!result || result.length === 0) {
-          const msg = '파일 내용이 없거나 잘못된 형식입니다.';
+          const msg = t('Backup.Toast.wrongFile');
           Toast.show(msg, Toast.LONG);
           return;
         }
@@ -97,11 +104,11 @@ function Backup() {
           const book = list[index];
           Database.saveOrUpdateBook(realm, book)
             .then(resultBook => {
-              const msg = `데이터 복원 성공: ${resultBook.title}`;
+              const msg = `restore done: ${resultBook.title}`;
               console.log(msg);
             })
             .catch(e => {
-              const msg = `데이터 복원 실패: ${e}`;
+              const msg = `${t('Backup.Toast.restoreFail')}: ${e}`;
               Toast.show(msg);
             })
             .finally(() => {
@@ -120,7 +127,7 @@ function Backup() {
       })
       .catch(e => {
         console.log('FileManager.readFile error', e);
-        const msg = `${restoreFileName}\n파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.`;
+        const msg = `${restoreFileName}\n${t('Backup.Toast.wrongFile')}`;
         Toast.show(msg, Toast.LONG);
         setShowProgress(false);
       });
@@ -136,21 +143,21 @@ function Backup() {
             onEndEditing={onEndEditingFileName}
             defaultValue={fileName}
             errorMessage={fileNameError}
-            label={'백업 파일'}
+            label={t('Backup.Input.backup')}
             keyboardType="default"
             autoCapitalize="none"
             multiline={true}
             numberOfLines={1}
           />
           <Button
-            title="데이터 백업"
+            title={t('Backup.Button.backup')}
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
               const content = Bundle.bundleBookList(realm, fileName);
-              write(fileName, content);
+              write(t, fileName, content);
               // Permission.checkPermissionForWriteExternalStorage(() => {
-              //   write(fileName, content);
+              //   write(t, fileName, content);
               // });
             }}
           />
@@ -165,20 +172,19 @@ function Backup() {
             containerStyle={styles.textInputBox}
             labelStyle={{fontSize: 14}}
             defaultValue={restoreFileName}
-            label={'복원 파일'}
+            label={t('Backup.Input.restore')}
             keyboardType="default"
             autoCapitalize="none"
             multiline={true}
             numberOfLines={1}
           />
           <Button
-            title="데이터 복원"
+            title={t('Backup.Button.restore')}
             type="outline"
             icon={<Icon name="backup-restore" type="material-community" />}
             onPress={() => {
               if (!uri) {
-                const msg =
-                  '아직 복원 파일을 선택하지 않았습니다.\n다시 확인해주십시오.';
+                const msg = t('Backup.Toast.restoreNoyReady');
                 Toast.show(msg);
                 return;
               }

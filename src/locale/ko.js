@@ -37,6 +37,24 @@ export default {
   },
   Backup: {
     title: '데이터 백업, 복원',
+    fileNameEmptyError: '백업 파일 이름이 비어있습니다.',
+    Input: {
+      backup: '백업 파일',
+      restore: '복원 파일',
+    },
+    Button: {
+      backup: ' 데이터 백업',
+      restore: ' 데이터 복원',
+    },
+    Toast: {
+      restoreNoyReady:
+        '아직 복원 파일을 선택하지 않았습니다.\n다시 확인해주십시오.',
+      writeOk: '백업 파일 저장 완료',
+      writeFail: '백업 파일 저장 실패',
+      restoreOk: '데이터 복원 완료',
+      restoreFail: '데이터 복원 실패',
+      wrongFile: '파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.',
+    },
   },
   ImportIsbn: {
     title: 'ISBN 파일 데이터 추가',
