@@ -13,11 +13,17 @@ export default {
     Error: {
       wrongIsbn: 'Wrong ISBN',
       alreadyAdded: 'Already added',
-      search: 'Search error',
+      search: 'Error to search',
     },
   },
   SearchAdd: {
     title: 'Add by Search',
+    searchBarPlaceholder: 'Tile, author, ISBN',
+    Error: {
+      noResult: 'No search result',
+      search: 'Error to search',
+      add: 'Error to add ',
+    },
   },
   Detail: {
     title: 'Detail',

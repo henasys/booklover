@@ -18,6 +18,12 @@ export default {
   },
   SearchAdd: {
     title: '제목 검색 추가',
+    searchBarPlaceholder: '제목, 저자, ISBN',
+    Error: {
+      noResult: '검색 결과가 없습니다.',
+      search: '검색 오류입니다.',
+      add: '추가 오류입니다.',
+    },
   },
   Detail: {
     title: '상세 정보',

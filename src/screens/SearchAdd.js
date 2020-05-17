@@ -7,8 +7,10 @@ import {FlatList} from 'react-native-gesture-handler';
 import {SearchBar} from 'react-native-elements';
 
 import Database from '../modules/database';
-import SearchItem from '../views/searchItem';
 import Searcher from '../modules/searcher';
+import LocaleContext from '../modules/LocaleContext';
+
+import SearchItem from '../views/searchItem';
 import SelectApiButton from '../views/SelectApiButton';
 
 function SearchAdd({navigation, route}) {
@@ -17,6 +19,7 @@ function SearchAdd({navigation, route}) {
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
   const [apiSource, setApiSource] = useState(null);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -63,7 +66,7 @@ function SearchAdd({navigation, route}) {
       .then(items => {
         console.log('search items', items.length);
         if (items.length === 0) {
-          setError('검색 결과가 없습니다.');
+          setError(t('SearchAdd.Error.noResult'));
           return;
         }
         items.forEach(item => {
@@ -75,7 +78,7 @@ function SearchAdd({navigation, route}) {
       })
       .catch(e => {
         console.log('search error', e);
-        setError(`검색 오류입니다. ${e}`);
+        setError(`${t('SearchAdd.Error.search')} ${e}`);
       });
   };
   const onSubmitEditing = () => {
@@ -89,7 +92,7 @@ function SearchAdd({navigation, route}) {
       setList(newList);
     };
     const errorCallback = e => {
-      setError(`추가 오류입니다. ${e}`);
+      setError(`${t('SearchAdd.Error.add')} ${e}`);
     };
     const searcher = Searcher.getSearcher(realm);
     Searcher.postProcess(searcher, item)
@@ -116,7 +119,7 @@ function SearchAdd({navigation, route}) {
       <KeyboardAvoidingView style={styles.flexOne}>
         <SearchBar
           platform="default"
-          placeholder={'제목, 저자, ISBN'}
+          placeholder={t('SearchAdd.searchBarPlaceholder')}
           containerStyle={styles.searchBarContainer}
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={onUpdateSearch}
