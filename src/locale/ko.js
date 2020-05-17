@@ -58,6 +58,21 @@ export default {
   },
   ImportIsbn: {
     title: 'ISBN 파일 데이터 추가',
+    Input: {
+      isbn: 'ISBN 파일',
+    },
+    Button: {
+      isbn: 'ISBN 검색 추가',
+    },
+    Toast: {
+      notReadyFile:
+        '아직 ISBN 파일을 선택하지 않았습니다.\n다시 확인해주십시오.',
+      wrongFile: '파일 내용이 없거나 잘못된 형식입니다.',
+      total: '전체',
+      success: '성공',
+      failure: '실패',
+      duplicated: '중복',
+    },
   },
   CategoryBar: {
     top: '전체',

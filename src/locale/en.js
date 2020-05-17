@@ -54,6 +54,20 @@ export default {
   },
   ImportIsbn: {
     title: 'Import ISBN file data',
+    Input: {
+      isbn: 'ISBN File',
+    },
+    Button: {
+      isbn: 'Add by ISBN search',
+    },
+    Toast: {
+      notReadyFile: 'You did not specify the file.\nPleae check it out again.',
+      wrongFile: 'There is no file or wrong format.',
+      total: 'Total',
+      success: 'Success',
+      failure: 'Failure',
+      duplicated: 'Duplicated',
+    },
   },
   CategoryBar: {
     top: 'TOTAL',

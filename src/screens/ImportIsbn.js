@@ -13,6 +13,7 @@ import Database from '../modules/database';
 import Searcher from '../modules/searcher';
 // import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
+import LocaleContext from '../modules/LocaleContext';
 
 const IsbnUtil = require('isbn-utils');
 
@@ -83,6 +84,7 @@ function ImportIsbn({navigation, route}) {
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -102,16 +104,18 @@ function ImportIsbn({navigation, route}) {
       .then(result => {
         console.log('FileManager.readFile result', result.length);
         if (!result || result.length === 0) {
-          const msg = '파일 내용이 없거나 잘못된 형식입니다.';
+          const msg = t('ImportIsbn.Toast.wrongFile');
           Toast.show(msg, Toast.LONG);
           return;
         }
         const list = result.trim().split('\n');
         console.log(list.length);
-        const limit = list.length;
+        // const limit = list.length;
+        const limit = 10;
         const finalCallback = () => {
           progressTotal += 1;
           const progressValue = progressTotal / limit;
+          console.log('progressLimit', limit);
           console.log('progressTotal', progressTotal);
           console.log('progressValue', progressValue);
           console.log('successList', successList.length);
@@ -119,9 +123,16 @@ function ImportIsbn({navigation, route}) {
           console.log('errorList', errorList.length, errorList);
           setProgress(progressValue);
           if (progressTotal === limit) {
-            const msg = `전체 ${list.length} 성공: ${
+            const total = t('ImportIsbn.Toast.total');
+            const success = t('ImportIsbn.Toast.success');
+            const duplicated = t('ImportIsbn.Toast.duplicated');
+            const failure = t('ImportIsbn.Toast.failure');
+            const msg = `${total} ${limit} ${success} ${
               successList.length
-            }\n중복: ${precheckedList.length} 실패: ${errorList.length}`;
+            }\n${duplicated}: ${precheckedList.length} ${failure}: ${
+              errorList.length
+            }`;
+            console.log(msg.replace(/\n/g, ''));
             Toast.show(msg, Toast.LONG);
             setTimeout(() => {
               setShowProgress(false);
@@ -136,6 +147,7 @@ function ImportIsbn({navigation, route}) {
           const checkIsbn = IsbnUtil.parse(isbn);
           if (!checkIsbn) {
             errorList.push(isbn);
+            finalCallback();
             continue;
           }
           const callback = book => {
@@ -153,7 +165,7 @@ function ImportIsbn({navigation, route}) {
       })
       .catch(e => {
         console.log('FileManager.readFile error', e);
-        const msg = '파일이 없거나 잘못된 형식입니다.\n다시 확인해주십시오.';
+        const msg = t('ImportIsbn.Toast.wrongFile');
         Toast.show(msg, Toast.LONG);
         setShowProgress(false);
       });
@@ -181,20 +193,19 @@ function ImportIsbn({navigation, route}) {
             containerStyle={styles.textInputBox}
             labelStyle={{fontSize: 14}}
             defaultValue={isbnFile}
-            label={'ISBN 파일'}
+            label={t('ImportIsbn.Input.isbn')}
             keyboardType="default"
             autoCapitalize="none"
             multiline={true}
             numberOfLines={1}
           />
           <Button
-            title="ISBN 검색 추가"
+            title={t('ImportIsbn.Button.isbn')}
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
               if (!uri) {
-                const msg =
-                  '아직 ISBN 파일을 선택하지 않았습니다.\n다시 확인해주십시오.';
+                const msg = t('ImportIsbn.Toast.notReadyFile');
                 Toast.show(msg);
                 return;
               }
