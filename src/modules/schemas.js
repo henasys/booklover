@@ -92,6 +92,11 @@ Setting.findIndexByApiSource = apiSource => {
   return keys.findIndex(item => item === apiSource);
 };
 
+Setting.firstApiSource = () => {
+  const values = Object.values(Setting.apiSourceType);
+  return values[0];
+};
+
 const schema0 = [Category, Book.schema0];
 const schema1 = [Category, Book, Setting.schema1];
 const schema2 = [Category, Book, Setting];

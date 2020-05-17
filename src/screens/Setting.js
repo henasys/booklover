@@ -46,9 +46,15 @@ const pickerApiSource = (t, realm, apiSource, setApiSource) => {
           setApiSource(value);
           Database.saveSetting(realm, {apiSource: value})
             .then(setting => {
-              console.log('saveSetting done', setting.apiSource);
+              console.log(
+                'saveSetting done',
+                setting.apiSource,
+                setting.language,
+              );
             })
-            .catch(e => {});
+            .catch(e => {
+              console.log('saveSetting error', e);
+            });
         }}
       />
     </View>

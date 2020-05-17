@@ -449,9 +449,14 @@ const saveSetting = (realm, {apiSource, language}) => {
       realm.write(() => {
         const rs = realm.objects('Setting');
         if (!rs.isEmpty()) {
+          console.log('saveSetting not empty');
           const setting = rs[0];
-          setting.apiSource = apiSource;
-          setting.language = language;
+          if (apiSource) {
+            setting.apiSource = apiSource;
+          }
+          if (language) {
+            setting.language = language;
+          }
           resolve(setting);
           return;
         }
@@ -459,6 +464,7 @@ const saveSetting = (realm, {apiSource, language}) => {
           apiSource: apiSource,
           language: language,
         });
+        console.log('saveSetting create done');
         resolve(setting);
       });
     } catch (e) {
@@ -469,14 +475,20 @@ const saveSetting = (realm, {apiSource, language}) => {
 };
 
 const getSetting = (realm, listener = null) => {
+  const apiSourceDefault = Setting.firstApiSource();
   const rs = realm.objects('Setting');
   listener && rs.addListener(listener);
   if (rs.isEmpty()) {
+    console.log('getSetting is empty');
     return {
-      apiSource: Setting.apiSourceType.ALADIN,
+      apiSource: apiSourceDefault,
     };
   }
-  return rs[0];
+  const setting = {...rs[0]};
+  if (!setting.apiSource) {
+    setting.apiSource = apiSourceDefault;
+  }
+  return setting;
 };
 
 export default {
