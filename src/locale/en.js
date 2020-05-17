@@ -116,6 +116,10 @@ export default {
     date: 'Sort by date',
     dateReverse: 'Sort by date reverse',
   },
+  SwipeableRow: {
+    actionTitle: 'Delete',
+    alertTitle: 'Delete',
+  },
   Button: {
     login: 'Login',
     logout: 'Logout',

@@ -121,6 +121,10 @@ export default {
     date: '입력일 정렬',
     dateReverse: '입력일 역순',
   },
+  SwipeableRow: {
+    actionTitle: '삭제',
+    alertTitle: '삭제',
+  },
   Button: {
     login: '로그인',
     logout: '로그아웃',

@@ -4,12 +4,15 @@ import {Animated, StyleSheet, Text, View, I18nManager} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
+import LocaleContext from '../modules/LocaleContext';
 import MyAlert from '../views/alert';
 
-const buttonWidth = 64;
+const buttonWidth = 70;
 const rightButtonCount = 1;
 
 export default class SwipeableRow extends Component {
+  static contextType = LocaleContext;
+
   constructor(props) {
     super(props);
     // console.log('props.rowItem', props.rowItem);
@@ -33,23 +36,38 @@ export default class SwipeableRow extends Component {
       </Animated.View>
     );
   };
-  renderRightActions = progress => (
-    <View
-      style={{
-        width: buttonWidth * rightButtonCount,
-        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-      }}>
-      {this.renderRightAction('삭제', '#dd2c00', buttonWidth, progress, () => {
-        const title = '삭제';
-        const message = this.props.rowItem.title;
-        const okCallback = () => {
-          this.props.onDeleteRow && this.props.onDeleteRow(this.props.rowKey);
-        };
-        const cancelCallback = () => {};
-        MyAlert.showTwoButtonAlert(title, message, okCallback, cancelCallback);
-      })}
-    </View>
-  );
+  renderRightActions = progress => {
+    const {t} = this.context;
+    return (
+      <View
+        style={{
+          width: buttonWidth * rightButtonCount,
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        }}>
+        {this.renderRightAction(
+          t('SwipeableRow.actionTitle'),
+          '#dd2c00',
+          buttonWidth,
+          progress,
+          () => {
+            const title = t('SwipeableRow.alertTitle');
+            const message = this.props.rowItem.title;
+            const okCallback = () => {
+              this.props.onDeleteRow &&
+                this.props.onDeleteRow(this.props.rowKey);
+            };
+            const cancelCallback = () => {};
+            MyAlert.showTwoButtonAlert(
+              title,
+              message,
+              okCallback,
+              cancelCallback,
+            );
+          },
+        )}
+      </View>
+    );
+  };
   updateRef = ref => {
     this._swipeableRow = ref;
   };
