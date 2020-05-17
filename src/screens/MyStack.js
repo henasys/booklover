@@ -3,6 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Icon} from 'react-native-elements';
 
+import LocaleContext from '../modules/LocaleContext';
+
 import Main from '../screens/Main';
 import Detail from '../screens/Detail';
 import BarcodeAdd from '../screens/BarcodeAdd';
@@ -11,7 +13,6 @@ import Edit from '../screens/Edit';
 import Setting from '../screens/Setting';
 import Backup from '../screens/Backup';
 import ImportIsbn from '../screens/ImportIsbn';
-import LocaleContext from '../modules/LocaleContext';
 
 const Stack = createStackNavigator();
 

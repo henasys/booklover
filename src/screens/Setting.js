@@ -62,9 +62,9 @@ const pickerApiSource = (t, realm, apiSource, setApiSource) => {
 };
 
 function Setting({navigation}) {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
   const [apiSource, setApiSource] = useState(null);
-  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);

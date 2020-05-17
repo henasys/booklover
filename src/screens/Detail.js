@@ -14,9 +14,9 @@ import BookCover from '../views/BookCover';
 const sanitizeHtml = require('sanitize-html');
 
 function Detail({navigation, route}) {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
   const [book, setBook] = useState(null);
-  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);

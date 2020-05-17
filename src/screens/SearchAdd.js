@@ -14,12 +14,12 @@ import SearchItem from '../views/searchItem';
 import SelectApiButton from '../views/SelectApiButton';
 
 function SearchAdd({navigation, route}) {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
   const [search, setSearch] = React.useState(null);
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
   const [apiSource, setApiSource] = useState(null);
-  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);

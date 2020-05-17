@@ -60,6 +60,7 @@ const pickFile = async (setValue, setUri) => {
 };
 
 function Backup() {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
   const [fileName, setFileName] = useState('booklover-backup.xlsx');
   const [fileNameError, setFileNameError] = useState(null);
@@ -67,7 +68,6 @@ function Backup() {
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
   const [showProgress, setShowProgress] = useState(false);
-  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);

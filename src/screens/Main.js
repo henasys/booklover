@@ -9,12 +9,13 @@ import {Icon, SearchBar, ListItem} from 'react-native-elements';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
+import MyColor from '../modules/myColor';
+import LocaleContext from '../modules/LocaleContext';
+
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/HeaderMenu';
 import CategoryBar from '../views/CategoryBar';
-import MyColor from '../modules/myColor';
-import LocaleContext from '../modules/LocaleContext';
 
 const printIdList = list => {
   // console.log(
@@ -89,6 +90,7 @@ const renderBrowsableIcon = (browsable, setBrowsable) => {
 const backHandler = new AndroidBackHandler();
 
 function Main({navigation}) {
+  const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = React.useState(null);
   const [list, setList] = React.useState([]);
   const [search, setSearch] = React.useState(null);
@@ -97,7 +99,6 @@ function Main({navigation}) {
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
   const [categoryId, setCategoryId] = React.useState(null);
-  const {t} = React.useContext(LocaleContext);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);

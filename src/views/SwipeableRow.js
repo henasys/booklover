@@ -5,6 +5,7 @@ import {RectButton} from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import LocaleContext from '../modules/LocaleContext';
+
 import MyAlert from '../views/alert';
 
 const buttonWidth = 70;
