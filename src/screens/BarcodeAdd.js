@@ -7,8 +7,10 @@ import {BarcodeMaskWithOuterLayout} from '@nartc/react-native-barcode-mask';
 import {FlatList} from 'react-native-gesture-handler';
 
 import Database from '../modules/database';
-import SearchItem from '../views/searchItem';
 import Searcher from '../modules/searcher';
+import LocaleContext from '../modules/LocaleContext';
+
+import SearchItem from '../views/searchItem';
 import SelectApiButton from '../views/SelectApiButton';
 
 const IsbnUtil = require('isbn-utils');
@@ -19,6 +21,7 @@ const defaultBarCodeTypes = [
 ];
 
 const handleOnBarcodeRead = ({
+  t,
   event,
   realm,
   apiSource,
@@ -30,7 +33,7 @@ const handleOnBarcodeRead = ({
   const checkIsbn = IsbnUtil.parse(isbn);
   if (!checkIsbn) {
     setBarcode(isbn);
-    setError('잘못된 ISBN 번호입니다.');
+    setError(t('BarcodeAdd.Error.wrongIsbn'));
     setList([]);
     return;
   }
@@ -39,7 +42,7 @@ const handleOnBarcodeRead = ({
   setList([]);
   const book = Database.getBookByIsbn(realm, isbn, isbn);
   if (book) {
-    setError('이미 추가된 도서입니다.');
+    setError(t('BarcodeAdd.Error.alreadyAdded'));
     book._alreadyAdded = true;
     setList([book]);
     setBarcodeTimer(setBarcode);
@@ -60,7 +63,7 @@ const handleOnBarcodeRead = ({
         );
         item._alreadyAdded = bookByIsbn !== null;
         if (item._alreadyAdded) {
-          setError('이미 추가된 도서입니다.');
+          setError(t('BarcodeAdd.Error.alreadyAdded'));
           setList(items);
           return;
         }
@@ -73,7 +76,7 @@ const handleOnBarcodeRead = ({
     })
     .catch(e => {
       console.log('searchIsbn error', e);
-      setError(`검색 오류입니다. ${e}`);
+      setError(`${t('BarcodeAdd.Error.search')} ${e}`);
     })
     .finally(() => {
       setBarcodeTimer(setBarcode);
@@ -92,6 +95,7 @@ function BarcodeAdd({navigation, route}) {
   const [list, setList] = useState([]);
   const [error, setError] = useState(null);
   const [apiSource, setApiSource] = useState(null);
+  const {t} = React.useContext(LocaleContext);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -125,6 +129,7 @@ function BarcodeAdd({navigation, route}) {
   }, [navigation, apiSource]);
   const onBarcodeRead = event => {
     handleOnBarcodeRead({
+      t,
       event,
       realm,
       apiSource,

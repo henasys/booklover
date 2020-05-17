@@ -10,6 +10,11 @@ export default {
   },
   BarcodeAdd: {
     title: 'Add by Barcode',
+    Error: {
+      wrongIsbn: 'Wrong ISBN',
+      alreadyAdded: 'Already added',
+      search: 'Search error',
+    },
   },
   SearchAdd: {
     title: 'Add by Search',

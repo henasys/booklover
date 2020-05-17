@@ -10,6 +10,11 @@ export default {
   },
   BarcodeAdd: {
     title: '바코드 검색 추가',
+    Error: {
+      wrongIsbn: '잘못된 ISBN 번호입니다.',
+      alreadyAdded: '이미 추가된 도서입니다.',
+      search: '검색 오류입니다.',
+    },
   },
   SearchAdd: {
     title: '제목 검색 추가',
