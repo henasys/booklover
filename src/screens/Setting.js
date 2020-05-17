@@ -7,8 +7,9 @@ import {Button, Icon} from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 
 import Database from '../modules/database';
-import MyAlert from '../views/alert';
 import MyColor from '../modules/myColor';
+import MyAlert from '../views/alert';
+import LanguagePicker from '../views/LanguagePicker';
 
 const pickerApiSource = (realm, apiSource, setApiSource) => {
   const data = [
@@ -32,7 +33,7 @@ const pickerApiSource = (realm, apiSource, setApiSource) => {
         onValueChange={(value, index) => {
           console.log('onValueChange', value, index);
           setApiSource(value);
-          Database.saveSetting(realm, value)
+          Database.saveSetting(realm, {apiSource: value})
             .then(setting => {
               console.log('saveSetting done', setting.apiSource);
             })
@@ -67,6 +68,9 @@ function Setting({navigation}) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <View>
+          <LanguagePicker />
+          <View style={styles.spacer} />
+          <View style={styles.spacer} />
           <Text>검색 API</Text>
           <View style={styles.spacer} />
           {pickerApiSource(realm, apiSource, setApiSource)}

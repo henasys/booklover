@@ -11,38 +11,40 @@ import Edit from '../screens/Edit';
 import Setting from '../screens/Setting';
 import Backup from '../screens/Backup';
 import ImportIsbn from '../screens/ImportIsbn';
+import LocaleContext from '../modules/LocaleContext';
 
 const Stack = createStackNavigator();
 
 export default function MyStack() {
+  const {t} = React.useContext(LocaleContext);
   return (
     <Stack.Navigator initialRouteName={'Main'}>
-      <Stack.Screen
-        name="BarcodeAdd"
-        component={BarcodeAdd}
-        options={({navigation, route}) => ({
-          title: '바코드 검색 추가 ',
-        })}
-      />
       <Stack.Screen
         name="Main"
         component={Main}
         options={({navigation, route}) => ({
-          title: '책사랑꾼',
+          title: t('Main.title'),
         })}
       />
       <Stack.Screen
-        name="Detail"
-        component={Detail}
+        name="BarcodeAdd"
+        component={BarcodeAdd}
         options={({navigation, route}) => ({
-          title: '상세 정보',
+          title: t('BarcodeAdd.title'),
         })}
       />
       <Stack.Screen
         name="SearchAdd"
         component={SearchAdd}
         options={({navigation, route}) => ({
-          title: '제목 검색 추가',
+          title: t('SearchAdd.title'),
+        })}
+      />
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={({navigation, route}) => ({
+          title: t('Detail.title'),
         })}
       />
       <Stack.Screen name="Edit" component={Edit} />
@@ -50,21 +52,21 @@ export default function MyStack() {
         name="Setting"
         component={Setting}
         options={({navigation, route}) => ({
-          title: '설정',
+          title: t('Setting.title'),
         })}
       />
       <Stack.Screen
         name="Backup"
         component={Backup}
         options={({navigation, route}) => ({
-          title: '데이터 백업, 복원',
+          title: t('Backup.title'),
         })}
       />
       <Stack.Screen
         name="ImportIsbn"
         component={ImportIsbn}
         options={({navigation, route}) => ({
-          title: 'ISBN 파일 데이터 추가',
+          title: t('ImportIsbn.title'),
         })}
       />
     </Stack.Navigator>

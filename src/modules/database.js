@@ -443,7 +443,7 @@ const saveOrUpdateBook = async (
   }
 };
 
-const saveSetting = (realm, apiSource) => {
+const saveSetting = (realm, {apiSource, language}) => {
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
@@ -451,11 +451,13 @@ const saveSetting = (realm, apiSource) => {
         if (!rs.isEmpty()) {
           const setting = rs[0];
           setting.apiSource = apiSource;
+          setting.language = language;
           resolve(setting);
           return;
         }
         const setting = realm.create('Setting', {
           apiSource: apiSource,
+          language: language,
         });
         resolve(setting);
       });

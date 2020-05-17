@@ -64,10 +64,18 @@ Book.schema = {
 
 export class Setting {}
 
+Setting.schema1 = {
+  name: 'Setting',
+  properties: {
+    apiSource: {type: 'string', optional: true},
+  },
+};
+
 Setting.schema = {
   name: 'Setting',
   properties: {
     apiSource: {type: 'string', optional: true},
+    language: {type: 'string', optional: true},
   },
 };
 
@@ -85,7 +93,8 @@ Setting.findIndexByApiSource = apiSource => {
 };
 
 const schema0 = [Category, Book.schema0];
-const schema1 = [Category, Book, Setting];
+const schema1 = [Category, Book, Setting.schema1];
+const schema2 = [Category, Book, Setting];
 
 function migrationFunctionNothing(oldRealm, newRealm) {
   console.log('migrationFunctionNothing', oldRealm, newRealm);
@@ -102,6 +111,11 @@ export const schemas = [
   {
     schema: schema1,
     schemaVersion: 1,
+    migration: migrationFunctionNothing,
+  },
+  {
+    schema: schema2,
+    schemaVersion: 2,
     migration: migrationFunctionNothing,
   },
 ];

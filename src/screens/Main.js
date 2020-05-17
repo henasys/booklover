@@ -14,6 +14,7 @@ import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/headerMenu';
 import CategoryBar from '../views/CategoryBar';
 import MyColor from '../modules/myColor';
+import LocaleContext from '../modules/LocaleContext';
 
 const printIdList = list => {
   // console.log(
@@ -96,6 +97,7 @@ function Main({navigation}) {
   const [stack, setStack] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
   const [categoryId, setCategoryId] = React.useState(null);
+  const localeContext = React.useContext(LocaleContext);
   React.useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
