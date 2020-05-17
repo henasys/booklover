@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text, View, Picker, Platform, StyleSheet} from 'react-native';
+import {Text, View, Picker, StyleSheet} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 import {I18nUtil} from '../modules/i18n';
