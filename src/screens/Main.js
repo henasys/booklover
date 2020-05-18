@@ -136,6 +136,8 @@ function Main({navigation}) {
     const cList = Database.getCategoryListByParentId(realm, categoryId).sorted(
       'name',
     );
+    const listListener = new ListListener(setCategoryList, 'category_list');
+    cList.addListener(listListener.listener);
     const cListCount = cList.map(c => {
       const countItem = countList.find(item => item.categoryId === c.id);
       c._count = countItem ? countItem.count : 0;
@@ -144,6 +146,10 @@ function Main({navigation}) {
     console.log('countList', countList.length);
     // console.log('cListCount', cListCount);
     setCategoryList(cListCount);
+    return () => {
+      cList.removeAllListeners();
+      console.log('cList removeAllListeners');
+    };
   }, [realm, categoryId, countList]);
   React.useEffect(() => {
     console.log('list_query', realm, sort, search, browsable);
@@ -158,13 +164,13 @@ function Main({navigation}) {
       ? Database.getBookListByCategory(realm, categoryId)
       : Database.getBookListBySearch(realm, search);
     bookList = bookList.sorted(sortItem.field, sortItem.reverse);
-    const listListener = new ListListener(setList);
+    const listListener = new ListListener(setList, 'book_list');
     bookList.addListener(listListener.listener);
     setList(bookList);
     console.log('list_query done', bookList.length);
     return () => {
       bookList && bookList.removeAllListeners();
-      console.log('list_query removeAllListeners');
+      console.log('bookList removeAllListeners');
     };
   }, [realm, sort, search, browsable, categoryId]);
   React.useLayoutEffect(() => {
