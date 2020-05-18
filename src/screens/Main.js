@@ -10,6 +10,7 @@ import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
 import LocaleContext from '../modules/LocaleContext';
 import ListListener from '../modules/ListListener';
+import Util from '../modules/util';
 
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
@@ -143,11 +144,10 @@ function Main({navigation}) {
     const listListener = new ListListener(setCategoryList, 'category_list');
     cList.addListener(listListener.listener);
     const cListCount = cList.map(c => {
-      const countItem = countList.find(item => item.categoryId === c.id);
-      c._count = countItem ? countItem.count : 0;
+      const count = Util.getCountFromCountList(countList, c.id);
+      c._count = count;
       return c;
     });
-    console.log('countList', countList.length);
     // console.log('cListCount', cListCount);
     setCategoryList(cListCount);
     return () => {
@@ -198,7 +198,8 @@ function Main({navigation}) {
   const refreshCountList = () => {
     const newCountList = [];
     Database.getBookCountByCategory(realm, null, newCountList);
-    console.log('refreshCountList newCountList', newCountList.length);
+    const totalCount = Util.getCountFromCountList(countList, null);
+    console.log('refreshCountList', newCountList.length, 'Total', totalCount);
     setCountList(newCountList);
   };
   const backHandlerCallback = () => {

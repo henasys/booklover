@@ -4,7 +4,7 @@ export default class ListListener {
     this.tag = tag;
   }
   listener = (oldList, changes) => {
-    console.log('ListListener changes', this.tag, changes);
+    // console.log('ListListener changes', this.tag, changes);
     if (changes.deletions.length > 0) {
       console.log('changes.deletions exists', this.tag);
       const newList = [];

@@ -13,8 +13,14 @@ export function getExtension(fileName) {
   return ext;
 }
 
+export function getCountFromCountList(countList, categoryId) {
+  const countItem = countList.find(item => item.categoryId === categoryId);
+  return countItem ? countItem.count : 0;
+}
+
 export default {
   splitCategoryName,
   parseInteger,
   getExtension,
+  getCountFromCountList,
 };

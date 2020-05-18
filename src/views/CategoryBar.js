@@ -3,17 +3,13 @@ import {View, Text, StyleSheet} from 'react-native';
 
 import MyColor from '../modules/myColor';
 import LocaleContext from '../modules/LocaleContext';
-
-const getCount = (countList, categoryId) => {
-  const countItem = countList.find(item => item.categoryId === categoryId);
-  return countItem ? countItem.count : 0;
-};
+import Util from '../modules/util';
 
 function CategoryBar({stack, countList, onPressTop, onPressSub = null}) {
   const {t} = React.useContext(LocaleContext);
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
-      {t('CategoryBar.top')} ({getCount(countList, null)})
+      {t('CategoryBar.top')} ({Util.getCountFromCountList(countList, null)})
     </Text>
   );
   const topDivider = <Text style={[style.text, style.subText]}> | </Text>;
