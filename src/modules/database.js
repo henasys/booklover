@@ -92,6 +92,10 @@ const bookToObject = book => {
   return realmToObject(book, Book.schema);
 };
 
+const categoryToObject = category => {
+  return realmToObject(category, Category.schema);
+};
+
 const clearAllDatabase = () => {
   return new Promise((resolve, reject) => {
     Realm.open(schemas.getLatestConfig())
@@ -520,6 +524,7 @@ export default {
   close,
   realmToObject,
   bookToObject,
+  categoryToObject,
   clearAllDatabase,
   saveCategoryOrGet,
   getCategoryList,

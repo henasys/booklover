@@ -145,8 +145,9 @@ function Main({navigation}) {
     cList.addListener(listListener.listener);
     const cListCount = cList.map(c => {
       const count = Util.getCountFromCountList(countList, c.id);
-      c._count = count;
-      return c;
+      const clone = Database.categoryToObject(c);
+      clone._count = count;
+      return clone;
     });
     // console.log('cListCount', cListCount);
     setCategoryList(cListCount);
