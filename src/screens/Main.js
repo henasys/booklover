@@ -133,10 +133,11 @@ function Main({navigation}) {
     if (!realm) {
       return;
     }
-    const count = Database.getBookCountByCategory(realm, categoryId, countList);
-    console.log('count', count);
-    console.log('countList', countList);
-  }, [realm, categoryId]);
+    const newCountList = [];
+    Database.getBookCountByCategory(realm, null, newCountList);
+    console.log('newCountList', newCountList.length);
+    setCountList(newCountList);
+  }, [realm]);
   React.useEffect(() => {
     if (!realm) {
       return;
@@ -144,9 +145,15 @@ function Main({navigation}) {
     const cList = Database.getCategoryListByParentId(realm, categoryId).sorted(
       'name',
     );
-    console.log('cList', cList);
-    setCategoryList(cList);
-  }, [realm, categoryId]);
+    const cListCount = cList.map(c => {
+      const countItem = countList.find(item => item.categoryId === c.id);
+      c._count = countItem ? countItem.count : 0;
+      return c;
+    });
+    console.log('countList', countList.length);
+    // console.log('cListCount', cListCount);
+    setCategoryList(cListCount);
+  }, [realm, categoryId, countList]);
   React.useEffect(() => {
     console.log('list_query', realm, sort, search, browsable);
     if (sort === undefined || sort === null) {
@@ -284,7 +291,7 @@ function Main({navigation}) {
             renderItem={({item, index}) => (
               <ListItem
                 key={index}
-                title={item.name}
+                title={`${item.name} (${item._count})`}
                 chevron={
                   <Icon
                     name="chevron-right"

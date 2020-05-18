@@ -496,10 +496,11 @@ const getBookCountByCategory = (realm, categoryId, countList = []) => {
   const categoryList = getCategoryListByParentId(realm, categoryId);
   categoryList.forEach(category => {
     const subCount = getBookCountByCategory(realm, category.id, countList);
-    console.log('subCount', subCount);
+    // console.log('subCount', subCount);
+    count += subCount;
   });
   const bookList = getBookListByCategory(realm, categoryId);
-  console.log('bookCount', bookList.length);
+  // console.log('bookCount', bookList.length);
   count += bookList.length;
   countList.push({categoryId, count});
   return count;
