@@ -97,6 +97,7 @@ function Backup() {
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log(list.length);
         const limit = list.length;
+        // const limit = 10;
         for (let index = 0; index < list.length; index++) {
           if (index > limit) {
             break;

@@ -110,8 +110,8 @@ function ImportIsbn({navigation, route}) {
         }
         const list = result.trim().split('\n');
         console.log(list.length);
-        // const limit = list.length;
-        const limit = 10;
+        const limit = list.length;
+        // const limit = 10;
         const finalCallback = () => {
           progressTotal += 1;
           const progressValue = progressTotal / limit;
