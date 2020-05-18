@@ -484,8 +484,11 @@ const getSetting = (realm, listener = null) => {
       apiSource: apiSourceDefault,
     };
   }
-  const setting = {...rs[0]};
+  console.log('getSetting rs[0]', rs[0].apiSource);
+  const setting = realmToObject(rs[0], Setting.schema);
+  console.log('getSetting realmToObject', setting);
   if (!setting.apiSource) {
+    console.log('getSetting apiSource is null', setting.apiSource);
     setting.apiSource = apiSourceDefault;
   }
   return setting;

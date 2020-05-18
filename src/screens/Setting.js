@@ -47,13 +47,13 @@ const pickerApiSource = (t, realm, apiSource, setApiSource) => {
           Database.saveSetting(realm, {apiSource: value})
             .then(setting => {
               console.log(
-                'saveSetting done',
+                'Setting saveSetting done',
                 setting.apiSource,
                 setting.language,
               );
             })
             .catch(e => {
-              console.log('saveSetting error', e);
+              console.log('Setting saveSetting error', e);
             });
         }}
       />
@@ -80,6 +80,7 @@ function Setting({navigation}) {
       return;
     }
     const setting = Database.getSetting(realm);
+    console.log('Setting init setting', setting.apiSource, setting.language);
     setApiSource(setting.apiSource);
   }, [realm]);
   return (
