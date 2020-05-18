@@ -114,21 +114,25 @@ function Main({navigation}) {
     if (!realm) {
       return;
     }
+    refreshCountList();
+    const listListener = new ListListener(refreshCountList, 'all_list');
+    const allList = Database.getBookList(realm);
+    allList.addListener(listListener.listener);
+    return () => {
+      allList.removeAllListeners();
+      console.log('allList removeAllListeners');
+    };
+  }, [realm]);
+  React.useEffect(() => {
+    if (!realm) {
+      return;
+    }
     const newStack = categoryId
       ? Database.getCategoryStackOnly2Level(realm, categoryId)
       : [];
     setStack(newStack);
     console.log('setStack', newStack);
   }, [realm, categoryId]);
-  React.useEffect(() => {
-    if (!realm) {
-      return;
-    }
-    const newCountList = [];
-    Database.getBookCountByCategory(realm, null, newCountList);
-    console.log('newCountList', newCountList.length);
-    setCountList(newCountList);
-  }, [realm]);
   React.useEffect(() => {
     if (!realm) {
       return;
@@ -191,6 +195,12 @@ function Main({navigation}) {
       ),
     });
   }, [navigation, sort, browsable]);
+  const refreshCountList = () => {
+    const newCountList = [];
+    Database.getBookCountByCategory(realm, null, newCountList);
+    console.log('refreshCountList newCountList', newCountList.length);
+    setCountList(newCountList);
+  };
   const backHandlerCallback = () => {
     console.log('backHandler callback');
     const length = stack.length;
