@@ -16,15 +16,6 @@ import HeaderMenu from '../views/HeaderMenu';
 import CategoryBar from '../views/CategoryBar';
 import CategoryItem from '../views/CategoryItem';
 
-const printIdList = list => {
-  // console.log(
-  //   'id list',
-  //   list.map((x, index) => {
-  //     return {index, id: x.id};
-  //   }),
-  // );
-};
-
 const renderActionButton = (navigation, t) => {
   return (
     <ActionButton buttonColor="rgba(231,76,60,1)">
@@ -214,7 +205,6 @@ function Main({navigation}) {
   const listListener = (oldList, changes) => {
     // console.log('main listListener changes', changes);
     // console.log('main listListener oldList', oldList);
-    printIdList(list);
     if (changes.deletions.length > 0) {
       console.log('changes.deletions exists');
       const newList = [];
@@ -308,9 +298,6 @@ function Main({navigation}) {
       );
     }
   };
-  // printIdList(list);
-  // console.log('stack', stack.map(c => c.name + ' ' + c.id));
-  // console.log('categoryList', categoryList.map(c => c.name + ' ' + c.id));
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.flexOne}>
