@@ -72,8 +72,8 @@ const renderBrowsableIcon = (browsable, setBrowsable) => {
         onPress={() => {
           setBrowsable(true);
         }}
-        name="swap-horiz"
-        type="material"
+        name="sitemap"
+        type="material-community"
       />
     );
   }
