@@ -1,21 +1,20 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native-gesture-handler';
-import {Icon, SearchBar, ListItem} from 'react-native-elements';
+import {Icon, SearchBar} from 'react-native-elements';
 
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
-import MyColor from '../modules/myColor';
 import LocaleContext from '../modules/LocaleContext';
 
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
 import HeaderMenu from '../views/HeaderMenu';
 import CategoryBar from '../views/CategoryBar';
+import CategoryItem from '../views/CategoryItem';
 
 const printIdList = list => {
   // console.log(
@@ -289,19 +288,7 @@ function Main({navigation}) {
             data={categoryList}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             renderItem={({item, index}) => (
-              <ListItem
-                key={index}
-                title={`${item.name} (${item._count})`}
-                chevron={
-                  <Icon
-                    name="chevron-right"
-                    type="material"
-                    color={MyColor.font1}
-                  />
-                }
-                onPress={() => browse(item.id)}
-                titleStyle={{color: MyColor.font1, paddingLeft: 10}}
-              />
+              <CategoryItem item={item} onPress={() => browse(item.id)} />
             )}
             keyExtractor={item => item.id}
           />
