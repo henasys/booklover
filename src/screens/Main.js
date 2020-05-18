@@ -281,6 +281,7 @@ function Main({navigation}) {
         <View>
           <CategoryBar
             stack={stack}
+            countList={countList}
             onPressTop={onPressTop}
             onPressSub={onPressSub}
           />

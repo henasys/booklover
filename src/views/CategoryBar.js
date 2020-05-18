@@ -4,11 +4,16 @@ import {View, Text, StyleSheet} from 'react-native';
 import MyColor from '../modules/myColor';
 import LocaleContext from '../modules/LocaleContext';
 
-function CategoryBar({stack, onPressTop, onPressSub = null}) {
+const getCount = (countList, categoryId) => {
+  const countItem = countList.find(item => item.categoryId === categoryId);
+  return countItem ? countItem.count : 0;
+};
+
+function CategoryBar({stack, countList, onPressTop, onPressSub = null}) {
   const {t} = React.useContext(LocaleContext);
   const rootView = (
     <Text style={style.text} onPress={onPressTop}>
-      {t('CategoryBar.top')}
+      {t('CategoryBar.top')} ({getCount(countList, null)})
     </Text>
   );
   const topDivider = <Text style={[style.text, style.subText]}> | </Text>;
