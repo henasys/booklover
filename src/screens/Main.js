@@ -9,6 +9,7 @@ import {Icon, SearchBar} from 'react-native-elements';
 import Database from '../modules/database';
 import AndroidBackHandler from '../modules/AndroidBackHandler';
 import LocaleContext from '../modules/LocaleContext';
+import ListListener from '../modules/ListListener';
 
 import SwipeableRow from '../views/SwipeableRow';
 import BookItem from '../views/BookItem';
@@ -157,7 +158,8 @@ function Main({navigation}) {
       ? Database.getBookListByCategory(realm, categoryId)
       : Database.getBookListBySearch(realm, search);
     bookList = bookList.sorted(sortItem.field, sortItem.reverse);
-    bookList.addListener(listListener);
+    const listListener = new ListListener(setList);
+    bookList.addListener(listListener.listener);
     setList(bookList);
     console.log('list_query done', bookList.length);
     return () => {
@@ -201,37 +203,6 @@ function Main({navigation}) {
   };
   const onUpdateSearch = text => {
     setSearch(text);
-  };
-  const listListener = (oldList, changes) => {
-    // console.log('main listListener changes', changes);
-    // console.log('main listListener oldList', oldList);
-    if (changes.deletions.length > 0) {
-      console.log('changes.deletions exists');
-      const newList = [];
-      for (let index = 0; index < oldList.length; index++) {
-        const element = oldList[index];
-        if (!changes.deletions.includes(index)) {
-          newList.push(element);
-        }
-      }
-      setList(newList);
-    }
-    if (changes.modifications.length > 0) {
-      console.log('changes.modifications exists');
-      const newList = [...oldList];
-      changes.insertions.forEach(index => {
-        newList[index] = oldList[index];
-      });
-      setList(newList);
-    }
-    if (changes.insertions.length > 0) {
-      console.log('changes.insertions exists');
-      const newList = [...oldList];
-      changes.insertions.forEach(index => {
-        newList[index] = oldList[index];
-      });
-      setList(newList);
-    }
   };
   const onDeleteRow = rowKey => {
     console.log('onDeleteRow', rowKey);
