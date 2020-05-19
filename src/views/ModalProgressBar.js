@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   message: {
+    fontSize: 16,
   },
   verticalSpacer: {
     marginVertical: 10,

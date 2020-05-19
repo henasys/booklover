@@ -85,13 +85,17 @@ function Backup() {
   };
   const restore = () => {
     let progressTotal = 0;
+    const errorList = [];
+    const successList = [];
     processList.forEach(book => {
       Database.saveOrUpdateBook(realm, book)
         .then(resultBook => {
+          successList.push(book.title);
           const msg = `restore done: ${resultBook.title}`;
           console.log(msg);
         })
         .catch(e => {
+          errorList.push(book.title);
           console.log('restore error', e);
         })
         .finally(() => {
@@ -100,6 +104,14 @@ function Backup() {
           console.log('progressTotal', progressTotal);
           console.log('progressValue', progressValue);
           setProgress(progressValue);
+          if (progressTotal === processList.length) {
+            const msg = t('Backup.modalMessage', {
+              total: processList.length,
+              success: successList.length,
+              failure: errorList.length,
+            });
+            setMessage(msg);
+          }
         });
     });
   };
@@ -118,7 +130,7 @@ function Backup() {
         // const limit = list.length - 1;
         const limit = 10;
         setProcessList(list.slice(0, limit));
-        setMessage(`to be process ${limit}`);
+        setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleRestoreModal(true);
       })
       .catch(e => {

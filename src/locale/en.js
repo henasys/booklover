@@ -69,6 +69,8 @@ export default {
   Backup: {
     title: 'Backup, restore data',
     fileNameEmptyError: 'The backup file name is empty.',
+    modalInitMessage: 'Total: %{total}',
+    modalMessage: 'Total: %{total}, Success: %{success}, Failure: %{failure}',
     Input: {
       backup: 'Backup File',
       restore: 'Restore File',
@@ -90,6 +92,8 @@ export default {
   },
   ImportIsbn: {
     title: 'Import ISBN file data',
+    modalMessage:
+      'Total: %{total} Success: %{success} Duplicated: %{duplicated} Failure: %{failure}',    
     Input: {
       isbn: 'ISBN File',
     },
