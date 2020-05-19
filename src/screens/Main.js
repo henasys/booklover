@@ -151,10 +151,10 @@ function Main({navigation}) {
     });
     // console.log('cListCount', cListCount);
     setCategoryList(cListCount);
-    return () => {
-      cList.removeAllListeners();
-      console.log('cList removeAllListeners');
-    };
+    // return () => {
+    //   cList.removeAllListeners();
+    //   console.log('cList removeAllListeners');
+    // };
   }, [realm, categoryId, countList]);
   React.useEffect(() => {
     console.log('list_query', realm, sort, search, browsable);
