@@ -13,7 +13,7 @@ import com.android.build.OutputFile
 
 ext.versionMajor = 0
 ext.versionMinor = 0
-ext.versionPatch = 1
+ext.versionPatch = 2
 ext.versionClassifier = null
 ext.isSnapshot = false
 
