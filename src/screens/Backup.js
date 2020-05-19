@@ -59,6 +59,10 @@ const pickFile = async (setValue, setUri) => {
   }
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function Backup() {
   const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
@@ -87,34 +91,49 @@ function Backup() {
     let progressTotal = 0;
     const errorList = [];
     const successList = [];
-    processList.forEach(book => {
-      Database.saveOrUpdateBook(realm, book)
+    const limit = processList.length;
+    const finalCallback = () => {
+      progressTotal += 1;
+      const progressValue = progressTotal / limit;
+      if (progressTotal % 10 === 0) {
+        console.log('progressTotal', progressTotal);
+        console.log('progressValue', progressValue);
+        setProgress(progressValue);
+      }
+      if (progressTotal % 10 === 0) {
+        setProgress(progressValue);
+        const msg = t('Backup.modalMessage', {
+          total: processList.length,
+          success: successList.length,
+          failure: errorList.length,
+        });
+        setMessage(msg);
+        console.log(msg.replace(/\n/g, ''));
+      }
+    };
+    if (limit === 0) {
+      setProgress(1);
+      return;
+    }
+    const starterPromise = Promise.resolve(null);
+    processList.reduce((previousPromise, book) => {
+      return previousPromise
         .then(resultBook => {
-          successList.push(book.title);
-          const msg = `restore done: ${resultBook.title}`;
-          console.log(msg);
+          if (resultBook) {
+            successList.push(book.title);
+            const msg = `restore done: ${resultBook.title}`;
+            console.log(msg);
+          }
+          return Database.saveOrUpdateBook(realm, book);
         })
         .catch(e => {
           errorList.push(book.title);
           console.log('restore error', e);
         })
         .finally(() => {
-          progressTotal += 1;
-          const progressValue = progressTotal / processList.length;
-          // console.log('progressTotal', progressTotal);
-          // console.log('progressValue', progressValue);
-          setProgress(progressValue);
-          if (progressTotal === processList.length) {
-            const msg = t('Backup.modalMessage', {
-              total: processList.length,
-              success: successList.length,
-              failure: errorList.length,
-            });
-            setMessage(msg);
-            console.log(msg.replace(/\n/g, ''));
-          }
+          finalCallback();
         });
-    });
+    }, starterPromise);
   };
   const read = () => {
     const encoding = Bundle.getEncoding(restoreFileName);
@@ -129,7 +148,7 @@ function Backup() {
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
         // const limit = list.length - 1;
-        const limit = 10;
+        const limit = 100;
         setProcessList(list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
@@ -140,6 +159,7 @@ function Backup() {
         Toast.show(msg, Toast.LONG);
       });
   };
+  console.log('Backup render');
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
