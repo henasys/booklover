@@ -149,8 +149,8 @@ function ImportIsbn({navigation, route}) {
         }
         const list = result.trim().split('\n');
         console.log('list.length', list.length);
-        // const limit = list.length;
-        const limit = 10;
+        // const limit = list.length - 1;
+        const limit = 40;
         setProcessList(list.slice(0, limit));
         setMessage(t('ImportIsbn.modalInitMessage', {total: limit}));
         setVisibleModal(true);
@@ -211,7 +211,7 @@ function ImportIsbn({navigation, route}) {
         title={t('ImportIsbn.Button.isbn')}
         message={message}
         closeButtonTitle={t('Button.close')}
-        processButtonTitle={t('Button.restore')}
+        processButtonTitle={t('Button.add')}
         visible={visibleModal}
         setVisible={setVisibleModal}
         progress={progress}

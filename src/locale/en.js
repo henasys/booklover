@@ -130,6 +130,7 @@ export default {
     new: 'New',
     close: 'Close',
     restore: 'Restore',
+    add: 'Add',
   },
   Language: {
     label: 'Language choice',

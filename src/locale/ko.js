@@ -135,6 +135,7 @@ export default {
     new: '새로 만들기',
     close: '닫기',
     restore: '복뤈',
+    add: '추가',
   },
   Language: {
     label: '언어선택',
