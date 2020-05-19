@@ -127,6 +127,8 @@ export default {
     cancel: 'Cancel',
     open: 'Open',
     new: 'New',
+    close: 'Close',
+    restore: 'Restore',
   },
   Language: {
     label: 'Language choice',

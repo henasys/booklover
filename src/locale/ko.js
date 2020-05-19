@@ -132,6 +132,8 @@ export default {
     cancel: '취소',
     open: '열기',
     new: '새로 만들기',
+    close: '닫기',
+    restore: '복뤈',
   },
   Language: {
     label: '언어선택',

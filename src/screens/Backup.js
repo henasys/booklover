@@ -6,15 +6,15 @@ import {Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import ProgressBar from 'react-native-progress/Bar';
 import DocumentPicker from 'react-native-document-picker';
 import * as mime from 'react-native-mime-types';
 
 import Database from '../modules/database';
-// import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 import Bundle from '../modules/bundle';
 import LocaleContext from '../modules/LocaleContext';
+
+import ModalProgressBar from '../views/ModalProgressBar';
 
 const write = (t, fileName, content) => {
   if (!fileName) {
@@ -67,15 +67,15 @@ function Backup() {
   const [restoreFileName, setRestoreFileName] = useState(null);
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [showProgress, setShowProgress] = useState(false);
+  const [visibleRestoreModal, setVisibleRestoreModal] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [processList, setProcessList] = useState([]);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
-      // console.log('Database.open');
     });
     return () => {
       Database.close(realm);
-      // console.log('Database.close');
     };
   }, []);
   const onEndEditingFileName = () => {
@@ -83,9 +83,28 @@ function Backup() {
       setFileNameError(t('Backup.fileNameEmptyError'));
     }
   };
+  const restore = () => {
+    let progressTotal = 0;
+    processList.forEach(book => {
+      Database.saveOrUpdateBook(realm, book)
+        .then(resultBook => {
+          const msg = `restore done: ${resultBook.title}`;
+          console.log(msg);
+        })
+        .catch(e => {
+          console.log('restore error', e);
+        })
+        .finally(() => {
+          progressTotal += 1;
+          const progressValue = progressTotal / processList.length;
+          console.log('progressTotal', progressTotal);
+          console.log('progressValue', progressValue);
+          setProgress(progressValue);
+        });
+    });
+  };
   const read = () => {
     const encoding = Bundle.getEncoding(restoreFileName);
-    let progressTotal = 0;
     FileManager.readFile(uri, encoding)
       .then(result => {
         console.log('FileManager.readFile result', result.length);
@@ -95,42 +114,17 @@ function Backup() {
           return;
         }
         const list = Bundle.parseBookList(restoreFileName, result);
-        console.log(list.length);
-        const limit = list.length;
-        // const limit = 10;
-        for (let index = 0; index < list.length; index++) {
-          if (index > limit) {
-            break;
-          }
-          const book = list[index];
-          Database.saveOrUpdateBook(realm, book)
-            .then(resultBook => {
-              const msg = `restore done: ${resultBook.title}`;
-              console.log(msg);
-            })
-            .catch(e => {
-              const msg = `${t('Backup.Toast.restoreFail')}: ${e}`;
-              Toast.show(msg);
-            })
-            .finally(() => {
-              progressTotal += 1;
-              const progressValue = progressTotal / limit;
-              // console.log('progressTotal', progressTotal);
-              // console.log('progressValue', progressValue);
-              setProgress(progressValue);
-              if (progressTotal === limit) {
-                setTimeout(() => {
-                  setShowProgress(false);
-                }, 5000);
-              }
-            });
-        }
+        console.log('list.length', list.length);
+        // const limit = list.length - 1;
+        const limit = 10;
+        setProcessList(list.slice(0, limit));
+        setMessage(`to be process ${limit}`);
+        setVisibleRestoreModal(true);
       })
       .catch(e => {
         console.log('FileManager.readFile error', e);
         const msg = `${restoreFileName}\n${t('Backup.Toast.wrongFile')}`;
         Toast.show(msg, Toast.LONG);
-        setShowProgress(false);
       });
   };
   return (
@@ -189,23 +183,26 @@ function Backup() {
                 Toast.show(msg);
                 return;
               }
-              setShowProgress(true);
               setProgress(0);
-              read(realm, fileName, progress, setProgress);
-              // Permission.checkPermissionForReadExternalStorage(() => {
-              //   read(realm, fileName, progress, setProgress);
-              // });
+              setMessage(null);
+              read();
             }}
           />
-          {showProgress && (
-            <View>
-              <View style={styles.spacer} />
-              <ProgressBar progress={progress} width={null} />
-            </View>
-          )}
           <View style={styles.spacer} />
         </View>
       </ScrollView>
+      <ModalProgressBar
+        title={t('Backup.Button.restore')}
+        message={message}
+        closeButtonTitle={t('Button.close')}
+        processButtonTitle={t('Button.restore')}
+        visible={visibleRestoreModal}
+        setVisible={setVisibleRestoreModal}
+        progress={progress}
+        processCallback={restore}
+        backButtonDisabled
+        backdropDisabled
+      />
     </SafeAreaView>
   );
 }
@@ -228,6 +225,24 @@ const styles = StyleSheet.create({
   },
   spacer: {
     paddingVertical: 5,
+  },
+  verticalSpacer: {
+    marginVertical: 10,
+  },
+  overlayContainer: {
+    backgroundColor: 'white',
+    marginVertical: 10,
+    marginHorizontal: 10,
+  },
+  overlayTitle: {
+    fontSize: 18,
+  },
+  overlayContents: {
+    fontSize: 16,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 
