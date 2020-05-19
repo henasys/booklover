@@ -1,12 +1,12 @@
 export default class ListListener {
-  constructor(callback, tag = '') {
+  constructor(callback, tag = '', printable = false) {
     this.callback = callback;
     this.tag = tag;
   }
   listener = (oldList, changes) => {
     // console.log('ListListener changes', this.tag, changes);
     if (changes.deletions.length > 0) {
-      console.log('changes.deletions exists', this.tag);
+      this.printable && console.log('changes.deletions exists', this.tag);
       const newList = [];
       for (let index = 0; index < oldList.length; index++) {
         const element = oldList[index];
@@ -17,7 +17,7 @@ export default class ListListener {
       this.callback && this.callback(newList);
     }
     if (changes.modifications.length > 0) {
-      console.log('changes.modifications exists', this.tag);
+      this.printable && console.log('changes.modifications exists', this.tag);
       const newList = [...oldList];
       changes.insertions.forEach(index => {
         newList[index] = oldList[index];
@@ -25,7 +25,7 @@ export default class ListListener {
       this.callback && this.callback(newList);
     }
     if (changes.insertions.length > 0) {
-      console.log('changes.insertions exists', this.tag);
+      this.printable && console.log('changes.insertions exists', this.tag);
       const newList = [...oldList];
       changes.insertions.forEach(index => {
         newList[index] = oldList[index];

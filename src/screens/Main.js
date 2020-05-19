@@ -199,8 +199,8 @@ function Main({navigation}) {
   const refreshCountList = () => {
     const newCountList = [];
     Database.getBookCountByCategory(realm, null, newCountList);
-    const totalCount = Util.getCountFromCountList(countList, null);
-    console.log('refreshCountList', newCountList.length, 'Total', totalCount);
+    // const totalCount = Util.getCountFromCountList(countList, null);
+    // console.log('refreshCountList', newCountList.length, 'Total', totalCount);
     setCountList(newCountList);
   };
   const backHandlerCallback = () => {
