@@ -67,7 +67,7 @@ function Backup() {
   const [restoreFileName, setRestoreFileName] = useState(null);
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [visibleRestoreModal, setVisibleRestoreModal] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   useEffect(() => {
@@ -131,7 +131,7 @@ function Backup() {
         const limit = 10;
         setProcessList(list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
-        setVisibleRestoreModal(true);
+        setVisibleModal(true);
       })
       .catch(e => {
         console.log('FileManager.readFile error', e);
@@ -208,8 +208,8 @@ function Backup() {
         message={message}
         closeButtonTitle={t('Button.close')}
         processButtonTitle={t('Button.restore')}
-        visible={visibleRestoreModal}
-        setVisible={setVisibleRestoreModal}
+        visible={visibleModal}
+        setVisible={setVisibleModal}
         progress={progress}
         processCallback={restore}
         backButtonDisabled
@@ -237,24 +237,6 @@ const styles = StyleSheet.create({
   },
   spacer: {
     paddingVertical: 5,
-  },
-  verticalSpacer: {
-    marginVertical: 10,
-  },
-  overlayContainer: {
-    backgroundColor: 'white',
-    marginVertical: 10,
-    marginHorizontal: 10,
-  },
-  overlayTitle: {
-    fontSize: 18,
-  },
-  overlayContents: {
-    fontSize: 16,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
   },
 });
 
