@@ -70,7 +70,7 @@ export default {
     title: 'Backup, restore data',
     fileNameEmptyError: 'The backup file name is empty.',
     modalInitMessage: 'Total: %{total}',
-    modalMessage: 'Total: %{total}, Success: %{success}, Failure: %{failure}',
+    modalMessage: 'Total: %{total}, \nSuccess: %{success}, Failure: %{failure}',
     Input: {
       backup: 'Backup File',
       restore: 'Restore File',
@@ -92,8 +92,9 @@ export default {
   },
   ImportIsbn: {
     title: 'Import ISBN file data',
+    modalInitMessage: 'Total: %{total}',
     modalMessage:
-      'Total: %{total} Success: %{success} Duplicated: %{duplicated} Failure: %{failure}',    
+      'Total: %{total} Success: %{success} \nDuplicated: %{duplicated} Failure: %{failure}',
     Input: {
       isbn: 'ISBN File',
     },
@@ -103,10 +104,6 @@ export default {
     Toast: {
       notReadyFile: 'You did not specify the file.\nPleae check it out again.',
       wrongFile: 'There is no file or wrong format.',
-      total: 'Total',
-      success: 'Success',
-      failure: 'Failure',
-      duplicated: 'Duplicated',
     },
   },
   CategoryBar: {

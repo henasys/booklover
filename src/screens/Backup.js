@@ -101,8 +101,8 @@ function Backup() {
         .finally(() => {
           progressTotal += 1;
           const progressValue = progressTotal / processList.length;
-          console.log('progressTotal', progressTotal);
-          console.log('progressValue', progressValue);
+          // console.log('progressTotal', progressTotal);
+          // console.log('progressValue', progressValue);
           setProgress(progressValue);
           if (progressTotal === processList.length) {
             const msg = t('Backup.modalMessage', {
@@ -111,6 +111,7 @@ function Backup() {
               failure: errorList.length,
             });
             setMessage(msg);
+            console.log(msg.replace(/\n/g, ''));
           }
         });
     });

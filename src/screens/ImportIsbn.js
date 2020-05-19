@@ -6,14 +6,14 @@ import {Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import ProgressBar from 'react-native-progress/Bar';
 import DocumentPicker from 'react-native-document-picker';
 
 import Database from '../modules/database';
 import Searcher from '../modules/searcher';
-// import Permission from '../modules/permission';
 import FileManager from '../modules/fileManager';
 import LocaleContext from '../modules/LocaleContext';
+
+import ModalProgressBar from '../views/ModalProgressBar';
 
 const IsbnUtil = require('isbn-utils');
 
@@ -84,7 +84,9 @@ function ImportIsbn({navigation, route}) {
   const [isbnFile, setIsbnFile] = useState('');
   const [uri, setUri] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [showProgress, setShowProgress] = useState(false);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [processList, setProcessList] = useState([]);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -95,11 +97,48 @@ function ImportIsbn({navigation, route}) {
       // console.log('Database.close');
     };
   }, []);
-  const read = () => {
+  const add = () => {
     let progressTotal = 0;
     const errorList = [];
     const precheckedList = [];
     const successList = [];
+    const limit = processList.length;
+    const finalCallback = () => {
+      progressTotal += 1;
+      const progressValue = progressTotal / limit;
+      setProgress(progressValue);
+      if (progressTotal === limit) {
+        const msg = t('ImportIsbn.modalMessage', {
+          total: processList.length,
+          success: successList.length,
+          duplicated: precheckedList.length,
+          failure: errorList.length,
+        });
+        setMessage(msg);
+        console.log(msg.replace(/\n/g, ''));
+      }
+    };
+    processList.forEach(isbn => {
+      const checkIsbn = IsbnUtil.parse(isbn);
+      if (!checkIsbn) {
+        errorList.push(isbn);
+        finalCallback();
+      } else {
+        const callback = book => {
+          if (book._prechecked) {
+            precheckedList.push(isbn);
+          } else {
+            successList.push(isbn);
+          }
+        };
+        const errorCallback = e => {
+          errorList.push(isbn);
+        };
+        search(realm, isbn, callback, errorCallback, finalCallback);
+      }
+    });
+  };
+  const read = () => {
     FileManager.readFile(uri)
       .then(result => {
         console.log('FileManager.readFile result', result.length);
@@ -109,65 +148,17 @@ function ImportIsbn({navigation, route}) {
           return;
         }
         const list = result.trim().split('\n');
-        console.log(list.length);
-        const limit = list.length;
-        // const limit = 10;
-        const finalCallback = () => {
-          progressTotal += 1;
-          const progressValue = progressTotal / limit;
-          console.log('progressLimit', limit);
-          console.log('progressTotal', progressTotal);
-          console.log('progressValue', progressValue);
-          console.log('successList', successList.length);
-          console.log('precheckedList', precheckedList.length);
-          console.log('errorList', errorList.length, errorList);
-          setProgress(progressValue);
-          if (progressTotal === limit) {
-            const total = t('ImportIsbn.Toast.total');
-            const success = t('ImportIsbn.Toast.success');
-            const duplicated = t('ImportIsbn.Toast.duplicated');
-            const failure = t('ImportIsbn.Toast.failure');
-            const msg = `${total} ${limit} ${success} ${
-              successList.length
-            }\n${duplicated}: ${precheckedList.length} ${failure}: ${
-              errorList.length
-            }`;
-            console.log(msg.replace(/\n/g, ''));
-            Toast.show(msg, Toast.LONG);
-            setTimeout(() => {
-              setShowProgress(false);
-            }, 5000);
-          }
-        };
-        for (let index = 0; index < list.length; index++) {
-          if (index > limit) {
-            break;
-          }
-          const isbn = list[index];
-          const checkIsbn = IsbnUtil.parse(isbn);
-          if (!checkIsbn) {
-            errorList.push(isbn);
-            finalCallback();
-            continue;
-          }
-          const callback = book => {
-            if (book._prechecked) {
-              precheckedList.push(isbn);
-            } else {
-              successList.push(isbn);
-            }
-          };
-          const errorCallback = e => {
-            errorList.push(isbn);
-          };
-          search(realm, isbn, callback, errorCallback, finalCallback);
-        }
+        console.log('list.length', list.length);
+        // const limit = list.length;
+        const limit = 10;
+        setProcessList(list.slice(0, limit));
+        setMessage(t('ImportIsbn.modalInitMessage', {total: limit}));
+        setVisibleModal(true);
       })
       .catch(e => {
         console.log('FileManager.readFile error', e);
         const msg = t('ImportIsbn.Toast.wrongFile');
         Toast.show(msg, Toast.LONG);
-        setShowProgress(false);
       });
   };
   return (
@@ -209,20 +200,25 @@ function ImportIsbn({navigation, route}) {
                 Toast.show(msg);
                 return;
               }
-              setShowProgress(true);
               setProgress(0);
               read();
             }}
           />
-          {showProgress && (
-            <View>
-              <View style={styles.spacer} />
-              <ProgressBar progress={progress} width={null} />
-            </View>
-          )}
           <View style={styles.spacer} />
         </View>
       </ScrollView>
+      <ModalProgressBar
+        title={t('ImportIsbn.Button.isbn')}
+        message={message}
+        closeButtonTitle={t('Button.close')}
+        processButtonTitle={t('Button.restore')}
+        visible={visibleModal}
+        setVisible={setVisibleModal}
+        progress={progress}
+        processCallback={add}
+        backButtonDisabled
+        backdropDisabled
+      />
     </SafeAreaView>
   );
 }

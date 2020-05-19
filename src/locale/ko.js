@@ -75,7 +75,7 @@ export default {
     title: '데이터 백업, 복원',
     fileNameEmptyError: '백업 파일 이름이 비어있습니다.',
     modalInitMessage: '전체: %{total}',
-    modalMessage: '전체: %{total} 성공: %{success} 실패: %{failure}',
+    modalMessage: '전체: %{total} \n성공: %{success} 실패: %{failure}',
     Input: {
       backup: '백업 파일',
       restore: '복원 파일',
@@ -96,8 +96,9 @@ export default {
   },
   ImportIsbn: {
     title: 'ISBN 파일 데이터 추가',
+    modalInitMessage: '전체: %{total}',
     modalMessage:
-      '전체: %{total} 성공: %{success} 중복: %{duplicated} 실패: %{failure}',
+      '전체: %{total} 성공: %{success} \n중복: %{duplicated} 실패: %{failure}',
     Input: {
       isbn: 'ISBN 파일',
     },
@@ -108,10 +109,6 @@ export default {
       notReadyFile:
         '아직 ISBN 파일을 선택하지 않았습니다.\n다시 확인해주십시오.',
       wrongFile: '파일 내용이 없거나 잘못된 형식입니다.',
-      total: '전체',
-      success: '성공',
-      failure: '실패',
-      duplicated: '중복',
     },
   },
   CategoryBar: {
