@@ -106,8 +106,15 @@ function ImportIsbn({navigation, route}) {
     const finalCallback = () => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
-      setProgress(progressValue);
+      if (progressTotal % 10 === 0) {
+        setTimeout(() => {
+          setProgress(progressValue);
+        }, 100);
+      }
       if (progressTotal === limit) {
+        setTimeout(() => {
+          setProgress(progressValue);
+        }, 500);
         const msg = t('ImportIsbn.modalMessage', {
           total: processList.length,
           success: successList.length,
@@ -150,7 +157,7 @@ function ImportIsbn({navigation, route}) {
         const list = result.trim().split('\n');
         console.log('list.length', list.length);
         // const limit = list.length - 1;
-        const limit = 40;
+        const limit = 100;
         setProcessList(list.slice(0, limit));
         setMessage(t('ImportIsbn.modalInitMessage', {total: limit}));
         setVisibleModal(true);

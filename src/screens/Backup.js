@@ -96,12 +96,14 @@ function Backup() {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       if (progressTotal % 10 === 0) {
-        console.log('progressTotal', progressTotal);
-        console.log('progressValue', progressValue);
-        setProgress(progressValue);
+        setTimeout(() => {
+          setProgress(progressValue);
+        }, 100);
       }
-      if (progressTotal % 10 === 0) {
-        setProgress(progressValue);
+      if (progressTotal === limit) {
+        setTimeout(() => {
+          setProgress(progressValue);
+        }, 500);
         const msg = t('Backup.modalMessage', {
           total: processList.length,
           success: successList.length,
@@ -115,16 +117,14 @@ function Backup() {
       setProgress(1);
       return;
     }
-    const starterPromise = Promise.resolve(null);
-    processList.reduce((previousPromise, book) => {
-      return previousPromise
+    processList.forEach(book => {
+      Database.saveOrUpdateBook(realm, book)
         .then(resultBook => {
           if (resultBook) {
             successList.push(book.title);
             const msg = `restore done: ${resultBook.title}`;
             console.log(msg);
           }
-          return Database.saveOrUpdateBook(realm, book);
         })
         .catch(e => {
           errorList.push(book.title);
@@ -133,7 +133,7 @@ function Backup() {
         .finally(() => {
           finalCallback();
         });
-    }, starterPromise);
+    });
   };
   const read = () => {
     const encoding = Bundle.getEncoding(restoreFileName);
@@ -159,7 +159,6 @@ function Backup() {
         Toast.show(msg, Toast.LONG);
       });
   };
-  console.log('Backup render');
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
