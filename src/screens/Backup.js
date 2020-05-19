@@ -59,10 +59,6 @@ const pickFile = async (setValue, setUri) => {
   }
 };
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function Backup() {
   const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
