@@ -141,12 +141,13 @@ function Main({navigation}) {
     const cList = Database.getCategoryListByParentId(realm, categoryId).sorted(
       'name',
     );
-    const listListener = new ListListener(setCategoryList, 'category_list');
-    cList.addListener(listListener.listener);
+    // const listListener = new ListListener(setCategoryList, 'category_list');
+    // cList.addListener(listListener.listener);
     const cListCount = cList.map(c => {
       const count = Util.getCountFromCountList(countList, c.id);
-      c._count = count;
-      return c;
+      const clone = Database.categoryToObject(c);
+      clone._count = count;
+      return clone;
     });
     // console.log('cListCount', cListCount);
     setCategoryList(cListCount);
