@@ -47,11 +47,14 @@ buck-out/
 # screenshots whenever they are needed.
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
-android/key.json
-
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+*/fastlane/README.md
+ios/*.mobileprovision
+ios/*.cer
+ios/*.dSYM.zip
+android/key.json
 
 # Bundle artifact
 *.jsbundle
