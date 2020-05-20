@@ -16,6 +16,26 @@
 default_platform(:android)
 
 platform :android do
+  def read_app_build_gradle()
+    path = '../app/build.gradle'
+
+    reMajor = /ext\.versionMajor\s+=\s+(\d+)/
+    reMinor = /ext\.versionMinor\s+=\s+(\d+)/
+    rePatch = /ext\.versionPatch\s+=\s+(\d+)/
+
+    s = File.read(path)
+    versionMajor = s[reMajor, 1].to_i
+    versionMinor = s[reMinor, 1].to_i
+    versionPatch = s[rePatch, 1].to_i
+    [versionMajor, versionMinor, versionPatch]
+  end
+
+  desc "Display version"
+  lane :version do
+    major, minor, patch = read_app_build_gradle()
+    UI.message("version '#{major}'.'#{minor}'.'#{patch}' ")
+  end
+
   desc "Runs all the tests"
   lane :test do
     gradle(task: "test")
@@ -31,8 +51,14 @@ platform :android do
   end
 
   desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :release do
+    gradle(task: "clean bundleRelease")
+    upload_to_play_store(
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_screenshots: true,
+      skip_upload_images: true,
+      skip_upload_apk: true
+    )
   end
 end
