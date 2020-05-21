@@ -75,6 +75,16 @@
                ReferencedContainer = "container:BookLover.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43646AD32477350400F28399"
+               BuildableName = "BookLoverUITests.xctest"
+               BlueprintName = "BookLoverUITests"
+               ReferencedContainer = "container:BookLover.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

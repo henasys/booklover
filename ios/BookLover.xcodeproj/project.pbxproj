@@ -16,6 +16,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BookLoverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BookLoverTests.m */; };
+		43646AD72477350400F28399 /* BookLoverUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 43646AD62477350400F28399 /* BookLoverUITests.m */; };
 		43F9FD112468F195007C08B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43F9FD102468F195007C08B4 /* GoogleService-Info.plist */; };
 		69D8F37851725EB8222FDAC5 /* libPods-BookLover-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 538CAFB1549B56F6EDE6E8E5 /* libPods-BookLover-tvOS.a */; };
 		95F6E34B4AE1E08406C51538 /* libPods-BookLover-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B980090B511F88C3519BF322 /* libPods-BookLover-tvOSTests.a */; };
@@ -38,6 +39,13 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "BookLover-tvOS";
 		};
+		43646AD92477350400F28399 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = BookLover;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +67,9 @@
 		2D02E4901E0B4A5D006451C7 /* BookLover-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BookLover-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34B05F4F3C3BACBEC96B1C3B /* libPods-BookLover.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3683F857DE48D2F6B2B7131E /* Pods-BookLover-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-tvOSTests/Pods-BookLover-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		43646AD42477350400F28399 /* BookLoverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookLoverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		43646AD62477350400F28399 /* BookLoverUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookLoverUITests.m; sourceTree = "<group>"; };
+		43646AD82477350400F28399 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43F9FD102468F195007C08B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		538CAFB1549B56F6EDE6E8E5 /* libPods-BookLover-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7466F157EED060FA060A27D9 /* Pods-BookLover-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-tvOS/Pods-BookLover-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,6 +112,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				95F6E34B4AE1E08406C51538 /* libPods-BookLover-tvOSTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43646AD12477350400F28399 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +192,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		43646AD52477350400F28399 /* BookLoverUITests */ = {
+			isa = PBXGroup;
+			children = (
+				43646AD62477350400F28399 /* BookLoverUITests.m */,
+				43646AD82477350400F28399 /* Info.plist */,
+			);
+			path = BookLoverUITests;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +214,7 @@
 				13B07FAE1A68108700A75B9A /* BookLover */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BookLoverTests */,
+				43646AD52477350400F28399 /* BookLoverUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				1495DC18F37CCD596786922E /* Pods */,
@@ -204,6 +232,7 @@
 				00E356EE1AD99517003FC87E /* BookLoverTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* BookLover-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* BookLover-tvOSTests.xctest */,
+				43646AD42477350400F28399 /* BookLoverUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,6 +319,24 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* BookLover-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		43646AD32477350400F28399 /* BookLoverUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43646ADD2477350400F28399 /* Build configuration list for PBXNativeTarget "BookLoverUITests" */;
+			buildPhases = (
+				43646AD02477350400F28399 /* Sources */,
+				43646AD12477350400F28399 /* Frameworks */,
+				43646AD22477350400F28399 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43646ADA2477350400F28399 /* PBXTargetDependency */,
+			);
+			name = BookLoverUITests;
+			productName = BookLoverUITests;
+			productReference = 43646AD42477350400F28399 /* BookLoverUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -317,6 +364,12 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
+					43646AD32477350400F28399 = {
+						CreatedOnToolsVersion = 11.4.1;
+						DevelopmentTeam = 8CNAK8DRQG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "BookLover" */;
@@ -337,6 +390,7 @@
 				00E356ED1AD99517003FC87E /* BookLoverTests */,
 				2D02E47A1E0B4A5D006451C7 /* BookLover-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* BookLover-tvOSTests */,
+				43646AD32477350400F28399 /* BookLoverUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -368,6 +422,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43646AD22477350400F28399 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -616,6 +677,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43646AD02477350400F28399 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43646AD72477350400F28399 /* BookLoverUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -628,6 +697,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* BookLover-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		43646ADA2477350400F28399 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* BookLover */;
+			targetProxy = 43646AD92477350400F28399 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -844,6 +918,56 @@
 			};
 			name = Release;
 		};
+		43646ADB2477350400F28399 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = BookLoverUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover.BookLoverUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BookLover;
+			};
+			name = Debug;
+		};
+		43646ADC2477350400F28399 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8CNAK8DRQG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = BookLoverUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover.BookLoverUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BookLover;
+			};
+			name = Release;
+		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -978,6 +1102,15 @@
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
 				2D02E49A1E0B4A5E006451C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43646ADD2477350400F28399 /* Build configuration list for PBXNativeTarget "BookLoverUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43646ADB2477350400F28399 /* Debug */,
+				43646ADC2477350400F28399 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
