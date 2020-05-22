@@ -479,10 +479,9 @@ const saveSetting = (realm, {apiSource, language}) => {
   });
 };
 
-const getSetting = (realm, listener = null) => {
+const getSetting = realm => {
   const apiSourceDefault = Setting.firstApiSource();
   const rs = realm.objects('Setting');
-  listener && rs.addListener(listener);
   if (rs.isEmpty()) {
     // console.log('getSetting is empty');
     return {
