@@ -33,7 +33,33 @@ platform :android do
   desc "Display version"
   lane :version do
     major, minor, patch = read_app_build_gradle()
-    UI.message("version '#{major}'.'#{minor}'.'#{patch}' ")
+    UI.message("version #{major}.#{minor}.#{patch} ")
+  end
+
+  def increase_version_patch()
+    path = '../app/build.gradle'
+    rePatch = /ext\.versionPatch\s+=\s+(\d+)/
+
+    s = File.read(path)
+    versionPatch = s[rePatch, 1].to_i
+    versionPatchPlus = versionPatch + 1
+    s[rePatch, 1] = versionPatchPlus.to_s
+
+    f = File.new(path, 'w')
+    f.write(s)
+    f.close
+
+    [versionPatch, versionPatchPlus]
+  end
+
+  desc "Increase version patch"
+  lane :increase_patch do
+    major, minor, patch = read_app_build_gradle()
+    UI.message("version #{major}.#{minor}.#{patch} ")
+    prev_patch, current_patch = increase_version_patch()
+    UI.message("patch #{prev_patch} -> #{current_patch}")
+    major, minor, patch = read_app_build_gradle()
+    UI.message("version #{major}.#{minor}.#{patch} ")
   end
 
   desc "Runs all the tests"
