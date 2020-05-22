@@ -137,5 +137,7 @@ export default {
   },
   Misc: {
     toastExitApplication: 'Press again to quit the application!',
+    toastWaitButton:
+      'this button already pressed, please a moment or close this popup and restart.',
   },
 };
