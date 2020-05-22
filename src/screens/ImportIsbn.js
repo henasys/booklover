@@ -40,18 +40,17 @@ const pickFile = async (setValue, setUri) => {
   }
 };
 
-const search = (realm, isbn, callback, errorCallback, finalCallback) => {
+const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+const search = async (realm, isbn, callback, errorCallback, finalCallback) => {
   console.log('search', isbn);
-  const book = Database.getBookByIsbn(realm, isbn, isbn);
-  if (book) {
-    const msg = `already added book ${isbn}`;
-    console.log(msg);
-    book._prechecked = true;
-    callback(book);
-    finalCallback();
-    return;
-  }
   const searcher = Searcher.getSearcher(realm);
+  if (searcher.isNaver) {
+    console.log('waitting....');
+    await sleep(2000);
+  }
   searcher
     .searchIsbn(isbn)
     .then(items => {
@@ -110,12 +109,6 @@ function ImportIsbn({navigation, route}) {
   }, []);
   const add = () => {
     console.log('add start');
-    if (buttonPressed) {
-      const msg = t('Misc.toastWaitButton');
-      Toast.show(msg);
-      return;
-    }
-    setButtonPressed(true);
     let progressTotal = 0;
     const errorList = [];
     const precheckedList = [];
@@ -124,7 +117,7 @@ function ImportIsbn({navigation, route}) {
     const updateProgress = index => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
-      console.log('progressTotal', progressTotal, 'index', index);
+      // console.log('progressTotal', progressTotal, 'index', index);
       // console.log('progressValue', progressValue, 'index', index);
       setTimeout(() => {
         setProgress(progressValue);
@@ -147,33 +140,44 @@ function ImportIsbn({navigation, route}) {
       next: v => {
         updateProgress(v);
         updateMessage();
-        console.log('progressTotal at progressUpdater', progressTotal);
+        // console.log('progressTotal at progressUpdater', progressTotal);
         if (progressTotal === limit) {
           subscriber.unsubscribe();
         }
       },
     });
+    const searchList = [];
     processList.forEach((isbn, index) => {
       const finalCallback = () => {
         progressUpdater.next(index);
-      };
-      const callback = book => {
-        if (book._prechecked) {
-          precheckedList.push(isbn);
-        } else {
-          successList.push(isbn);
-        }
-      };
-      const errorCallback = e => {
-        errorList.push(isbn);
       };
       const checkIsbn = IsbnUtil.parse(isbn);
       if (!checkIsbn) {
         errorList.push(isbn);
         finalCallback();
       } else {
-        search(realm, isbn, callback, errorCallback, finalCallback);
+        const book = Database.getBookByIsbn(realm, isbn, isbn);
+        if (book) {
+          // const msg = `already added book ${isbn}`;
+          // console.log(msg);
+          precheckedList.push(isbn);
+          finalCallback();
+        } else {
+          searchList.push(isbn);
+        }
       }
+    });
+    searchList.forEach((isbn, index) => {
+      const finalCallback = () => {
+        progressUpdater.next(index);
+      };
+      const callback = book => {
+        successList.push(isbn);
+      };
+      const errorCallback = e => {
+        errorList.push(isbn);
+      };
+      search(realm, isbn, callback, errorCallback, finalCallback);
     });
   };
   const read = () => {
@@ -255,7 +259,17 @@ function ImportIsbn({navigation, route}) {
         visible={visibleModal}
         setVisible={setVisibleModal}
         progress={progress}
-        processCallback={add}
+        processCallback={() => {
+          if (buttonPressed) {
+            const msg = t('Misc.toastWaitButton');
+            Toast.show(msg);
+            return;
+          }
+          setButtonPressed(true);
+          setTimeout(() => {
+            add();
+          }, 0);
+        }}
         backButtonDisabled
         backdropDisabled
       />
