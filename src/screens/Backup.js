@@ -70,6 +70,7 @@ function Backup() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
+  const [buttonPressed, setButtonPressed] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -84,50 +85,61 @@ function Backup() {
     }
   };
   const restore = () => {
-    let progressTotal = 0;
-    const errorList = [];
-    const successList = [];
+    if (buttonPressed) {
+      const msg = t('Misc.toastWaitButton');
+      Toast.show(msg);
+      return;
+    }
+    setButtonPressed(true);
     const limit = processList.length;
-    const finalCallback = () => {
-      progressTotal += 1;
-      const progressValue = progressTotal / limit;
-      if (progressTotal % 10 === 0) {
-        setTimeout(() => {
-          setProgress(progressValue);
-        }, 0);
-      }
-      console.log('progressTotal', progressTotal);
-      if (progressTotal === limit) {
-        setTimeout(() => {
-          setProgress(progressValue);
-        }, 500);
-        const msg = t('Backup.modalMessage', {
-          total: processList.length,
-          success: successList.length,
-          failure: errorList.length,
-        });
-        setMessage(msg);
-        console.log(msg.replace(/\n/g, ''));
-      }
-    };
     if (limit === 0) {
       setProgress(1);
       return;
     }
-    processList.forEach(book => {
+    let progressTotal = 0;
+    const errorList = [];
+    const successList = [];
+    const finalCallback = () => {
+      console.log('progressTotal at finalCallback', progressTotal);
+    };
+    const updateProgress = index => {
+      progressTotal += 1;
+      const progressValue = progressTotal / limit;
+      console.log('progressTotal', progressTotal, 'index', index);
+      setTimeout(() => {
+        setProgress(progressValue);
+      }, 0);
+    };
+    const updateMessage = () => {
+      const msg = t('Backup.modalMessage', {
+        total: processList.length,
+        success: successList.length,
+        failure: errorList.length,
+      });
+      setTimeout(() => {
+        setMessage(msg);
+      }, 0);
+      console.log(msg.replace(/\n/g, ''));
+    };
+    processList.forEach((book, index) => {
       Database.saveOrUpdateBook(realm, book)
         .then(resultBook => {
           if (resultBook) {
             successList.push(book.title);
             const msg = `restore done: ${resultBook.title}`;
             console.log(msg);
+            updateProgress(index);
+            updateMessage();
           }
         })
         .catch(e => {
           errorList.push(book.title);
           console.log('restore error', e);
+          updateProgress(index);
+          updateMessage();
         })
         .finally(() => {
+          console.log('progressTotal at finally', progressTotal);
           finalCallback();
         });
     });
@@ -144,9 +156,8 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
-        // const limit = list.length;
-        const limit = 100;
-        setProcessList(list.slice(0, limit - 1));
+        const limit = 20;
+        setProcessList(limit === list.length ? list : list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
       })
@@ -156,6 +167,7 @@ function Backup() {
         Toast.show(msg, Toast.LONG);
       });
   };
+  // console.log('Backup render');
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -214,6 +226,7 @@ function Backup() {
               }
               setProgress(0);
               setMessage(null);
+              setButtonPressed(false);
               read();
             }}
           />

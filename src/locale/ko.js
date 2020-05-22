@@ -142,5 +142,7 @@ export default {
   },
   Misc: {
     toastExitApplication: '"뒤로" 버튼을 한 번 더 누르시면 앱이 종료됩니다.',
+    toastWaitButton:
+      '이 버튼은 이미 실행중입니다. 잠시만 기다리시거나 창을 닫고 다시 시작해주십시오.',
   },
 };
