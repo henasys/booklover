@@ -139,6 +139,11 @@ class Naver {
       })
       .then(response => {
         // console.log('naver response.json()', response);
+        if (response.errorCode) {
+          const error = new Error(response.errorMessage);
+          error.errorCode = response.errorCode;
+          throw error;
+        }
         return this._getBooks(response);
       })
       .then(books => this._mapping(books));
