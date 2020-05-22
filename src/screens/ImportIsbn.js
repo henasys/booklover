@@ -7,6 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import DocumentPicker from 'react-native-document-picker';
+import {Subject} from 'rxjs';
 
 import Database from '../modules/database';
 import Searcher from '../modules/searcher';
@@ -95,15 +96,12 @@ function ImportIsbn({navigation, route}) {
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
-      // console.log('Database.open');
     });
     return () => {
-      Database.close(realm);
-      // console.log('Database.close');
+      Database.close(realm);;
     };
   }, []);
   const add = () => {
@@ -138,14 +136,22 @@ function ImportIsbn({navigation, route}) {
       setTimeout(() => {
         setMessage(msg);
       }, 0);
-      console.log(msg.replace(/\n/g, ''));
+      // console.log(msg.replace(/\n/g, ''));
     };
-    setIsLoading(true);
+    const progressUpdater = new Subject();
+    const subscriber = progressUpdater.subscribe({
+      next: v => {
+        updateProgress(v);
+        updateMessage();
+        console.log('progressTotal at progressUpdater', progressTotal);
+        if (progressTotal === limit) {
+          subscriber.unsubscribe();
+        }
+      },
+    });
     processList.forEach((isbn, index) => {
       const finalCallback = () => {
-        setIsLoading(false);
-        updateProgress(index);
-        updateMessage();
+        progressUpdater.next(index);
       };
       const checkIsbn = IsbnUtil.parse(isbn);
       if (!checkIsbn) {
@@ -177,9 +183,8 @@ function ImportIsbn({navigation, route}) {
         }
         const list = result.trim().split('\n');
         console.log('list.length', list.length);
-        const limit = list.length;
-        // const limit = 100;
-        setProcessList(list.slice(0, limit - 1));
+        const limit = 70; //list.length;
+        setProcessList(limit === list.length ? list : list.slice(0, limit));
         setMessage(t('ImportIsbn.modalInitMessage', {total: limit}));
         setVisibleModal(true);
       })
@@ -240,12 +245,13 @@ function ImportIsbn({navigation, route}) {
         title={t('ImportIsbn.Button.isbn')}
         message={message}
         closeButtonTitle={t('Button.close')}
-        processButtonTitle={t('Button.add')}
+        processButtonTitle={
+          buttonPressed ? t('Button.processing') : t('Button.add')
+        }
         visible={visibleModal}
         setVisible={setVisibleModal}
         progress={progress}
         processCallback={add}
-        isLoading={isLoading}
         backButtonDisabled
         backdropDisabled
       />
