@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import Modal from 'react-native-modal';
 import {Button} from 'react-native-elements';
 import ProgressBar from 'react-native-progress/Bar';
@@ -13,6 +13,7 @@ export default function ModalProgressBar({
   setVisible,
   progress,
   processCallback,
+  isLoading,
   backButtonDisabled,
   backdropDisabled,
 }) {
@@ -37,7 +38,8 @@ export default function ModalProgressBar({
         {message && <View style={styles.verticalSpacer} />}
         {message && <Text style={styles.message}>{message}</Text>}
         <View style={styles.verticalSpacer} />
-        <ProgressBar progress={progress} width={null} />
+        {isLoading && <ActivityIndicator size="large" />}
+        {!isLoading && <ProgressBar progress={progress} width={null} />}
         <View style={styles.verticalSpacer} />
         <View style={styles.buttonsContainer}>
           <Button
