@@ -1,12 +1,12 @@
 import {Platform} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
-const checkPermission = (permission, callback = null, errorCallbak = null) => {
+const checkPermission = (permission, callback = null, errorCallback = null) => {
   check(permission)
     .then(result => {
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          errorCallbak(RESULTS.UNAVAILABLE);
+          errorCallback && errorCallback(RESULTS.UNAVAILABLE);
           console.log(
             'This feature is not available (on this device / in this context)',
           );
@@ -15,14 +15,14 @@ const checkPermission = (permission, callback = null, errorCallbak = null) => {
           console.log(
             'The permission has not been requested / is denied but requestable',
           );
-          requestPermission(permission, callback);
+          requestPermission(permission, callback, errorCallback);
           break;
         case RESULTS.GRANTED:
           console.log('The permission is granted');
           callback && callback();
           break;
         case RESULTS.BLOCKED:
-          errorCallbak(RESULTS.BLOCKED);
+          errorCallback && errorCallback(RESULTS.BLOCKED);
           console.log('The permission is denied and not requestable anymore');
           break;
       }
@@ -35,19 +35,19 @@ const checkPermission = (permission, callback = null, errorCallbak = null) => {
 const requestPermission = (
   permission,
   callback = null,
-  errorCallbak = null,
+  errorCallback = null,
 ) => {
   request(permission)
     .then(result => {
       switch (result) {
         case RESULTS.UNAVAILABLE:
-          errorCallbak(RESULTS.UNAVAILABLE);
+          errorCallback && errorCallback(RESULTS.UNAVAILABLE);
           console.log(
             'This feature is not available (on this device / in this context)',
           );
           break;
         case RESULTS.DENIED:
-          errorCallbak(RESULTS.DENIED);
+          errorCallback && errorCallback(RESULTS.DENIED);
           console.log(
             'The permission has not been requested / is denied but requestable',
           );
@@ -57,7 +57,7 @@ const requestPermission = (
           callback && callback();
           break;
         case RESULTS.BLOCKED:
-          errorCallbak(RESULTS.BLOCKED);
+          errorCallback && errorCallback(RESULTS.BLOCKED);
           console.log('The permission is denied and not requestable anymore');
           break;
       }
@@ -69,46 +69,46 @@ const requestPermission = (
 
 const checkPermissionForWriteExternalStorage = (
   callback = null,
-  errorCallbak = null,
+  errorCallback = null,
 ) => {
   checkPermission(
     PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
     callback,
-    errorCallbak,
+    errorCallback,
   );
 };
 
 const checkPermissionForReadExternalStorage = (
   callback = null,
-  errorCallbak = null,
+  errorCallback = null,
 ) => {
   checkPermission(
     PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     callback,
-    errorCallbak,
+    errorCallback,
   );
 };
 
 const checkPermissionForCoarseLocation = (
   callback = null,
-  errorCallbak = null,
+  errorCallback = null,
 ) => {
   checkPermission(
     PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
     callback,
-    errorCallbak,
+    errorCallback,
   );
 };
 
 const checkPermissionForFineLocation = (
   callback = null,
-  errorCallbak = null,
+  errorCallback = null,
 ) => {
   const permission = Platform.select({
     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
   });
-  checkPermission(permission, callback, errorCallbak);
+  checkPermission(permission, callback, errorCallback);
 };
 
 export default {
