@@ -157,21 +157,21 @@ function ImportIsbn({navigation, route}) {
       const finalCallback = () => {
         progressUpdater.next(index);
       };
+      const callback = book => {
+        if (book._prechecked) {
+          precheckedList.push(isbn);
+        } else {
+          successList.push(isbn);
+        }
+      };
+      const errorCallback = e => {
+        errorList.push(isbn);
+      };
       const checkIsbn = IsbnUtil.parse(isbn);
       if (!checkIsbn) {
         errorList.push(isbn);
         finalCallback();
       } else {
-        const callback = book => {
-          if (book._prechecked) {
-            precheckedList.push(isbn);
-          } else {
-            successList.push(isbn);
-          }
-        };
-        const errorCallback = e => {
-          errorList.push(isbn);
-        };
         search(realm, isbn, callback, errorCallback, finalCallback);
       }
     });
