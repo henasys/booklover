@@ -189,9 +189,14 @@ function Backup() {
             icon={<Icon name="save" type="material" />}
             onPress={() => {
               const content = Bundle.bundleBookList(realm, fileName);
+              const errorCallback = code => {
+                const msg = t('Error.permission', {error: code});
+                console.log(msg);
+                Toast.show(msg);
+              };
               Permission.checkPermissionForWriteExternalStorage(() => {
                 write(t, fileName, content);
-              });
+              }, errorCallback);
             }}
           />
           <View style={styles.spacer} />
@@ -224,7 +229,14 @@ function Backup() {
               setProgress(0);
               setMessage(null);
               setButtonPressed(false);
-              read();
+              const errorCallback = code => {
+                const msg = t('Error.permission', {error: code});
+                console.log(msg);
+                Toast.show(msg);
+              };
+              Permission.checkPermissionForReadExternalStorage(() => {
+                read();
+              }, errorCallback);
             }}
           />
           <View style={styles.spacer} />
