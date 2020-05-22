@@ -14,7 +14,7 @@ import Database from './src/modules/database';
 import {LocaleProvider} from './src/modules/LocaleContext';
 
 if (!__DEV__) {
-  console.log = () => {};
+  // console.log = () => {};
   // console.warn = () => {};
   // console.error = () => {};
 }
