@@ -8,6 +8,7 @@ import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
 import DocumentPicker from 'react-native-document-picker';
 import * as mime from 'react-native-mime-types';
+import {Subject} from 'rxjs';
 
 import Database from '../modules/database';
 import FileManager from '../modules/fileManager';
@@ -109,7 +110,7 @@ function Backup() {
       // console.log('progressValue', progressValue, 'index', index);
       setTimeout(() => {
         setProgress(progressValue);
-      }, 0);
+      }, 10);
     };
     const updateMessage = () => {
       const msg = t('Backup.modalMessage', {
@@ -119,10 +120,28 @@ function Backup() {
       });
       setTimeout(() => {
         setMessage(msg);
-      }, 0);
+      }, 10);
       console.log(msg.replace(/\n/g, ''));
     };
     setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(true);
+    }, 0);
+    const progressUpdater = new Subject();
+    const subscriber = progressUpdater.subscribe({
+      next: v => {
+        console.log('progressUpdater.subscribe', v);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 0);
+        updateProgress(v);
+        updateMessage();
+        console.log('progressTotal at progressUpdater', progressTotal);
+        if (progressTotal === limit) {
+          subscriber.unsubscribe();
+        }
+      },
+    });
     processList.forEach(async (book, index) => {
       try {
         const resultBook = await Database.saveOrUpdateBook(realm, book);
@@ -135,10 +154,11 @@ function Backup() {
         errorList.push(book.title);
         console.log('restore error', e);
       } finally {
-        setIsLoading(false);
-        updateProgress(index);
-        updateMessage();
-        console.log('progressTotal at finally', progressTotal);
+        progressUpdater.next(index);
+        // setIsLoading(false);
+        // updateProgress(index);
+        // updateMessage();
+        // console.log('progressTotal at finally', progressTotal);
       }
     });
   };
@@ -154,7 +174,7 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
-        const limit = 100; //list.length;
+        const limit = list.length;
         setProcessList(limit === list.length ? list : list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
