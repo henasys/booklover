@@ -17,6 +17,7 @@ import LocaleContext from '../modules/LocaleContext';
 import Permission from '../modules/permission';
 
 import ModalProgressBar from '../views/ModalProgressBar';
+import MyAlert from '../views/alert';
 
 const write = (t, fileName, content) => {
   if (!fileName) {
@@ -189,17 +190,31 @@ function Backup() {
             type="outline"
             icon={<Icon name="save" type="material" />}
             onPress={() => {
-              const content = Bundle.bundleBookList(realm, fileName);
-              const errorCallback = code => {
-                const msg = t('Error.permission', {error: code});
-                console.log(msg);
-                Toast.show(msg);
-              };
-              Permission.checkPermissionForReadExternalStorage(() => {
-                Permission.checkPermissionForWriteExternalStorage(() => {
-                  write(t, fileName, content);
+              const list = Database.getBookList(realm);
+              const alertTitle = t('Backup.BackupAlert.title');
+              const alertMessage = t('Backup.BackupAlert.message', {
+                total: list.length,
+              });
+              const okCallback = () => {
+                const content = Bundle.bundleBookList(realm, fileName);
+                const errorCallback = code => {
+                  const msg = t('Error.permission', {error: code});
+                  console.log(msg);
+                  Toast.show(msg);
+                };
+                Permission.checkPermissionForReadExternalStorage(() => {
+                  Permission.checkPermissionForWriteExternalStorage(() => {
+                    write(t, fileName, content);
+                  }, errorCallback);
                 }, errorCallback);
-              }, errorCallback);
+              };
+              const cancelCallback = () => {};
+              MyAlert.showTwoButtonAlert(
+                alertTitle,
+                alertMessage,
+                okCallback,
+                cancelCallback,
+              );
             }}
           />
           <View style={styles.spacer} />

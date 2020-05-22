@@ -84,6 +84,10 @@ export default {
       backup: ' 데이터 백업',
       restore: ' 데이터 복원',
     },
+    BackupAlert: {
+      title: '데이터 백업',
+      message: '전체 %{total} 권입니다. 백업하시겠습니까?',
+    },
     Toast: {
       restoreNoyReady:
         '아직 복원 파일을 선택하지 않았습니다.\n다시 확인해주십시오.',
