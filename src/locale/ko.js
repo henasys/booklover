@@ -145,4 +145,7 @@ export default {
     toastWaitButton:
       '이 버튼은 이미 실행중입니다. 잠시만 기다리시거나 창을 닫고 다시 시작해주십시오.',
   },
+  Error: {
+    permission: '권한 오류: %{error}',
+  },
 };

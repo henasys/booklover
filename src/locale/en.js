@@ -140,4 +140,7 @@ export default {
     toastWaitButton:
       'this button already pressed, please a moment or close this popup and restart.',
   },
+  Error: {
+    permission: 'Permission error: %{error}',
+  },
 };
