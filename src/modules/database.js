@@ -484,16 +484,16 @@ const getSetting = (realm, listener = null) => {
   const rs = realm.objects('Setting');
   listener && rs.addListener(listener);
   if (rs.isEmpty()) {
-    console.log('getSetting is empty');
+    // console.log('getSetting is empty');
     return {
       apiSource: apiSourceDefault,
     };
   }
-  console.log('getSetting rs[0]', rs[0].apiSource);
+  // console.log('getSetting rs[0]', rs[0].apiSource);
   const setting = realmToObject(rs[0], Setting.schema);
-  console.log('getSetting realmToObject', setting);
+  // console.log('getSetting realmToObject', setting);
   if (!setting.apiSource) {
-    console.log('getSetting apiSource is null', setting.apiSource);
+    // console.log('getSetting apiSource is null', setting.apiSource);
     setting.apiSource = apiSourceDefault;
   }
   return setting;
