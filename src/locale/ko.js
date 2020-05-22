@@ -134,7 +134,7 @@ export default {
     open: '열기',
     new: '새로 만들기',
     close: '닫기',
-    restore: '복뤈',
+    restore: '복원',
     add: '추가',
   },
   Language: {
