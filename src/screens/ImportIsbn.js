@@ -58,10 +58,14 @@ const search = (realm, isbn, callback, errorCallback, finalCallback) => {
       if (
         items === undefined ||
         items === null ||
-        Array.isArray(items) === false
+        Array.isArray(items) === false ||
+        items.length === 0
       ) {
         throw new Error(`searchIsbn items is null, ${isbn} ${items}`);
       }
+      return items;
+    })
+    .then(items => {
       // console.log('searchIsbn items', items.length);
       items.forEach(item => {
         Searcher.postProcess(searcher, item)
@@ -101,7 +105,7 @@ function ImportIsbn({navigation, route}) {
       setRealm(_realm);
     });
     return () => {
-      Database.close(realm);;
+      Database.close(realm);
     };
   }, []);
   const add = () => {
