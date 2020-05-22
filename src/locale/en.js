@@ -131,6 +131,7 @@ export default {
     close: 'Close',
     restore: 'Restore',
     add: 'Add',
+    processing: 'Processing...',
   },
   Language: {
     label: 'Language choice',

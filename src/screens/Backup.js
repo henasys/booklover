@@ -73,7 +73,6 @@ function Backup() {
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -89,12 +88,6 @@ function Backup() {
   };
   const restore = () => {
     console.log('restore start');
-    if (buttonPressed) {
-      const msg = t('Misc.toastWaitButton');
-      Toast.show(msg);
-      return;
-    }
-    setButtonPressed(true);
     const limit = processList.length;
     if (limit === 0) {
       setProgress(1);
@@ -106,7 +99,7 @@ function Backup() {
     const updateProgress = index => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
-      console.log('progressTotal', progressTotal, 'index', index);
+      // console.log('progressTotal', progressTotal, 'index', index);
       // console.log('progressValue', progressValue, 'index', index);
       setTimeout(() => {
         setProgress(progressValue);
@@ -121,22 +114,21 @@ function Backup() {
       setTimeout(() => {
         setMessage(msg);
       }, 10);
-      console.log(msg.replace(/\n/g, ''));
+      // console.log(msg.replace(/\n/g, ''));
     };
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(true);
-    }, 0);
+    // setTimeout(() => {
+    //   setIsLoading(true);
+    // }, 0);
     const progressUpdater = new Subject();
     const subscriber = progressUpdater.subscribe({
       next: v => {
-        console.log('progressUpdater.subscribe', v);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 0);
+        // console.log('progressUpdater.subscribe', v);
+        // setTimeout(() => {
+        //   setIsLoading(false);
+        // }, 0);
         updateProgress(v);
         updateMessage();
-        console.log('progressTotal at progressUpdater', progressTotal);
+        // console.log('progressTotal at progressUpdater', progressTotal);
         if (progressTotal === limit) {
           subscriber.unsubscribe();
         }
@@ -148,7 +140,7 @@ function Backup() {
         if (resultBook) {
           successList.push(book.title);
           const msg = `restore done: ${resultBook.title}`;
-          console.log(msg);
+          // console.log(msg);
         }
       } catch (e) {
         errorList.push(book.title);
@@ -268,12 +260,23 @@ function Backup() {
         title={t('Backup.Button.restore')}
         message={message}
         closeButtonTitle={t('Button.close')}
-        processButtonTitle={t('Button.restore')}
+        processButtonTitle={
+          buttonPressed ? t('Button.processing') : t('Button.restore')
+        }
         visible={visibleModal}
         setVisible={setVisibleModal}
         progress={progress}
-        processCallback={restore}
-        isLoading={isLoading}
+        processCallback={() => {
+          if (buttonPressed) {
+            const msg = t('Misc.toastWaitButton');
+            Toast.show(msg);
+            return;
+          }
+          setButtonPressed(true);
+          setTimeout(() => {
+            restore();
+          }, 0);
+        }}
         backButtonDisabled
         backdropDisabled
       />
