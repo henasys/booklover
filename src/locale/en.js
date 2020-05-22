@@ -79,6 +79,10 @@ export default {
       backup: ' Backup data',
       restore: ' Restore data',
     },
+    BackupAlert: {
+      title: 'Backup data',
+      message: 'Total %{total} books. Would you like to backup?',
+    },
     Toast: {
       restoreNoyReady:
         'You did not specify the restore file.\nPleae check it out again.',
