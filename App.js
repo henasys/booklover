@@ -41,7 +41,6 @@ function App() {
     if (!realm) {
       return;
     }
-    console.log(realm.schemaVersion);
     I18nService.initializeLanguage(realm);
     setLocale(I18nService.getLanguage());
     initLocale();
