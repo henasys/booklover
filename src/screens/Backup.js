@@ -116,16 +116,9 @@ function Backup() {
       }, 10);
       // console.log(msg.replace(/\n/g, ''));
     };
-    // setTimeout(() => {
-    //   setIsLoading(true);
-    // }, 0);
     const progressUpdater = new Subject();
     const subscriber = progressUpdater.subscribe({
       next: v => {
-        // console.log('progressUpdater.subscribe', v);
-        // setTimeout(() => {
-        //   setIsLoading(false);
-        // }, 0);
         updateProgress(v);
         updateMessage();
         // console.log('progressTotal at progressUpdater', progressTotal);
@@ -139,7 +132,7 @@ function Backup() {
         const resultBook = await Database.saveOrUpdateBook(realm, book);
         if (resultBook) {
           successList.push(book.title);
-          const msg = `restore done: ${resultBook.title}`;
+          // const msg = `restore done: ${resultBook.title}`;
           // console.log(msg);
         }
       } catch (e) {
@@ -147,10 +140,6 @@ function Backup() {
         console.log('restore error', e);
       } finally {
         progressUpdater.next(index);
-        // setIsLoading(false);
-        // updateProgress(index);
-        // updateMessage();
-        // console.log('progressTotal at finally', progressTotal);
       }
     });
   };
