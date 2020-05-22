@@ -71,6 +71,7 @@ function Backup() {
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -85,12 +86,14 @@ function Backup() {
     }
   };
   const restore = () => {
+    console.log('restore start');
     if (buttonPressed) {
       const msg = t('Misc.toastWaitButton');
       Toast.show(msg);
       return;
     }
     setButtonPressed(true);
+    setIsLoading(true);
     const limit = processList.length;
     if (limit === 0) {
       setProgress(1);
@@ -99,13 +102,11 @@ function Backup() {
     let progressTotal = 0;
     const errorList = [];
     const successList = [];
-    const finalCallback = () => {
-      console.log('progressTotal at finalCallback', progressTotal);
-    };
     const updateProgress = index => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       console.log('progressTotal', progressTotal, 'index', index);
+      console.log('progressValue', progressValue, 'index', index);
       setTimeout(() => {
         setProgress(progressValue);
       }, 0);
@@ -121,9 +122,12 @@ function Backup() {
       }, 0);
       console.log(msg.replace(/\n/g, ''));
     };
-    processList.forEach((book, index) => {
+    processList.forEach(async (book, index) => {
       Database.saveOrUpdateBook(realm, book)
         .then(resultBook => {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 0);
           if (resultBook) {
             successList.push(book.title);
             const msg = `restore done: ${resultBook.title}`;
@@ -139,8 +143,8 @@ function Backup() {
           updateMessage();
         })
         .finally(() => {
-          console.log('progressTotal at finally', progressTotal);
-          finalCallback();
+          // console.log('progressTotal at finally', progressTotal);
+          // finalCallback();
         });
     });
   };
@@ -156,7 +160,7 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
-        const limit = 20;
+        const limit = list.length;
         setProcessList(limit === list.length ? list : list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
@@ -242,6 +246,7 @@ function Backup() {
         setVisible={setVisibleModal}
         progress={progress}
         processCallback={restore}
+        isLoading={isLoading}
         backButtonDisabled
         backdropDisabled
       />
