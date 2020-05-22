@@ -87,6 +87,8 @@ function ImportIsbn({navigation, route}) {
   const [visibleModal, setVisibleModal] = useState(false);
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
+  const [buttonPressed, setButtonPressed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -98,12 +100,20 @@ function ImportIsbn({navigation, route}) {
     };
   }, []);
   const add = () => {
+    console.log('add start');
+    if (buttonPressed) {
+      const msg = t('Misc.toastWaitButton');
+      Toast.show(msg);
+      return;
+    }
+    setButtonPressed(true);
     let progressTotal = 0;
     const errorList = [];
     const precheckedList = [];
     const successList = [];
     const limit = processList.length;
     const finalCallback = () => {
+      setIsLoading(false);
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       if (progressTotal % 10 === 0) {
@@ -125,6 +135,7 @@ function ImportIsbn({navigation, route}) {
         console.log(msg.replace(/\n/g, ''));
       }
     };
+    setIsLoading(true);
     processList.forEach(isbn => {
       const checkIsbn = IsbnUtil.parse(isbn);
       if (!checkIsbn) {
@@ -208,6 +219,7 @@ function ImportIsbn({navigation, route}) {
                 return;
               }
               setProgress(0);
+              setButtonPressed(false);
               read();
             }}
           />
@@ -223,6 +235,7 @@ function ImportIsbn({navigation, route}) {
         setVisible={setVisibleModal}
         progress={progress}
         processCallback={add}
+        isLoading={isLoading}
         backButtonDisabled
         backdropDisabled
       />
