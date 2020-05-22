@@ -94,7 +94,6 @@ function Backup() {
       return;
     }
     setButtonPressed(true);
-    setIsLoading(true);
     const limit = processList.length;
     if (limit === 0) {
       setProgress(1);
@@ -123,6 +122,7 @@ function Backup() {
       }, 0);
       console.log(msg.replace(/\n/g, ''));
     };
+    setIsLoading(true);
     processList.forEach(async (book, index) => {
       try {
         const resultBook = await Database.saveOrUpdateBook(realm, book);
