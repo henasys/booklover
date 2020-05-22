@@ -33,7 +33,7 @@ const write = (t, fileName, content) => {
     })
     .catch(e => {
       console.log('FileManager.writeBookLoverPath error', e);
-      const msg = `${t('Backup.Toast.writeFail')}: ${fileName} ${e}`;
+      const msg = `${t('Backup.Toast.writeFail')}: ${fileName}`;
       Toast.show(msg);
     });
 };
@@ -194,8 +194,10 @@ function Backup() {
                 console.log(msg);
                 Toast.show(msg);
               };
-              Permission.checkPermissionForWriteExternalStorage(() => {
-                write(t, fileName, content);
+              Permission.checkPermissionForReadExternalStorage(() => {
+                Permission.checkPermissionForWriteExternalStorage(() => {
+                  write(t, fileName, content);
+                }, errorCallback);
               }, errorCallback);
             }}
           />
