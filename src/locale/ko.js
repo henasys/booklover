@@ -136,6 +136,7 @@ export default {
     close: '닫기',
     restore: '복원',
     add: '추가',
+    processing: '처리중...',
   },
   Language: {
     label: '언어선택',
