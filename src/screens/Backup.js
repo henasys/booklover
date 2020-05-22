@@ -94,8 +94,9 @@ function Backup() {
       if (progressTotal % 10 === 0) {
         setTimeout(() => {
           setProgress(progressValue);
-        }, 100);
+        }, 0);
       }
+      console.log('progressTotal', progressTotal);
       if (progressTotal === limit) {
         setTimeout(() => {
           setProgress(progressValue);
@@ -143,9 +144,9 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
-        const limit = list.length - 1;
-        // const limit = 100;
-        setProcessList(list.slice(0, limit));
+        // const limit = list.length;
+        const limit = 100;
+        setProcessList(list.slice(0, limit - 1));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
       })

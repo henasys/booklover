@@ -156,9 +156,9 @@ function ImportIsbn({navigation, route}) {
         }
         const list = result.trim().split('\n');
         console.log('list.length', list.length);
-        const limit = list.length - 1;
+        const limit = list.length;
         // const limit = 100;
-        setProcessList(list.slice(0, limit));
+        setProcessList(list.slice(0, limit - 1));
         setMessage(t('ImportIsbn.modalInitMessage', {total: limit}));
         setVisibleModal(true);
       })
