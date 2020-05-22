@@ -54,7 +54,14 @@ const search = (realm, isbn, callback, errorCallback, finalCallback) => {
   searcher
     .searchIsbn(isbn)
     .then(items => {
-      console.log('searchIsbn items', items.length);
+      if (
+        items === undefined ||
+        items === null ||
+        Array.isArray(items) === false
+      ) {
+        throw new Error(`searchIsbn items is null, ${isbn} ${items}`);
+      }
+      // console.log('searchIsbn items', items.length);
       items.forEach(item => {
         Searcher.postProcess(searcher, item)
           .then(mBook => {
@@ -112,31 +119,34 @@ function ImportIsbn({navigation, route}) {
     const precheckedList = [];
     const successList = [];
     const limit = processList.length;
-    const finalCallback = () => {
-      setIsLoading(false);
+    const updateProgress = index => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
-      if (progressTotal % 10 === 0) {
-        setTimeout(() => {
-          setProgress(progressValue);
-        }, 100);
-      }
-      if (progressTotal === limit) {
-        setTimeout(() => {
-          setProgress(progressValue);
-        }, 500);
-        const msg = t('ImportIsbn.modalMessage', {
-          total: processList.length,
-          success: successList.length,
-          duplicated: precheckedList.length,
-          failure: errorList.length,
-        });
+      console.log('progressTotal', progressTotal, 'index', index);
+      // console.log('progressValue', progressValue, 'index', index);
+      setTimeout(() => {
+        setProgress(progressValue);
+      }, 0);
+    };
+    const updateMessage = () => {
+      const msg = t('ImportIsbn.modalMessage', {
+        total: processList.length,
+        success: successList.length,
+        duplicated: precheckedList.length,
+        failure: errorList.length,
+      });
+      setTimeout(() => {
         setMessage(msg);
-        console.log(msg.replace(/\n/g, ''));
-      }
+      }, 0);
+      console.log(msg.replace(/\n/g, ''));
     };
     setIsLoading(true);
-    processList.forEach(isbn => {
+    processList.forEach((isbn, index) => {
+      const finalCallback = () => {
+        setIsLoading(false);
+        updateProgress(index);
+        updateMessage();
+      };
       const checkIsbn = IsbnUtil.parse(isbn);
       if (!checkIsbn) {
         errorList.push(isbn);

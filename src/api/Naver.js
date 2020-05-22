@@ -1,6 +1,3 @@
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
-
 import {REACT_APP_NAVER_CLIENT_ID} from 'react-native-dotenv';
 import {REACT_APP_NAVER_CLIENT_SECRET} from 'react-native-dotenv';
 import {parse} from 'node-html-parser';
@@ -136,8 +133,14 @@ class Naver {
       'X-Naver-Client-Secret': this.clientSecret,
     };
     return fetch(url, {headers: headers})
-      .then(response => response.json())
-      .then(response => this._getBooks(response))
+      .then(response => {
+        // console.log('naver response', response);
+        return response.json();
+      })
+      .then(response => {
+        // console.log('naver response.json()', response);
+        return this._getBooks(response);
+      })
       .then(books => this._mapping(books));
   }
 }
