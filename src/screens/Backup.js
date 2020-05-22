@@ -106,7 +106,7 @@ function Backup() {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       console.log('progressTotal', progressTotal, 'index', index);
-      console.log('progressValue', progressValue, 'index', index);
+      // console.log('progressValue', progressValue, 'index', index);
       setTimeout(() => {
         setProgress(progressValue);
       }, 0);
@@ -123,29 +123,22 @@ function Backup() {
       console.log(msg.replace(/\n/g, ''));
     };
     processList.forEach(async (book, index) => {
-      Database.saveOrUpdateBook(realm, book)
-        .then(resultBook => {
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 0);
-          if (resultBook) {
-            successList.push(book.title);
-            const msg = `restore done: ${resultBook.title}`;
-            console.log(msg);
-            updateProgress(index);
-            updateMessage();
-          }
-        })
-        .catch(e => {
-          errorList.push(book.title);
-          console.log('restore error', e);
-          updateProgress(index);
-          updateMessage();
-        })
-        .finally(() => {
-          // console.log('progressTotal at finally', progressTotal);
-          // finalCallback();
-        });
+      try {
+        const resultBook = await Database.saveOrUpdateBook(realm, book);
+        if (resultBook) {
+          successList.push(book.title);
+          const msg = `restore done: ${resultBook.title}`;
+          console.log(msg);
+        }
+      } catch (e) {
+        errorList.push(book.title);
+        console.log('restore error', e);
+      } finally {
+        setIsLoading(false);
+        updateProgress(index);
+        updateMessage();
+        console.log('progressTotal at finally', progressTotal);
+      }
     });
   };
   const read = () => {
@@ -160,7 +153,7 @@ function Backup() {
         }
         const list = Bundle.parseBookList(restoreFileName, result);
         console.log('list.length', list.length);
-        const limit = list.length;
+        const limit = 100; //list.length;
         setProcessList(limit === list.length ? list : list.slice(0, limit));
         setMessage(t('Backup.modalInitMessage', {total: limit}));
         setVisibleModal(true);
