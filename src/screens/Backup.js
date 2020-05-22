@@ -13,6 +13,7 @@ import Database from '../modules/database';
 import FileManager from '../modules/fileManager';
 import Bundle from '../modules/bundle';
 import LocaleContext from '../modules/LocaleContext';
+import Permission from '../modules/permission';
 
 import ModalProgressBar from '../views/ModalProgressBar';
 
@@ -188,10 +189,9 @@ function Backup() {
             icon={<Icon name="save" type="material" />}
             onPress={() => {
               const content = Bundle.bundleBookList(realm, fileName);
-              write(t, fileName, content);
-              // Permission.checkPermissionForWriteExternalStorage(() => {
-              //   write(t, fileName, content);
-              // });
+              Permission.checkPermissionForWriteExternalStorage(() => {
+                write(t, fileName, content);
+              });
             }}
           />
           <View style={styles.spacer} />
