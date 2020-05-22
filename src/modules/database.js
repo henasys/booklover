@@ -448,12 +448,13 @@ const saveOrUpdateBook = async (
 };
 
 const saveSetting = (realm, {apiSource, language}) => {
+  console.log('saveSetting', 'apiSource', apiSource, 'language', language);
   return new Promise((resolve, reject) => {
     try {
       realm.write(() => {
         const rs = realm.objects('Setting');
         if (!rs.isEmpty()) {
-          console.log('saveSetting not empty');
+          console.log('saveSetting rs is not empty');
           const setting = rs[0];
           if (apiSource) {
             setting.apiSource = apiSource;
