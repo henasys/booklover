@@ -40,17 +40,9 @@ const pickFile = async (setValue, setUri) => {
   }
 };
 
-const sleep = ms => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
 const search = async (realm, isbn, callback, errorCallback, finalCallback) => {
   console.log('search', isbn);
   const searcher = Searcher.getSearcher(realm);
-  if (searcher.isNaver) {
-    console.log('waitting....');
-    await sleep(2000);
-  }
   searcher
     .searchIsbn(isbn)
     .then(items => {
@@ -167,7 +159,11 @@ function ImportIsbn({navigation, route}) {
         }
       }
     });
-    searchList.forEach((isbn, index) => {
+    const searcher = Searcher.getSearcher(realm);
+    const searchDelay = searcher.isNaver ? 100 : 0;
+    let index = 0;
+    const searchWithDelay = () => {
+      const isbn = searchList[index];
       const finalCallback = () => {
         progressUpdater.next(index);
       };
@@ -177,8 +173,15 @@ function ImportIsbn({navigation, route}) {
       const errorCallback = e => {
         errorList.push(isbn);
       };
-      search(realm, isbn, callback, errorCallback, finalCallback);
-    });
+      setTimeout(() => {
+        search(realm, isbn, callback, errorCallback, finalCallback);
+        index++;
+        if (index < searchList.length) {
+          searchWithDelay();
+        }
+      }, searchDelay);
+    };
+    searchWithDelay();
   };
   const read = () => {
     FileManager.readFile(uri)
