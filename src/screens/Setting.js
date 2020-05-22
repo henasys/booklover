@@ -79,10 +79,13 @@ function Setting({navigation}) {
     if (!realm) {
       return;
     }
+    updateApiSource();
+  }, [realm]);
+  const updateApiSource = () => {
     const setting = Database.getSetting(realm);
     console.log('Setting init setting', setting.apiSource, setting.language);
     setApiSource(setting.apiSource);
-  }, [realm]);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
@@ -128,6 +131,7 @@ function Setting({navigation}) {
               const message = t('Setting.DeleteAlert.message');
               const okCallback = async () => {
                 await Database.clearAllDatabase();
+                updateApiSource();
               };
               const cancelCallback = () => {};
               MyAlert.showTwoButtonAlert(
