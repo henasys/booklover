@@ -39,7 +39,7 @@ export default function ModalProgressBar({
         {message && <Text style={styles.message}>{message}</Text>}
         <View style={styles.verticalSpacer} />
         {isLoading && <ActivityIndicator size="large" />}
-        {!isLoading && <ProgressBar progress={progress} width={null} />}
+        <ProgressBar progress={progress} width={null} />
         <View style={styles.verticalSpacer} />
         <View style={styles.buttonsContainer}>
           <Button
