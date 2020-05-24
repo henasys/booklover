@@ -56,6 +56,8 @@ const pickFile = async (setValue, setUri) => {
   } catch (err) {
     if (DocumentPicker.isCancel(err)) {
       // User cancelled the picker, exit any dialogs or menus and move on
+      console.log('User cancelled the picker');
+      throw err;
     } else {
       throw err;
     }
@@ -219,10 +221,14 @@ function Backup() {
           />
           <View style={styles.spacer} />
           <Input
-            onFocus={() => {
+            onFocus={async () => {
               console.log('onFocus Input');
               Keyboard.dismiss();
-              pickFile(setRestoreFileName, setUri);
+              try {
+                await pickFile(setRestoreFileName, setUri);
+              } catch (error) {
+                console.log(error);
+              }
             }}
             disabledInputStyle={{color: 'black', opacity: 1}}
             containerStyle={styles.textInputBox}
