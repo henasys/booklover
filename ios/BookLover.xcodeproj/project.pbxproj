@@ -194,7 +194,6 @@
 				9738D40E9B68E1FCD39614C1 /* Pods-BookLoverTests.debug.xcconfig */,
 				EC4254F553C9E1F27320A4E9 /* Pods-BookLoverTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -308,6 +307,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -630,12 +630,13 @@
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = BookLover/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover;
 				PRODUCT_NAME = BookLover;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -649,12 +650,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = BookLover/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover;
 				PRODUCT_NAME = BookLover;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
