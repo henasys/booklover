@@ -78,3 +78,10 @@ default.realm.management/access_control.write.mx
 # Firebase
 android/app/google-services.json
 ios/GoogleService-Info.plist
+
+# Java
+android/.project
+android/.settings/org.eclipse.buildship.core.prefs
+android/app/.classpath
+android/app/.project
+android/app/.settings/org.eclipse.buildship.core.prefs
