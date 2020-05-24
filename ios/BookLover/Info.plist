@@ -40,7 +40,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Used to take barcode scanning</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Used to use Camera for scanning</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
