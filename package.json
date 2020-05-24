@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "clean": "rm -rf node_modules && yarn cache clean && yarn install && watchman watch-del-all && rm -fr $TMPDIR/metro*"
+    "clean": "react-native-clean-project"
+    // "clean": "rm -rf node_modules && yarn cache clean && yarn install && watchman watch-del-all && rm -fr $TMPDIR/metro*"
   },
   "dependencies": {
     "@nartc/react-native-barcode-mask": "^1.2.0",
