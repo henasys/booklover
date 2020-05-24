@@ -76,6 +76,7 @@ function Backup() {
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
+  const [restoreInputPressed, setRestoreInputPressed] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -222,13 +223,23 @@ function Backup() {
           <View style={styles.spacer} />
           <Input
             onFocus={async () => {
-              console.log('onFocus Input');
+              console.log('Input onFocus', restoreInputPressed);
               Keyboard.dismiss();
+              if (restoreInputPressed) {
+                console.log('restoreInput is already pressed');
+                return;
+              }
+              setRestoreInputPressed(true);
               try {
                 await pickFile(setRestoreFileName, setUri);
               } catch (error) {
                 console.log(error);
+                setRestoreInputPressed(false);
               }
+            }}
+            onBlur={() => {
+              console.log('Input onBlur');
+              Keyboard.dismiss();
             }}
             disabledInputStyle={{color: 'black', opacity: 1}}
             containerStyle={styles.textInputBox}
