@@ -5785,6 +5785,11 @@ react-native-camera@^3.23.1:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-clean-project@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-clean-project/-/react-native-clean-project-3.3.0.tgz#89974c4a291123e6d1f72c32185a012a649f1fa8"
+  integrity sha512-IudFlNsaQd6QcgcbTZcNEXDlrJ9zzRspIUV7yvBX3bfB72Z9et9hIceH9+F+xYSlvwUSB4L/fvkIPosYKa+q9Q==
+
 react-native-document-picker@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-3.4.0.tgz#7bbd110b8474a3322ac3178ec5446e2df64c8339"
