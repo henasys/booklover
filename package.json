@@ -8,8 +8,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "clean": "react-native-clean-project"
-   },
+    "clean-i": "react-native-clean-project",
+    "clean": "rm -rf node_modules && yarn install && watchman watch-del-all && rm -fr $TMPDIR/metro*"
+  },
   "dependencies": {
     "@nartc/react-native-barcode-mask": "^1.2.0",
     "@react-native-community/masked-view": "^0.1.10",
@@ -22,8 +23,8 @@
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.25.3",
     "node-html-parser": "^1.2.16",
-    "react": "16.11.0",
-    "react-native": "0.62.2",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
     "react-native-action-button": "git://github.com/henasys/react-native-action-button.git#b48e5e0d0cbec228ae319fb34b56abcd96fdd214",
     "react-native-camera": "^3.23.1",
     "react-native-document-picker": "^3.4.0",
