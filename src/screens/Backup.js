@@ -5,6 +5,7 @@ import {StyleSheet, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
+import Share from 'react-native-share';
 import {Subject} from 'rxjs';
 
 import Database from '../modules/database';
@@ -172,6 +173,75 @@ function Backup() {
         Toast.show(msg, Toast.LONG);
       });
   };
+  const _onPressBackup = () => {
+    const list = Database.getBookList(realm);
+    const alertTitle = t('Backup.BackupAlert.title');
+    const alertMessage = t('Backup.BackupAlert.message', {
+      total: list.length,
+    });
+    const okCallback = () => {
+      const content = Bundle.bundleBookList(realm, fileName);
+      const errorCallback = code => {
+        const msg = t('Error.permission', {error: code});
+        console.log(msg);
+        Toast.show(msg);
+      };
+      Permission.checkPermissionForReadExternalStorage(() => {
+        Permission.checkPermissionForWriteExternalStorage(() => {
+          write(t, fileName, content);
+        }, errorCallback);
+      }, errorCallback);
+    };
+    const cancelCallback = () => {};
+    MyAlert.showTwoButtonAlert(
+      alertTitle,
+      alertMessage,
+      okCallback,
+      cancelCallback,
+    );
+  };
+  const _onPressShare = async () => {
+    if (!fileName) {
+      return;
+    }
+    const path = FileManager.getBookLoverPath(fileName);
+    const shareOptions = {
+      failOnCancel: false,
+      saveToFiles: true,
+      url: `file://${path}`,
+    };
+    try {
+      const exists = await FileManager.existsBookLoverPath(fileName);
+      if (exists) {
+        const ShareResponse = await Share.open(shareOptions);
+        console.log(JSON.stringify(ShareResponse, null, 2));
+      } else {
+        const msg = t('Backup.Toast.wrongFile');
+        Toast.show(msg);
+        return;
+      }
+    } catch (error) {
+      console.log('Error =>', error);
+    }
+  };
+  const _onPressRestore = () => {
+    if (!uri) {
+      const msg = t('Backup.Toast.restoreNoyReady');
+      Toast.show(msg);
+      return;
+    }
+    setProgress(0);
+    setMessage(null);
+    setButtonPressed(false);
+    const errorCallback = code => {
+      const msg = t('Error.permission', {error: code});
+      console.log(msg);
+      Toast.show(msg);
+    };
+    Permission.checkPermissionForReadExternalStorage(() => {
+      read();
+    }, errorCallback);
+  };
   // console.log('Backup render');
   return (
     <SafeAreaView style={styles.container}>
@@ -194,33 +264,14 @@ function Backup() {
             title={t('Backup.Button.backup')}
             type="outline"
             icon={<Icon name="save" type="material" />}
-            onPress={() => {
-              const list = Database.getBookList(realm);
-              const alertTitle = t('Backup.BackupAlert.title');
-              const alertMessage = t('Backup.BackupAlert.message', {
-                total: list.length,
-              });
-              const okCallback = () => {
-                const content = Bundle.bundleBookList(realm, fileName);
-                const errorCallback = code => {
-                  const msg = t('Error.permission', {error: code});
-                  console.log(msg);
-                  Toast.show(msg);
-                };
-                Permission.checkPermissionForReadExternalStorage(() => {
-                  Permission.checkPermissionForWriteExternalStorage(() => {
-                    write(t, fileName, content);
-                  }, errorCallback);
-                }, errorCallback);
-              };
-              const cancelCallback = () => {};
-              MyAlert.showTwoButtonAlert(
-                alertTitle,
-                alertMessage,
-                okCallback,
-                cancelCallback,
-              );
-            }}
+            onPress={_onPressBackup}
+          />
+          <View style={styles.spacer} />
+          <Button
+            title={t('Backup.Button.share')}
+            type="outline"
+            icon={<Icon name="share" type="material" />}
+            onPress={_onPressShare}
           />
           <View style={styles.spacer} />
           <PickFileInput
@@ -234,24 +285,7 @@ function Backup() {
             title={t('Backup.Button.restore')}
             type="outline"
             icon={<Icon name="backup-restore" type="material-community" />}
-            onPress={() => {
-              if (!uri) {
-                const msg = t('Backup.Toast.restoreNoyReady');
-                Toast.show(msg);
-                return;
-              }
-              setProgress(0);
-              setMessage(null);
-              setButtonPressed(false);
-              const errorCallback = code => {
-                const msg = t('Error.permission', {error: code});
-                console.log(msg);
-                Toast.show(msg);
-              };
-              Permission.checkPermissionForReadExternalStorage(() => {
-                read();
-              }, errorCallback);
-            }}
+            onPress={_onPressRestore}
           />
           <View style={styles.spacer} />
         </View>
