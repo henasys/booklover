@@ -2,12 +2,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
-import {Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Icon, Input} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import DocumentPicker from 'react-native-document-picker';
-import * as mime from 'react-native-mime-types';
 import {Subject} from 'rxjs';
 
 import Database from '../modules/database';
@@ -16,6 +13,7 @@ import Bundle from '../modules/bundle';
 import LocaleContext from '../modules/LocaleContext';
 import Permission from '../modules/permission';
 
+import PickFileInput from '../views/PickFileInput';
 import ModalProgressBar from '../views/ModalProgressBar';
 import MyAlert from '../views/alert';
 
@@ -40,30 +38,6 @@ const write = (t, fileName, content) => {
     });
 };
 
-const pickFile = async (setValue, setUri) => {
-  try {
-    const res = await DocumentPicker.pick({
-      type: [mime.lookup('xlsx'), mime.lookup('xls')],
-    });
-    console.log(
-      res.uri,
-      res.type, // mime type
-      res.name,
-      res.size,
-    );
-    setValue(res.name);
-    setUri(res.uri);
-  } catch (err) {
-    if (DocumentPicker.isCancel(err)) {
-      // User cancelled the picker, exit any dialogs or menus and move on
-      console.log('User cancelled the picker');
-      throw err;
-    } else {
-      throw err;
-    }
-  }
-};
-
 function Backup() {
   const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
@@ -76,7 +50,6 @@ function Backup() {
   const [message, setMessage] = useState(null);
   const [processList, setProcessList] = useState([]);
   const [buttonPressed, setButtonPressed] = useState(false);
-  const [restoreInputPressed, setRestoreInputPressed] = useState(false);
   useEffect(() => {
     Database.open(_realm => {
       setRealm(_realm);
@@ -100,7 +73,7 @@ function Backup() {
     let progressTotal = 0;
     const errorList = [];
     const successList = [];
-    const updateProgress = index => {
+    const updateProgress = () => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       // console.log('progressTotal', progressTotal, 'index', index);
@@ -221,35 +194,11 @@ function Backup() {
             }}
           />
           <View style={styles.spacer} />
-          <Input
-            onFocus={async () => {
-              console.log('Input onFocus', restoreInputPressed);
-              Keyboard.dismiss();
-              if (restoreInputPressed) {
-                console.log('restoreInput is already pressed');
-                return;
-              }
-              setRestoreInputPressed(true);
-              try {
-                await pickFile(setRestoreFileName, setUri);
-              } catch (error) {
-                console.log(error);
-                setRestoreInputPressed(false);
-              }
-            }}
-            onBlur={() => {
-              console.log('Input onBlur');
-              Keyboard.dismiss();
-            }}
-            disabledInputStyle={{color: 'black', opacity: 1}}
-            containerStyle={styles.textInputBox}
-            labelStyle={{fontSize: 14}}
-            defaultValue={restoreFileName}
+          <PickFileInput
             label={t('Backup.Input.restore')}
-            keyboardType="default"
-            autoCapitalize="none"
-            multiline={true}
-            numberOfLines={1}
+            filename={restoreFileName}
+            setFilename={setRestoreFileName}
+            setUri={setUri}
           />
           <Button
             title={t('Backup.Button.restore')}
