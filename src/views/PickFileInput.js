@@ -29,7 +29,12 @@ const pickFile = async (type, setValue, setUri) => {
 
 PickFileInput.Type = {
   all: [DocumentPicker.types.allFiles],
-  excel: [DocumentPicker.types.csv, mime.lookup('xlsx'), mime.lookup('xls')],
+  excel: [
+    DocumentPicker.types.csv,
+    'public.data',
+    mime.lookup('xlsx'),
+    mime.lookup('xls'),
+  ],
   plainText: [DocumentPicker.types.plainText],
 };
 
