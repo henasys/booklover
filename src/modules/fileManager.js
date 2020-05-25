@@ -1,6 +1,26 @@
 import RNFS from 'react-native-fs';
-// import {Platform} from 'react-native';
+import {Platform} from 'react-native';
 
+// ios only
+const getMainBundle = () => {
+  return RNFS.MainBundlePath;
+};
+
+const readDirMainBundle = () => {
+  const dir = getMainBundle();
+  return RNFS.readDir(dir);
+};
+
+const getDocumentDirectory = () => {
+  return RNFS.DocumentDirectoryPath;
+};
+
+const readDirDocumentDirectory = () => {
+  const dir = getDocumentDirectory();
+  return RNFS.readDir(dir);
+};
+
+// android only
 const getExternalStorage = () => {
   // return RNFS.ExternalDirectoryPath;
   return RNFS.ExternalStorageDirectoryPath;
@@ -20,7 +40,8 @@ const getBookLoverFolder = () => {
 };
 
 const getBookLoverPath = (fileName = null) => {
-  const rootDir = getDownloadDirectory();
+  const rootDir =
+    Platform.OS === 'ios' ? getDocumentDirectory() : getDownloadDirectory();
   const folerName = getBookLoverFolder();
   const base = `${rootDir}/${folerName}`;
   if (fileName) {
@@ -48,11 +69,20 @@ const readBookLoverPath = (fileName, encoding = 'utf8') => {
   return RNFS.readFile(path, encoding);
 };
 
+const existsBookLoverPath = fileName => {
+  const path = getBookLoverPath(fileName);
+  return RNFS.exists(path);
+};
+
 const readFile = (path, encodingOrOptions = null) => {
   return RNFS.readFile(path, encodingOrOptions);
 };
 
 export default {
+  getMainBundle,
+  readDirMainBundle,
+  getDocumentDirectory,
+  readDirDocumentDirectory,
   getExternalStorage,
   getDownloadDirectory,
   readDirExternalStorage,
@@ -61,5 +91,6 @@ export default {
   readDirBookLoverPath,
   writeBookLoverPath,
   readBookLoverPath,
+  existsBookLoverPath,
   readFile,
 };

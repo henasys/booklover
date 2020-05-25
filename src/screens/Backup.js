@@ -38,6 +38,19 @@ const write = (t, fileName, content) => {
     });
 };
 
+const readDir = () => {
+  console.log('readDir');
+  FileManager.readDirDocumentDirectory()
+    .then(result => {
+      result.forEach(item => {
+        console.log(item);
+      });
+    })
+    .catch(e => {
+      console.log(e);
+    });
+};
+
 function Backup() {
   const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
@@ -58,6 +71,22 @@ function Backup() {
       Database.close(realm);
     };
   }, []);
+  useEffect(() => {
+    FileManager.existsBookLoverPath(fileName)
+      .then(exists => {
+        if (exists) {
+          setRestoreFileName(fileName);
+          const path = FileManager.getBookLoverPath(fileName);
+          setUri(path);
+        } else {
+          setRestoreFileName(null);
+          setUri(null);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }, [fileName]);
   const onEndEditingFileName = () => {
     if (!fileName || fileName.length === 0) {
       setFileNameError(t('Backup.fileNameEmptyError'));
