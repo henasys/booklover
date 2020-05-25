@@ -24,15 +24,15 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         <!-- filter for sending text; accepts SENDTO action with sms URI schemes -->
-        <intent-filter>
+        <!-- <intent-filter>
             <action android:name="android.intent.action.SENDTO"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:scheme="sms" />
             <data android:scheme="smsto" />
             <data android:scheme="mailto" />
-        </intent-filter>
+        </intent-filter> -->
         <!-- filter for sending text or images; accepts SEND action and text or image data -->
-        <intent-filter>
+        <!-- <intent-filter>
             <action android:name="android.intent.action.SEND"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <data android:mimeType="image/*"/>
@@ -44,7 +44,7 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="mychat" />
-        </intent-filter>        
+        </intent-filter>         -->
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
