@@ -196,6 +196,7 @@ function Backup() {
           <View style={styles.spacer} />
           <PickFileInput
             label={t('Backup.Input.restore')}
+            type={PickFileInput.Type.excel}
             filename={restoreFileName}
             setFilename={setRestoreFileName}
             setUri={setUri}

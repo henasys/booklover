@@ -1,12 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
-import {Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button, Icon, Input} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import Toast from 'react-native-simple-toast';
-import DocumentPicker from 'react-native-document-picker';
 import {Subject} from 'rxjs';
 
 import Database from '../modules/database';
@@ -14,31 +11,10 @@ import Searcher from '../modules/searcher';
 import FileManager from '../modules/fileManager';
 import LocaleContext from '../modules/LocaleContext';
 
+import PickFileInput from '../views/PickFileInput';
 import ModalProgressBar from '../views/ModalProgressBar';
 
 const IsbnUtil = require('isbn-utils');
-
-const pickFile = async (setValue, setUri) => {
-  try {
-    const res = await DocumentPicker.pick({
-      type: [DocumentPicker.types.plainText],
-    });
-    console.log(
-      res.uri,
-      res.type, // mime type
-      res.name,
-      res.size,
-    );
-    setValue(res.name);
-    setUri(res.uri);
-  } catch (err) {
-    if (DocumentPicker.isCancel(err)) {
-      // User cancelled the picker, exit any dialogs or menus and move on
-    } else {
-      throw err;
-    }
-  }
-};
 
 const search = async (realm, isbn, callback, errorCallback, finalCallback) => {
   console.log('search', isbn);
@@ -81,7 +57,7 @@ const search = async (realm, isbn, callback, errorCallback, finalCallback) => {
     });
 };
 
-function ImportIsbn({navigation, route}) {
+function ImportIsbn() {
   const {t} = React.useContext(LocaleContext);
   const [realm, setRealm] = useState(null);
   const [isbnFile, setIsbnFile] = useState('');
@@ -106,7 +82,7 @@ function ImportIsbn({navigation, route}) {
     const precheckedList = [];
     const successList = [];
     const limit = processList.length;
-    const updateProgress = index => {
+    const updateProgress = () => {
       progressTotal += 1;
       const progressValue = progressTotal / limit;
       // console.log('progressTotal', progressTotal, 'index', index);
@@ -167,10 +143,10 @@ function ImportIsbn({navigation, route}) {
       const finalCallback = () => {
         progressUpdater.next(index);
       };
-      const callback = book => {
+      const callback = () => {
         successList.push(isbn);
       };
-      const errorCallback = e => {
+      const errorCallback = () => {
         errorList.push(isbn);
       };
       setTimeout(() => {
@@ -209,30 +185,12 @@ function ImportIsbn({navigation, route}) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <View>
-          <Input
-            onFocus={() => {
-              console.log('onFocus Input');
-              Keyboard.dismiss();
-              pickFile(setIsbnFile, setUri);
-            }}
-            onBlur={() => {
-              console.log('onBlur Input');
-            }}
-            onKeyPress={() => {
-              console.log('onKeyPress Input');
-            }}
-            onPress={() => {
-              console.log('onPress Input');
-            }}
-            disabledInputStyle={{color: 'black', opacity: 1}}
-            containerStyle={styles.textInputBox}
-            labelStyle={{fontSize: 14}}
-            defaultValue={isbnFile}
+          <PickFileInput
             label={t('ImportIsbn.Input.isbn')}
-            keyboardType="default"
-            autoCapitalize="none"
-            multiline={true}
-            numberOfLines={1}
+            type={PickFileInput.Type.plainText}
+            filename={isbnFile}
+            setFilename={setIsbnFile}
+            setUri={setUri}
           />
           <Button
             title={t('ImportIsbn.Button.isbn')}
