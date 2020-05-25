@@ -22,7 +22,6 @@ const pickFile = async (type, setValue, setUri) => {
     if (DocumentPicker.isCancel(err)) {
       // User cancelled the picker, exit any dialogs or menus and move on
       console.log('User cancelled the picker');
-      throw err;
     } else {
       throw err;
     }
