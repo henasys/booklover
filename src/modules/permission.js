@@ -71,6 +71,10 @@ const checkPermissionForWriteExternalStorage = (
   callback = null,
   errorCallback = null,
 ) => {
+  if (Platform.OS === 'ios') {
+    callback && callback();
+    return;
+  }
   checkPermission(
     PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
     callback,
@@ -82,6 +86,10 @@ const checkPermissionForReadExternalStorage = (
   callback = null,
   errorCallback = null,
 ) => {
+  if (Platform.OS === 'ios') {
+    callback && callback();
+    return;
+  }
   checkPermission(
     PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     callback,
