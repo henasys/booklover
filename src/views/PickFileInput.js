@@ -7,7 +7,6 @@ import * as mime from 'react-native-mime-types';
 const pickFile = async (type, setValue, setUri) => {
   try {
     const res = await DocumentPicker.pick({
-      // type: [mime.lookup('xlsx'), mime.lookup('xls')],
       type: type,
     });
     console.log(
@@ -29,7 +28,8 @@ const pickFile = async (type, setValue, setUri) => {
 };
 
 PickFileInput.Type = {
-  excel: [mime.lookup('xlsx'), mime.lookup('xls')],
+  all: [DocumentPicker.types.allFiles],
+  excel: [DocumentPicker.types.csv, mime.lookup('xlsx'), mime.lookup('xls')],
   plainText: [DocumentPicker.types.plainText],
 };
 
