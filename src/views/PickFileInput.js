@@ -4,10 +4,11 @@ import {Input} from 'react-native-elements';
 import DocumentPicker from 'react-native-document-picker';
 import * as mime from 'react-native-mime-types';
 
-const pickFile = async (setValue, setUri) => {
+const pickFile = async (type, setValue, setUri) => {
   try {
     const res = await DocumentPicker.pick({
-      type: [mime.lookup('xlsx'), mime.lookup('xls')],
+      // type: [mime.lookup('xlsx'), mime.lookup('xls')],
+      type: type,
     });
     console.log(
       res.uri,
@@ -28,9 +29,20 @@ const pickFile = async (setValue, setUri) => {
   }
 };
 
-export default function PickFileInput({label, filename, setFilename, setUri}) {
+PickFileInput.Type = {
+  excel: [mime.lookup('xlsx'), mime.lookup('xls')],
+  plainText: [DocumentPicker.types.plainText],
+};
+
+export default function PickFileInput({
+  label,
+  type,
+  filename,
+  setFilename,
+  setUri,
+}) {
   const onPress = () => {
-    pickFile(setFilename, setUri)
+    pickFile(type, setFilename, setUri)
       .then()
       .catch(e => {
         console.log('pickFile error', e);
