@@ -17,6 +17,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BookLoverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BookLoverTests.m */; };
 		43092442247C761E0066A85C /* BookLoverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43092441247C761E0066A85C /* BookLoverUITests.swift */; };
+		4309244A247C7A0C0066A85C /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43092449247C7A0C0066A85C /* SnapshotHelper.swift */; };
 		4368C834247B4E8E00F1A7D9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368C833247B4E8E00F1A7D9 /* CloudKit.framework */; };
 		43A693C6247A30BA004F99D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */; };
 		5F6EC17F9C1CD219F718D953 /* libPods-BookLover-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24166BB436EC62F773C5CC51 /* libPods-BookLover-tvOSTests.a */; };
@@ -71,6 +72,7 @@
 		4309243F247C761E0066A85C /* BookLoverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookLoverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43092441247C761E0066A85C /* BookLoverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookLoverUITests.swift; sourceTree = "<group>"; };
 		43092443247C761E0066A85C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43092449247C7A0C0066A85C /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		43494F5D247A557D0031CD3C /* BookLover.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BookLover.entitlements; path = BookLover/BookLover.entitlements; sourceTree = "<group>"; };
 		4368C833247B4E8E00F1A7D9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		43092440247C761E0066A85C /* BookLoverUITests */ = {
 			isa = PBXGroup;
 			children = (
+				43092449247C7A0C0066A85C /* SnapshotHelper.swift */,
 				43092441247C761E0066A85C /* BookLoverUITests.swift */,
 				43092443247C761E0066A85C /* Info.plist */,
 			);
@@ -681,6 +684,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43092442247C761E0066A85C /* BookLoverUITests.swift in Sources */,
+				4309244A247C7A0C0066A85C /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
