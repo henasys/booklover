@@ -78,6 +78,7 @@ export default {
     Button: {
       backup: ' Backup data',
       restore: ' Restore data',
+      share: ' Share data',
     },
     BackupAlert: {
       title: 'Backup data',

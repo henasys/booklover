@@ -83,6 +83,7 @@ export default {
     Button: {
       backup: ' 데이터 백업',
       restore: ' 데이터 복원',
+      share: ' 데이터 공유',
     },
     BackupAlert: {
       title: '데이터 백업',
