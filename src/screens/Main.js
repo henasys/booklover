@@ -22,6 +22,7 @@ const renderActionButton = (navigation, t) => {
   return (
     <ActionButton buttonColor="rgba(231,76,60,1)">
       <ActionButton.Item
+        testID="Main.ActionButton.inputManually"
         buttonColor="#9b59b6"
         title={t('Main.ActionButton.inputManually')}
         onPress={() => {
@@ -30,6 +31,7 @@ const renderActionButton = (navigation, t) => {
         <Icon name="form" type="antdesign" style={styles.actionButtonIcon} />
       </ActionButton.Item>
       <ActionButton.Item
+        testID="Main.ActionButton.titleSearch"
         buttonColor="#3498db"
         title={t('Main.ActionButton.titleSearch')}
         onPress={() => {
@@ -38,6 +40,7 @@ const renderActionButton = (navigation, t) => {
         <Icon name="search" type="material" style={styles.actionButtonIcon} />
       </ActionButton.Item>
       <ActionButton.Item
+        testID="Main.ActionButton.barcodeSearch"
         buttonColor="#1abc9c"
         title={t('Main.ActionButton.barcodeSearch')}
         onPress={() => {

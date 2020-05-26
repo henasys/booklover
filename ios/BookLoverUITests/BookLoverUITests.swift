@@ -12,7 +12,9 @@ class BookLoverUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-
+        let app = XCUIApplication()
+        setupSnapshot(app)
+        app.launch()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
@@ -22,20 +24,20 @@ class BookLoverUITests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-  
-    override func setUp() {
-        super.setUp()
-
-        let app = XCUIApplication()
-        setupSnapshot(app)
-        app.launch()
-    }
 
     func testExample() throws {
         // Use recording to get started writing UI tests.
               // Use XCTAssert and related functions to verify your tests produce the correct results.
-      snapshot("01LoginScreen")
-                  
+      let app = XCUIApplication()
+      
+      app.otherElements["Main.ActionButton.barcodeSearch"].waitForExistence(timeout: 30)
+      snapshot("01_LoginScreen")
+      
+      
+      
+      
+      app.otherElements["Main.ActionButton.barcodeSearch"].tap()
+      snapshot("01_LoginScreen")
                                                             
     }
 
