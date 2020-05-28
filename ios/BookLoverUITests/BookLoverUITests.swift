@@ -12,9 +12,6 @@ class BookLoverUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        let app = XCUIApplication()
-        setupSnapshot(app)
-        app.launch()
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
@@ -28,25 +25,24 @@ class BookLoverUITests: XCTestCase {
     func testExample() throws {
         // Use recording to get started writing UI tests.
               // Use XCTAssert and related functions to verify your tests produce the correct results.
-      let app = XCUIApplication()
-      
-      app.otherElements["Main.ActionButton.barcodeSearch"].waitForExistence(timeout: 30)
-      snapshot("01_LoginScreen")
-      
-      
-      
-      
-      app.otherElements["Main.ActionButton.barcodeSearch"].tap()
-      snapshot("01_LoginScreen")
+        let app = XCUIApplication()
+        setupSnapshot(app)
+        app.launch()
+        snapshot("01_MainScreen")
+        // let setting = app.otherElements["Setting"]
+        // XCTAssertNotNil(setting)
+        // XCTAssertTrue(setting.exists)
+        // setting.tap()
+        // snapshot("02_SettingScreen")
                                                             
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
+    // func testLaunchPerformance() throws {
+    //     if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
+    //         // This measures how long it takes to launch your application.
+    //         measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
+    //             XCUIApplication().launch()
+    //         }
+    //     }
+    // }
 }
