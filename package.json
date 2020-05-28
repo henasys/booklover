@@ -23,8 +23,8 @@
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.25.3",
     "node-html-parser": "^1.2.16",
-    "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
     "react-native-action-button": "git://github.com/henasys/react-native-action-button.git#b48e5e0d0cbec228ae319fb34b56abcd96fdd214",
     "react-native-camera": "^3.23.1",
     "react-native-document-picker": "^3.4.0",
@@ -65,10 +65,10 @@
     "babel-jest": "^24.9.0",
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
-    "metro-react-native-babel-preset": "^0.56.0",
+    "metro-react-native-babel-preset": "^0.58.0",
     "react-native-clean-project": "^3.3.0",
     "react-native-dotenv": "^0.2.0",
-    "react-test-renderer": "16.9.0"
+    "react-test-renderer": "16.11.0"
   },
   "jest": {
     "preset": "react-native"
