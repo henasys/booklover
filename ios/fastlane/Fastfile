@@ -55,7 +55,11 @@ platform :ios do
 
   desc "Generate new localized screenshots"
   lane :screenshots do
-    capture_screenshots(workspace: "#{get_target()}.xcworkspace", scheme: get_target())
+    capture_screenshots(
+      stop_after_first_error: true, 
+      workspace: "#{get_target()}.xcworkspace", 
+      scheme: get_target()
+    )
   end
 
   desc "Push a new beta build to TestFlight"
