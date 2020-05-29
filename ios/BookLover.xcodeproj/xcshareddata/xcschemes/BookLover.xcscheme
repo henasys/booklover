@@ -34,20 +34,6 @@
                ReferencedContainer = "container:BookLover.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4309243E247C761E0066A85C"
-               BuildableName = "BookLoverUITests.xctest"
-               BlueprintName = "BookLoverUITests"
-               ReferencedContainer = "container:BookLover.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -65,16 +51,6 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4309243E247C761E0066A85C"
-               BuildableName = "BookLoverUITests.xctest"
-               BlueprintName = "BookLoverUITests"
-               ReferencedContainer = "container:BookLover.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
