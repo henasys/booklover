@@ -105,10 +105,10 @@ target 'BookLover' do
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse.podspec"
   
-  target 'BookLoverTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  # target 'BookLoverTests' do
+  #   inherit! :complete
+  #   # Pods for testing
+  # end
 
   use_native_modules!
 
