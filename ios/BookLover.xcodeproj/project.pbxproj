@@ -18,6 +18,7 @@
 		4368C834247B4E8E00F1A7D9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368C833247B4E8E00F1A7D9 /* CloudKit.framework */; };
 		43A693C6247A30BA004F99D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */; };
 		43E20E6424809BFA00291AE9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20E6324809BFA00291AE9 /* File.swift */; };
+		43E20E792481D52E00291AE9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43E20E7B2481D52E00291AE9 /* InfoPlist.strings */; };
 		5F6EC17F9C1CD219F718D953 /* libPods-BookLover-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24166BB436EC62F773C5CC51 /* libPods-BookLover-tvOSTests.a */; };
 		71121268CE26579318E68714 /* libPods-BookLover-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 666B8A986DDE6BB74C01A13F /* libPods-BookLover-tvOS.a */; };
 		7195B6AB276438DED38D24C3 /* libPods-BookLover.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF5E1DE1F8251BE689F3491 /* libPods-BookLover.a */; };
@@ -60,6 +61,7 @@
 		43E20E6524809C2B00291AE9 /* BookLoverTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BookLoverTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		43E20E6624809C2B00291AE9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		43E20E6C2481CE0900291AE9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		43E20E7A2481D52E00291AE9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		53FA172DBC10E0B795C907F4 /* Pods-BookLover.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover.release.xcconfig"; path = "Target Support Files/Pods-BookLover/Pods-BookLover.release.xcconfig"; sourceTree = "<group>"; };
 		666B8A986DDE6BB74C01A13F /* libPods-BookLover-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C7909EE8A17E899DCB70B3D /* Pods-BookLover-BookLoverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-BookLoverTests.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-BookLoverTests/Pods-BookLover-BookLoverTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		13B07FAE1A68108700A75B9A /* BookLover */ = {
 			isa = PBXGroup;
 			children = (
+				43E20E7B2481D52E00291AE9 /* InfoPlist.strings */,
 				43494F5D247A557D0031CD3C /* BookLover.entitlements */,
 				43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -318,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				43E20E792481D52E00291AE9 /* InfoPlist.strings in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				43A693C6247A30BA004F99D8 /* GoogleService-Info.plist in Resources */,
 			);
@@ -569,6 +573,15 @@
 				43E20E6C2481CE0900291AE9 /* ko */,
 			);
 			name = LaunchScreen.xib;
+			path = BookLover;
+			sourceTree = "<group>";
+		};
+		43E20E7B2481D52E00291AE9 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43E20E7A2481D52E00291AE9 /* ko */,
+			);
+			name = InfoPlist.strings;
 			path = BookLover;
 			sourceTree = "<group>";
 		};

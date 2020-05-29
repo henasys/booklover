@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  BookLover
+
+  Created by Alex Hojong Lee on 2020/05/30.
+  Copyright © 2020 Facebook. All rights reserved.
+*/
+
+NSCameraUsageDescription = "사진 기능으로 바코드 스캐닝할 때 필요합니다";
+NSLocationWhenInUseUsageDescription = "사진 기능으로 바코드 스캐닝할 때 필요합니다";
