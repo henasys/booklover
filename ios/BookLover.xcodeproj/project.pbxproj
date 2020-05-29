@@ -20,6 +20,8 @@
 		4309244A247C7A0C0066A85C /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43092449247C7A0C0066A85C /* SnapshotHelper.swift */; };
 		4368C834247B4E8E00F1A7D9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368C833247B4E8E00F1A7D9 /* CloudKit.framework */; };
 		43A693C6247A30BA004F99D8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */; };
+		43E20E6424809BFA00291AE9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20E6324809BFA00291AE9 /* File.swift */; };
+		43E20E6724809C2B00291AE9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E20E6624809C2B00291AE9 /* File.swift */; };
 		5F6EC17F9C1CD219F718D953 /* libPods-BookLover-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24166BB436EC62F773C5CC51 /* libPods-BookLover-tvOSTests.a */; };
 		71121268CE26579318E68714 /* libPods-BookLover-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 666B8A986DDE6BB74C01A13F /* libPods-BookLover-tvOS.a */; };
 		7195B6AB276438DED38D24C3 /* libPods-BookLover.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF5E1DE1F8251BE689F3491 /* libPods-BookLover.a */; };
@@ -77,6 +79,10 @@
 		43494F5D247A557D0031CD3C /* BookLover.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BookLover.entitlements; path = BookLover/BookLover.entitlements; sourceTree = "<group>"; };
 		4368C833247B4E8E00F1A7D9 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		43A693C5247A30BA004F99D8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		43E20E6224809BFA00291AE9 /* BookLover-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BookLover-Bridging-Header.h"; sourceTree = "<group>"; };
+		43E20E6324809BFA00291AE9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		43E20E6524809C2B00291AE9 /* BookLoverTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BookLoverTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		43E20E6624809C2B00291AE9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		53FA172DBC10E0B795C907F4 /* Pods-BookLover.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover.release.xcconfig"; path = "Target Support Files/Pods-BookLover/Pods-BookLover.release.xcconfig"; sourceTree = "<group>"; };
 		666B8A986DDE6BB74C01A13F /* libPods-BookLover-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BookLover-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C7909EE8A17E899DCB70B3D /* Pods-BookLover-BookLoverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookLover-BookLoverTests.debug.xcconfig"; path = "Target Support Files/Pods-BookLover-BookLoverTests/Pods-BookLover-BookLoverTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +144,8 @@
 			children = (
 				00E356F21AD99517003FC87E /* BookLoverTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
+				43E20E6624809C2B00291AE9 /* File.swift */,
+				43E20E6524809C2B00291AE9 /* BookLoverTests-Bridging-Header.h */,
 			);
 			path = BookLoverTests;
 			sourceTree = "<group>";
@@ -162,6 +170,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				43E20E6324809BFA00291AE9 /* File.swift */,
+				43E20E6224809BFA00291AE9 /* BookLover-Bridging-Header.h */,
 			);
 			name = BookLover;
 			sourceTree = "<group>";
@@ -356,10 +366,12 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 8CNAK8DRQG;
+						LastSwiftMigration = 1150;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 8CNAK8DRQG;
+						LastSwiftMigration = 1150;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -703,6 +715,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* BookLoverTests.m in Sources */,
+				43E20E6724809C2B00291AE9 /* File.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,6 +724,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				43E20E6424809BFA00291AE9 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -778,7 +792,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6C7909EE8A17E899DCB70B3D /* Pods-BookLover-BookLoverTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -798,6 +814,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BookLoverTests/BookLoverTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BookLover.app/BookLover";
 			};
 			name = Debug;
@@ -806,7 +825,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 07D04E9153AB03C96AD67243 /* Pods-BookLover-BookLoverTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 8CNAK8DRQG;
 				INFOPLIST_FILE = BookLoverTests/Info.plist;
@@ -823,6 +844,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BookLoverTests/BookLoverTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BookLover.app/BookLover";
 			};
 			name = Release;
@@ -832,6 +855,7 @@
 			baseConfigurationReference = 1FCA1A1C5AD41B09FE0BEC59 /* Pods-BookLover.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BookLover/BookLover.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -853,6 +877,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover;
 				PRODUCT_NAME = BookLover;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "BookLover-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -862,6 +889,7 @@
 			baseConfigurationReference = 53FA172DBC10E0B795C907F4 /* Pods-BookLover.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BookLover/BookLover.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -882,6 +910,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.henasys.app.booklover;
 				PRODUCT_NAME = BookLover;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "BookLover-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1017,6 +1047,7 @@
 		43092446247C761E0066A85C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1049,6 +1080,7 @@
 		43092447247C761E0066A85C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
