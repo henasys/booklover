@@ -54,6 +54,8 @@ buck-out/
 ios/*.mobileprovision
 ios/*.cer
 ios/*.dSYM.zip
+ios/*.certSigningRequest
+ios/*.p12
 android/key.json
 
 # Bundle artifact
