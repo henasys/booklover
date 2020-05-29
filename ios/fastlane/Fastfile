@@ -16,8 +16,54 @@
 default_platform(:ios)
 
 platform :ios do
+  def get_target()
+    "BookLover"
+  end
+  def get_version()
+    version = get_version_number(target:get_target())
+    build_number = get_build_number()
+    [version, build_number]
+  end
+
+  def display_version()
+    version, build_number = get_version()
+    UI.message("version: #{version}, build_number: #{build_number}")
+  end
+
+  desc "Display version"
+  lane :version do
+    display_version()
+  end
+
+  def increase_version_patch()
+    versionPatch = get_build_number()
+    increment_build_number()
+    increment_version_number(bump_type: "patch")
+    versionPatchPlus = get_build_number()
+    [versionPatch, versionPatchPlus]
+  end
+
+  desc "Increase version patch"
+  lane :increase_patch do
+    version, build_number = get_version()
+    UI.message("version: #{version}, build_number: #{build_number}")
+    prev_patch, current_patch = increase_version_patch()
+    UI.message("patch #{prev_patch} -> #{current_patch}")
+    version, build_number = get_version()
+    UI.message("version: #{version}, build_number: #{build_number}")
+  end
+
   desc "Generate new localized screenshots"
   lane :screenshots do
-    capture_screenshots(workspace: "BookLover.xcworkspace", scheme: "BookLover")
+    capture_screenshots(workspace: "#{get_target()}.xcworkspace", scheme: get_target())
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    get_certificates
+    get_provisioning_profile
+    display_version()
+    build_app(workspace: "#{get_target()}.xcworkspace", scheme: get_target())
+    upload_to_testflight
   end
 end
