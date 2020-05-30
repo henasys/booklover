@@ -53,6 +53,30 @@ platform :ios do
     UI.message("version: #{version}, build_number: #{build_number}")
   end
 
+  desc "Set version like 1.2.3"
+  lane :set_version do |options|
+    if options[:version]
+      version = options[:version]
+    else
+      version = prompt(text: "Enter the specific version like 1.2.3): ")
+    end
+    increment_version_number(version_number: version)
+    version, build_number = get_version()
+    UI.message("version: #{version}, build_number: #{build_number}")
+  end
+
+  desc "Set build_number like 10099"
+  lane :set_build_number do |options|
+    if options[:build_number]
+      build_number = options[:build_number]
+    else
+      build_number = prompt(text: "Enter build_number like 10099): ")
+    end
+    increment_build_number(build_number: build_number)
+    version, build_number2 = get_version()
+    UI.message("version: #{version}, build_number: #{build_number2}")
+  end  
+
   desc "Generate new localized screenshots"
   lane :screenshots do
     capture_screenshots(
