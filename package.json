@@ -53,7 +53,7 @@
     "react-native-xml2js": "^1.0.3",
     "realm": "^5.0.4",
     "rxjs": "^6.5.5",
-    "sanitize-html": "^1.23.0",
+    "sanitize-html": "^2.3.2",
     "uuid": "^8.0.0",
     "xlsx": "^0.16.0",
     "xmldom": "^0.3.0"
